@@ -9,14 +9,22 @@ Pharmastar is a multi-functional traditional chinese medicine network pharmacolo
 <!-- toc -->
 
 - [中文](#中文)
+  - [安装](#安装)
   - [使用](#使用)
   
 - [English](#english)
+  - [Installation](#installation)
   - [Usage](#usage)
   
 <!-- tocstop -->
 
 # 中文
+
+## 安装
+
+可以使用pip安装Pharmastar。
+
+`pip install pharmastar`
 
 ## 使用
 
@@ -51,6 +59,12 @@ analysis.reverse(genes,
 
 # English
 Pharmastar is a multi-functional traditional chinese medicine network pharmacology analysis tool for classical network pharmacology and reverse network pharmacology.
+
+## Installation
+
+You can install Pharmastar using pip.
+
+`pip install pharmastar`
 
 ## Usage
 
