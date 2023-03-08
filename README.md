@@ -1,3 +1,7 @@
+<h1 align="center">
+<img src="https://github.com/Eliseo1122/pharmastar/blob/main/%E8%8D%AF%E7%90%86%E5%A4%A7%E5%B8%88.svg" width="300">
+</h1><br>
+
 药理大师是一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
 
 Pharmastar is a multi-functional traditional chinese medicine network pharmacology analysis tool under development for classical network pharmacology and reverse network pharmacology.
