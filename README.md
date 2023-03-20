@@ -1,10 +1,6 @@
-<h1 align="center">
-<img src="https://github.com/Eliseo1122/pharmastar/blob/main/%E8%8D%AF%E7%90%86%E5%A4%A7%E5%B8%88.svg" width="300">
-</h1><br>
+HerbiV一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
 
-药理大师是一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
-
-Pharmastar is a multi-functional traditional chinese medicine network pharmacology analysis tool under development for classical network pharmacology and reverse network pharmacology.
+HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool under development for classical network pharmacology and reverse network pharmacology.
 
 <!-- toc -->
 
@@ -22,20 +18,20 @@ Pharmastar is a multi-functional traditional chinese medicine network pharmacolo
 
 ## 安装
 
-可以使用pip安装Pharmastar。
+可以使用pip安装HerbiV。
 
-`pip install pharmastar`
+`pip install herbiv`
 
 ## 使用
 
 ### 基本使用
 
-`pharmastar.analysis`中提供了进行网络药理学分析的pipeline函数。
+`herbiv.analysis`中提供了进行网络药理学分析的pipeline函数。
 
 - `reverse`函数: 反向网络药理学分析的pipeline函数。使用它仅需使用命令
 
 ```python
-from pharmastar import analysis
+from herbiv import analysis
 analysis.reverse(genes,
                  protein_chemical_links_filename,
                  score,
@@ -58,24 +54,24 @@ analysis.reverse(genes,
 - `try_num`: int类型，pubchempy重复尝试的次数，默认为`3`。
 
 # English
-Pharmastar is a multi-functional traditional chinese medicine network pharmacology analysis tool for classical network pharmacology and reverse network pharmacology.
+HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool for classical network pharmacology and reverse network pharmacology.
 
 ## Installation
 
-You can install Pharmastar using pip.
+You can install HerbiV using pip.
 
-`pip install pharmastar`
+`pip install herbiv`
 
 ## Usage
 
 ### Basic usage
 
-`pharmastar.analysis` provides pipeline function for network pharmacology analysis.
+`herbiv.analysis` provides pipeline function for network pharmacology analysis.
 
 - `reverse` : pipeline function for reverse network pharmacology. To use it, please use command
 
 ```python
-from pharmastar import analysis
+from herbiv import analysis
 analysis.reverse(genes,
                  protein_chemical_links_filename,
                  score,
