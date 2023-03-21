@@ -1,3 +1,7 @@
+<h1 align="center">
+<img src="https://github.com/Eliseo1122/HerbiV/blob/main/Logo.svg" width="2000">
+</h1>
+
 HerbiV一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
 
 HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool under development for classical network pharmacology and reverse network pharmacology.
