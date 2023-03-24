@@ -3,6 +3,7 @@
 </h1>
 
 [![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=green&right_color=blue&left_text=PyPI%20Downloads)](https://pepy.tech/project/herbiv)
+[![Downloads](https://static.pepy.tech/personalized-badge/pharmastar?period=month&units=international_system&left_color=green&right_color=blue&left_text=Old%20Version(Pharmastar)%20Downloads)](https://pepy.tech/project/pharmastar)
 
 HerbiV一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
 
