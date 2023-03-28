@@ -14,11 +14,13 @@ HerbiV is a multi-functional traditional chinese medicine network pharmacology a
 - [中文](#中文)
   - [安装](#安装)
   - [使用](#使用)
+  - [更新日志](#更新日志)
   
 - [English](#english)
   - [Installation](#installation)
   - [Usage](#usage)
-  
+  - [Versions](#versions) 
+ 
 <!-- tocstop -->
 
 # 中文
@@ -40,25 +42,34 @@ HerbiV is a multi-functional traditional chinese medicine network pharmacology a
 ```python
 from herbiv import analysis
 analysis.reverse(genes,
-                 protein_chemical_links_filename,
+                 protein_chemical_links_path,
                  score,
-                 chemicals_filename,
-                 chunksize,
-                 swiss_filename,
-                 drug_likeness_num,
-                 try_num)
+                 save,
+                 chemicals_path,
+                 tcm_chemical_links_path,
+                 tcm_path)
 ```
 
 它需要一个必需形参`genes`，这是一个存储编码拟分析靶点的基因的Ensembl ID与其名称的字典，如`{'9606.ENSP00000265022': 'DGKG'}`。
 
 它的可选形参有
-- `protein_chemical_links_filename`: 字符串类型，从STITCH数据库中下载的protein_chemical.links.transfer的文件名，默认为`9606.protein_chemical.links.transfer.v5.0.tsv`；
+- `protein_chemical_links_path`: 字符串类型，HerbiV_chemical_protein_links数据集的路径，默认为`data/HerbiV_chemical_protein_links.csv`；
 - `score`: int类型，仅combined_score大于等于score的记录会被筛选出，默认为`900`；
-- `chemicals_filename`: 字符串类型，从STITCH数据库中下载的chemicals数据集的文件名，默认为`chemicals.v5.0.tsv.gz`；
-- `param chunksize`: int类型，遍历chemicals数据集时的chunksize，该值过大可能耗尽计算机的内存，默认为`1000000`；
-- `swiss_filename`: SwissADME的分析结果（csv文件）的路径，默认为`swissadme.csv`；
-- `drug_likeness_num`: int类型，筛选类药性指标时至少有多少个为Yes，默认为`3`；
-- `try_num`: int类型，pubchempy重复尝试的次数，默认为`3`。
+- `save`: 布尔类型，是否保存原始分析结果，默认为`True`；
+- `chemicals_path`: 字符串类型，HerbiV_chemicals数据集的路径，默认为`data/HerbiV_chemicals.csv`；
+- `tcm_chemical_links_path`: 字符串类型，HerbiV_tcm_chemical_links数据集的路径，默认为`data/HerbiV_tcm_chemical_links.csv`；
+- `tcm_path`: 字符串类型，HerbiV_tcm数据集的路径，默认为`data/HerbiV_tcm.csv`。
+
+### 更新日志
+
+#### 0.0.1a1
+
+- 横空出世
+
+#### 0.0.2a1(2323.3.28)
+
+- 使用本项目自己的数据集进行分析，不再使用其他数据库的公共数据集，更新了整个分析架构，大大加快了分析速度；
+- 加入了基于朴素贝叶斯的中药重要性评价模型。
 
 # English
 HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool for classical network pharmacology and reverse network pharmacology.
@@ -80,22 +91,31 @@ You can install HerbiV using pip.
 ```python
 from herbiv import analysis
 analysis.reverse(genes,
-                 protein_chemical_links_filename,
+                 protein_chemical_links_path,
                  score,
-                 chemicals_filename,
-                 chunksize,
-                 swiss_filename,
-                 drug_likeness_num,
-                 try_num)
+                 save,
+                 chemicals_path,
+                 tcm_chemical_links_path,
+                 tcm_path)
 ```
 
 It needs a required parameter `genes`, which is a dictionary that stores the Ensembl ID(s) of the gene(s) encoding the target(s) to be analyzed along with their name(s), e.g. `{'9606.ENSP00000265022': 'DGKG'}`.
 
 Its optional parameter includes
-- `protein_chemical_links_filename`: dict, filename of the dataset protein_chemical.links.transfer from STITCH database, `9606.protein_chemical.links.transfer.v5.0.tsv` by default;
+- `protein_chemical_links_path`: str, path of the dataset HerbiV_chemical_protein_links, `9606.protein_chemical.links.transfer.v5.0.tsv` by default;
 - `score`: int, only when the combined_score is no less than it will be selected out, `900` by default;
-- `chemicals_filename`: str, filename of the dataset chemicals from STITCH database, `chemicals.v5.0.tsv.gz` by default;
-- `param chunksize`: int, chunksize of the traversal to the chemicals dataset，the computer's memory may be exhausted if it is too large, `1000000` by default;
-- `swiss_filename`: pathway of the SwissADME result, `swissadme.csv` by default;
-- `drug_likeness_num`: int, how many 'Yes' at least when processing ADME selection, `3` by default;
-- `try_num`: int, the number of times pubchempy tries, `3` by default.
+- `save`: boolean，Whether to save the original analysis results, `True` by default;
+- `chemicals_path`: str, path of the dataset HerbiV_chemicals, `data/HerbiV_chemicals.csv` by default;
+- `tcm_chemical_links_path`: str, path of the dataset HerbiV_chemicals, `data/HerbiV_chemicals.csv` by default;
+- `tcm_path`: str, path of the dataset HerbiV_tcm, `data/HerbiV_tcm.csv` by default.
+
+### Versions
+
+#### 0.0.1a1
+
+- All start at here.
+
+#### 0.0.2a1(2323.3.28)
+
+- Using the project's own datasets for analysis, instead of using public datasets from other databases. Updated the entire analysis architecture and greatly accelerated the analysis speed;
+- Added a naive Bayes model-based importance evaluation model for TCM.
