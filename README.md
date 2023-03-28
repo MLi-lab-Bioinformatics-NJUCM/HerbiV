@@ -66,7 +66,7 @@ analysis.reverse(genes,
 
 - 横空出世
 
-#### 0.0.2a1(2323.3.28)
+#### 0.1a1(2323.3.28)
 
 - 使用本项目自己的数据集进行分析，不再使用其他数据库的公共数据集，更新了整个分析架构，大大加快了分析速度；
 - 加入了基于朴素贝叶斯的中药重要性评价模型。
@@ -115,7 +115,7 @@ Its optional parameter includes
 
 - All start at here.
 
-#### 0.0.2a1(2323.3.28)
+#### 0.1a1(2323.3.28)
 
 - Using the project's own datasets for analysis, instead of using public datasets from other databases. Updated the entire analysis architecture and greatly accelerated the analysis speed;
 - Added a naive Bayes model-based importance evaluation model for TCM.
