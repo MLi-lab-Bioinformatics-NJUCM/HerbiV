@@ -27,9 +27,13 @@ HerbiV is a multi-functional traditional chinese medicine network pharmacology a
 
 ## 安装
 
-可以使用pip安装HerbiV。
+可以使用pip安装`herbiv`。
 
 `pip install herbiv`
+
+此外还需要安装依赖库`pandas`。
+
+`pip install pandas`或`conda install pandas`
 
 ## 使用
 
@@ -41,24 +45,16 @@ HerbiV is a multi-functional traditional chinese medicine network pharmacology a
 
 ```python
 from herbiv import analysis
-analysis.reverse(genes,
-                 protein_chemical_links_path,
-                 score,
-                 save,
-                 chemicals_path,
-                 tcm_chemical_links_path,
-                 tcm_path)
+analysis.reverse(genes, score, save)
 ```
 
 它需要一个必需形参`genes`，这是一个存储编码拟分析靶点的基因的Ensembl ID与其名称的字典，如`{'9606.ENSP00000265022': 'DGKG'}`。
 
 它的可选形参有
-- `protein_chemical_links_path`: 字符串类型，HerbiV_chemical_protein_links数据集的路径，默认为`data/HerbiV_chemical_protein_links.csv`；
 - `score`: int类型，仅combined_score大于等于score的记录会被筛选出，默认为`900`；
-- `save`: 布尔类型，是否保存原始分析结果，默认为`True`；
-- `chemicals_path`: 字符串类型，HerbiV_chemicals数据集的路径，默认为`data/HerbiV_chemicals.csv`；
-- `tcm_chemical_links_path`: 字符串类型，HerbiV_tcm_chemical_links数据集的路径，默认为`data/HerbiV_tcm_chemical_links.csv`；
-- `tcm_path`: 字符串类型，HerbiV_tcm数据集的路径，默认为`data/HerbiV_tcm.csv`。
+- `save`: 布尔类型，是否保存原始分析结果，默认为`True`。
+
+分析结果存放在当前路径的`result`文件夹下（需先建立该文件夹）。
 
 ### 更新日志
 
@@ -71,14 +67,23 @@ analysis.reverse(genes,
 - 使用本项目自己的数据集进行分析，不再使用其他数据库的公共数据集，更新了整个分析架构，大大加快了分析速度；
 - 加入了基于朴素贝叶斯的中药重要性评价模型。
 
+####  0.1a2(2323.3.29)
+
+- 数据集随herbiv库下载，无需指定数据集存放路径。
+
 # English
 HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool for classical network pharmacology and reverse network pharmacology.
 
 ## Installation
 
-You can install HerbiV using pip.
+You can install `herbiv` using pip.
 
 `pip install herbiv`
+
+
+In addition, you need to install the dependency `pandas`.
+
+`pip install pandas` or `conda install pandas`
 
 ## Usage
 
@@ -90,24 +95,16 @@ You can install HerbiV using pip.
 
 ```python
 from herbiv import analysis
-analysis.reverse(genes,
-                 protein_chemical_links_path,
-                 score,
-                 save,
-                 chemicals_path,
-                 tcm_chemical_links_path,
-                 tcm_path)
+analysis.reverse(genes, score, save)
 ```
 
 It needs a required parameter `genes`, which is a dictionary that stores the Ensembl ID(s) of the gene(s) encoding the target(s) to be analyzed along with their name(s), e.g. `{'9606.ENSP00000265022': 'DGKG'}`.
 
 Its optional parameter includes
-- `protein_chemical_links_path`: str, path of the dataset HerbiV_chemical_protein_links, `9606.protein_chemical.links.transfer.v5.0.tsv` by default;
 - `score`: int, only when the combined_score is no less than it will be selected out, `900` by default;
-- `save`: boolean，Whether to save the original analysis results, `True` by default;
-- `chemicals_path`: str, path of the dataset HerbiV_chemicals, `data/HerbiV_chemicals.csv` by default;
-- `tcm_chemical_links_path`: str, path of the dataset HerbiV_chemicals, `data/HerbiV_chemicals.csv` by default;
-- `tcm_path`: str, path of the dataset HerbiV_tcm, `data/HerbiV_tcm.csv` by default.
+- `save`: boolean，Whether to save the original analysis results, `True` by default.
+
+The analysis results are stored in the result folder of the current path (need to create this folder first).
 
 ### Versions
 
@@ -119,3 +116,7 @@ Its optional parameter includes
 
 - Using the project's own datasets for analysis, instead of using public datasets from other databases. Updated the entire analysis architecture and greatly accelerated the analysis speed;
 - Added a naive Bayes model-based importance evaluation model for TCM.
+
+####  0.1a2(2323.3.29)
+
+- The dataset is downloaded with herbiv, no need to specify the dataset storage path.
