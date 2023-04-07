@@ -1,60 +1,46 @@
-import os
 import pandas as pd
 
 
-def out_for_cytoscape(chem_herb, chem_protein_links_with_cheminfo):
+def out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path='result/'):
     r"""
     输出Cytoscape用于作图的网络文件和属性文件
-    :param chem_herb: pd.DataFrame类型，包含filtered_chem中化合物的名称、STITCH数据库中的CID和HERB数据库中对应的中药
-    :param chem_protein_links_with_cheminfo: pd.DataFrame类型，protein_chemical数据集中包含目标基因、combined_score大于等于score且SMILES表达式长度小于等于200（可选）的记录及化合物信息
+    :param chem_protein_links: pd.DataFrame类型，HerbiV_chemical_protein_links数据集数据集中包含目标基因且Combined_score大于等于score的记录
+    :param chem: pd.DataFrame类型，chem_protein_links中化合物的信息及其Importance Score
+    :param genes: 字典类型，存储拟分析蛋白（基因）在STITCH中的ID与其名称的对应关系
+    :param tcm_chem_links: pd.DataFrame类型，包含filtered_chem中化合物的名称、STITCH数据库中的CID和HERB数据库中对应的中药
+    :param tcm: pd.DataFrame类型，tcm_chem_links中中药的信息及其Importance Score
+    :param path: 字符串类型，存放结果的目录
     """
 
-    if not os.path.exists('result'):  # 若无result目录，先创建该目录
-        os.mkdir('result')
+    out_chem_protein_links = chem_protein_links.iloc[:, 0:2]
+    out_chem_protein_links.columns = ['SourceNode', 'TargetNode']
+    out_chem_protein_links.loc[:, 'SourceNode'] = out_chem_protein_links.loc[:, 'SourceNode'].apply(
+        lambda x: chem.loc[chem['HVCID'] == x]['Name'].iloc[0])
+    out_chem_protein_links.loc[:, 'TargetNode'] = out_chem_protein_links.loc[:, 'TargetNode'].apply(
+        lambda x: genes.get(x))
 
-    # 提取out_herb_to_chem中中药和化合物的名称并重命名列名
-    out_herb_to_chem = chem_herb.loc[:, ['herb', 'name']]
-    out_herb_to_chem.columns = ['SourceNode', 'TargetNode']
+    out_tcm_chem = tcm_chem_links.iloc[:, 0:2]
+    out_tcm_chem.columns = ['SourceNode', 'TargetNode']
+    out_tcm_chem.loc[:, 'SourceNode'] = out_tcm_chem.loc[:, 'SourceNode'].apply(
+        lambda x: tcm.loc[tcm['HVMID'] == x]['cn_name'].iloc[0])
+    out_tcm_chem.loc[:, 'TargetNode'] = out_tcm_chem.loc[:, 'TargetNode'].apply(
+        lambda x: chem.loc[chem['HVCID'] == x]['Name'].iloc[0])
 
-    # 提取chem_protein_links_with_cheminfo中在chem_herb中的化合物的名称及蛋白的名称并重命名列名
-    out_chem_to_gene = chem_protein_links_with_cheminfo.loc[:, ['chemical_name', 'protein_name_of_gene']]
-    out_chem_to_gene = out_chem_to_gene[out_chem_to_gene.loc[:, 'chemical_name'].isin(chem_herb.loc[:, 'name'])]
-    out_chem_to_gene.columns = ['SourceNode', 'TargetNode']
-
-    # 将out_herb_to_chem和out_chem_to_gene输出为Cytoscape的网络文件
-    pd.concat([out_herb_to_chem, out_chem_to_gene]).to_csv('result/Network.csv', index=False)
-
-    # 提取chem_herb中中药的名称并重命名列名
-    out_herb = chem_herb.loc[:, ['herb']]
-    out_herb.columns = ['Key']
-
-    # 删除重复值
-    out_herb = out_herb.drop_duplicates()
-
-    for tup in out_herb.itertuples():  # 遍历out_herb中的每个中药
-        if len(out_herb_to_chem.loc[out_herb_to_chem['SourceNode'] == tup[1]]) == 1:  # 若该中药只含1种out_herb_to_chem中的成分
-            # 则将其属性命名为”have 其所含的成分 only“
-            out_herb.loc[out_herb['Key'] == tup[1], 'Attribute'] = 'have ' + out_herb_to_chem.loc[
-                out_herb_to_chem['SourceNode'] == tup[1]]['TargetNode'].all() + ' only'
-        else:  # 若含多种out_herb_to_chem中的成分
-            # 将其属性命名为"have many chemicals"
-            out_herb.loc[out_herb['Key'] == tup[1], 'Attribute'] = 'have many chemicals'
-
-    # 提取chem_herb中化合物的名称并重命名列名
-    out_chem = chem_herb.loc[:, ['name']]
+    out_chem = chem.loc[:, ['Name']]
     out_chem.columns = ['Key']
+    out_chem['Attribute'] = 'Chemicals'
 
-    # 将其属性命名为chemical并删除重复值
-    out_chem['Attribute'] = 'chemical'
-    out_chem = out_chem.drop_duplicates()
+    out_tcm = tcm.loc[:, ['cn_name']]
+    out_tcm.columns = ['Key']
+    out_tcm['Attribute'] = 'TCM'
 
-    # 提取out_gene中蛋白质的名称并重命名列名
-    out_gene = chem_protein_links_with_cheminfo.loc[:, ['protein_name_of_gene']]
-    out_gene.columns = ['Key']
-
-    # 将其属性命名为gene并删除重复值
+    out_gene = pd.DataFrame({'Key': [*genes.values()]})
     out_gene['Attribute'] = 'gene'
-    out_gene = out_gene.drop_duplicates()
 
-    # 将out_herb、out_chem和out_gene输出为Cytoscape的属性文件
-    pd.concat([out_herb, out_chem, out_gene]).to_csv('result/Type.csv', index=False)
+    # 输出Network文件
+    pd.concat([out_chem_protein_links, out_tcm_chem]).to_csv(path + 'Network.csv', index=False)
+
+    # 输出Type文件
+    pd.concat([out_tcm, out_chem, out_gene]).to_csv(path + 'Type.csv', index=False)
+
+    return
