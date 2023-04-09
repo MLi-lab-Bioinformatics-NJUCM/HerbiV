@@ -117,8 +117,6 @@ In addition, you need to install the dependency `pandas`.
 
 ## Usage
 
-### Basic usage
-
 `herbiv.analysis` provides pipeline function for network pharmacology analysis.
 
 - `reverse` : pipeline function for reverse network pharmacology. To use it, please use command
