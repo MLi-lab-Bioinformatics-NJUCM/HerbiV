@@ -7,18 +7,23 @@
 
 HerbiV一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
 
-HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool under development for classical network pharmacology and reverse network pharmacology.
+HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool 
+under development for classical network pharmacology and reverse network pharmacology.
 
 <!-- toc -->
 
 - [中文](#中文)
   - [安装](#安装)
   - [使用](#使用)
+    - [`from_tcm`](#from_tcm)
+    - [`from_genes`](#from_genes)
   - [更新日志](#更新日志)
   
 - [English](#english)
   - [Installation](#installation)
   - [Usage](#usage)
+    - [`from_tcm`](#from_tcm)
+    - [`from_genes`](#from_genes)
   - [Versions](#versions) 
  
 <!-- tocstop -->
@@ -37,24 +42,45 @@ HerbiV is a multi-functional traditional chinese medicine network pharmacology a
 
 ## 使用
 
-### 基本使用
 
-`herbiv.analysis`中提供了进行网络药理学分析的pipeline函数。
+`herbiv.analysis`中提供了两个进行网络药理学分析的pipeline函数。
 
-- `reverse`函数: 反向网络药理学分析的pipeline函数。使用它仅需使用命令
+### `from_tcm`
+
+经典的正向网络药理学分析的pipeline函数。使用它仅需使用命令
 
 ```python
 from herbiv import analysis
-analysis.reverse(genes, score, save)
+from_tcm(tcm, score, re)
 ```
 
-它需要一个必需形参`genes`，这是一个存储编码拟分析靶点的基因的Ensembl ID与其名称的字典，如`{'9606.ENSP00000265022': 'DGKG'}`。
+它需要一个必需形参`tcm`，这是一个list或其他任何可以使用in判断一个元素是否在其中的组合数据类型，存放要查询的中药名，
+如`['柴胡', '黄芩']`。
+
+它的可选形参有
+
+- `score`: int类型，仅combined_score大于等于score的记录会被筛选出，默认为`900`；
+- `re`: boolean类型，是否返回原始分析结果，默认为`True`。若`re`为`True`，
+则函数将返回运行结果`tcm`、`tcm_chem_links`、`chem_protein_links`，它们均为pd.DataFrame类型，
+分别存储了中药信息、中药-成分信息、化合物-蛋白质（靶点）信息。
+
+### `from_genes`
+
+```python
+from herbiv import analysis
+analysis.from_genes(genes, score, out_for_cytoscape, re, path)
+```
+
+它需要一个必需形参`genes`，这是一个存储编码拟分析靶点的基因的Ensembl ID与其名称的dict，
+如`{'9606.ENSP00000265022': 'DGKG'}`。
 
 它的可选形参有
 - `score`: int类型，仅combined_score大于等于score的记录会被筛选出，默认为`900`；
-- `save`: 布尔类型，是否保存原始分析结果，默认为`True`。
-
-分析结果存放在当前路径的`result`文件夹下（需先建立该文件夹）。
+- `out_for_cytoscape`: boolean类型，是否输出用于Cytoscape绘图的文件，默认为`True`；
+- `re`: boolean类型，是否返回原始分析结果，默认为`True`。若`re`为`True`，
+则函数将返回运行结果`tcm`、`tcm_chem_links`、`chem_protein_links`，它们均为pd.DataFrame类型，
+分别存储了中药信息、中药-成分信息、化合物-蛋白质（靶点）信息；
+- `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
 ### 更新日志
 
@@ -70,6 +96,10 @@ analysis.reverse(genes, score, save)
 ####  0.1a2(2323.3.29)
 
 - 数据集随herbiv库下载，无需指定数据集存放路径。
+
+####  0.1a3(2323.4.9)
+
+- 重构了代码，增加了经典的正向网络药理学分析的功能。
 
 # English
 HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool for classical network pharmacology and reverse network pharmacology.

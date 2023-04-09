@@ -50,4 +50,4 @@ def from_genes(genes,
         output.out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path)
 
     if re:
-        return tcm, tcm_chem_links
+        return tcm, tcm_chem_links, chem_protein_links
