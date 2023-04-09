@@ -7,7 +7,7 @@
 
 HerbiV一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
 
-HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool 
+HerbiV is a multifunctional traditional chinese medicine network pharmacology analysis tool 
 under development for classical network pharmacology and reverse network pharmacology.
 
 <!-- toc -->
@@ -88,28 +88,26 @@ analysis.from_genes(genes, score, out_for_cytoscape, re, path)
 
 - 横空出世
 
-#### 0.1a1(2323.3.28)
+#### 0.1a1(2023.3.28)
 
 - 使用本项目自己的数据集进行分析，不再使用其他数据库的公共数据集，更新了整个分析架构，大大加快了分析速度；
 - 加入了基于朴素贝叶斯的中药重要性评价模型。
 
-####  0.1a2(2323.3.29)
+####  0.1a2(2023.3.29)
 
 - 数据集随herbiv库下载，无需指定数据集存放路径。
 
-####  0.1a3(2323.4.9)
+####  0.1a3(2023.4.9)
 
 - 重构了代码，增加了经典的正向网络药理学分析的功能。
 
 # English
-HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool for classical network pharmacology and reverse network pharmacology.
 
 ## Installation
 
-You can install `herbiv` using pip.
+You can install `herbiv` with the help of pip.
 
 `pip install herbiv`
-
 
 In addition, you need to install the dependency `pandas`.
 
@@ -117,34 +115,53 @@ In addition, you need to install the dependency `pandas`.
 
 ## Usage
 
-`herbiv.analysis` provides pipeline function for network pharmacology analysis.
+`herbiv.analysis` provides two pipeline functions which are employed for network pharmacology analysis.
 
-- `reverse` : pipeline function for reverse network pharmacology. To use it, please use command
+### 'from_tcm'
+
+The pipeline function that is used in the classic network pharmacology analysis. Nothing except for your command is required when using it.
 
 ```python
 from herbiv import analysis
-analysis.reverse(genes, score, save)
+from_tcm(tcm, score, re)
 ```
 
-It needs a required parameter `genes`, which is a dictionary that stores the Ensembl ID(s) of the gene(s) encoding the target(s) to be analyzed along with their name(s), e.g. `{'9606.ENSP00000265022': 'DGKG'}`.
+It needs a required parameter `tcm`, which is a list or a combined data type in any other form that can judge whether an element lying in it, e.g. `['柴胡', '黄芩']`.
 
 Its optional parameter includes
-- `score`: int, only when the combined_score is no less than it will be selected out, `900` by default;
-- `save`: boolean，Whether to save the original analysis results, `True` by default.
+- `score`: int, which will not be picked out unless the combined_score is no less than it, `900` by default;
+- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem_protein_links`, all of which are in pd.DataFrame form, storing the information of the traditional chinese medicine, the information of traditional chinese medicine-ingredients and the information of compound-protein or the target, respectively.
 
-The analysis results are stored in the result folder of the current path (need to create this folder first).
+### `from_genes`
 
-### Versions
+```python
+from herbiv import analysis
+analysis.from_genes(genes, score, out_for_cytoscape, re, path)
+```
+
+It needs a required parameter `genes`, which is a dict that stores the Ensembl ID and name of certain genes which are encoding the target for analysis, e.g. `{'9606.ENSP00000265022': 'DGKG'}`.
+
+Its optional parameter includes
+- `score`: int, which will not be picked out unless the combined_score is no less than it, `900` by default;
+- `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping later, `True` by default;
+- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem_protein_links`, all of which are in pd.DataFrame form, storing the information of the traditional chinese medicine, the information of traditional chinese medicine-ingredients and the information of compound-protein or the target, respectively;
+- `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
+
+### update log
 
 #### 0.0.1a1
 
-- All start at here.
+-ROARING ACROSS THE HORIZON
 
-#### 0.1a1(2323.3.28)
+#### 0.1a1(2023.3.28)
 
-- Using the project's own datasets for analysis, instead of using public datasets from other databases. Updated the entire analysis architecture and greatly accelerated the analysis speed;
-- Added a naive Bayes model-based importance evaluation model for TCM.
+- From now on, the project's own data set can be utilized to run the analysis, which means the latest version will not rely on the public data set of other databases any more. Moreover, the whole analysis framework has been updated, which greatly accelerates the analysis speed;
+- A traditional Chinese medicine importance evaluation model based on Naive Bayes was added.
 
-####  0.1a2(2323.3.29)
+#### 0.1a2(2023.3.29)
 
-- The dataset is downloaded with herbiv, no need to specify the dataset storage path.
+- The data set is downloaded with the herbiv database. There is no need to specify the storage path of the data set.
+
+#### 0.1a3(2023.4.9)
+
+- The code is refactored. The function of the classic network pharmacology analysis is added.
