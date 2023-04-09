@@ -105,7 +105,7 @@ analysis.from_genes(genes, score, out_for_cytoscape, re, path)
 
 ## Installation
 
-You can install `herbiv` with the help of pip.
+You can install `herbiv` with pip.
 
 `pip install herbiv`
 
@@ -117,7 +117,7 @@ In addition, you need to install the dependency `pandas`.
 
 `herbiv.analysis` provides two pipeline functions which are employed for network pharmacology analysis.
 
-### 'from_tcm'
+### `from_tcm`
 
 The pipeline function that is used in the classic network pharmacology analysis. Nothing except for your command is required when using it.
 
@@ -151,7 +151,7 @@ Its optional parameter includes
 
 #### 0.0.1a1
 
--ROARING ACROSS THE HORIZON
+- ROARING ACROSS THE HORIZON
 
 #### 0.1a1(2023.3.28)
 
