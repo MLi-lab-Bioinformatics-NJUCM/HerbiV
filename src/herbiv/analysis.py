@@ -1,6 +1,6 @@
-from . import get
-from . import compute
-from . import output
+import get
+import compute
+import output
 
 
 def from_tcm(tcm,
@@ -20,9 +20,11 @@ def from_tcm(tcm,
     tcm_chem_links = get.get_tcm_chem_links('HVMID', tcm['HVMID'])
     chem = get.get_chemicals('HVCID', tcm_chem_links['HVCID'])
     chem_protein_links = get.get_chem_protein_links('HVCID', chem['HVCID'], score)
+    protein = get.get_proteins('Ensembl_ID', chem_protein_links['Ensembl_ID'])
+    chem, tcm = compute.score(chem_protein_links, chem, tcm_chem_links, tcm)
 
     if re:
-        return tcm, tcm_chem_links, chem_protein_links
+        return tcm, tcm_chem_links, chem, chem_protein_links, protein
 
 
 def from_genes(genes,
@@ -32,7 +34,7 @@ def from_genes(genes,
                path='result/'):
     r"""
     进行逆向网络药理学分析
-    :param genes: 字典类型，存储拟分析蛋白（基因）在STITCH中的ID与其名称的对应关系
+    :param genes: list类型，存储拟分析蛋白（基因）在STITCH中的ID
     :param score: int类型，仅combined_score大于等于score的记录会被筛选出
     :param out_for_cytoscape: 布尔类型，是否输出用于Cytoscape绘图的文件
     :param re: 布尔类型，是否返回原始分析结果
@@ -40,14 +42,15 @@ def from_genes(genes,
     :return: tcm: pd.DataFrame类型，中药信息
     :return: tcm_chem_links: pd.DataFrame类型，中药-成分信息
     """
-    chem_protein_links = get.get_chem_protein_links('Ensembl_ID', genes, score)
+    proteins = get.get_proteins('Ensembl_ID', genes)
+    chem_protein_links = get.get_chem_protein_links('Ensembl_ID', proteins['Ensembl_ID'], 0)
     chem = get.get_chemicals('HVCID', chem_protein_links['HVCID'])
     tcm_chem_links = get.get_tcm_chem_links('HVCID', chem['HVCID'])
     tcm = get.get_tcm('HVMID', tcm_chem_links['HVMID'])
     chem, tcm = compute.score(chem_protein_links, chem, tcm_chem_links, tcm)
 
     if out_for_cytoscape:
-        output.out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path)
+        output.out_for_cyto(chem_protein_links, chem, proteins, tcm_chem_links, tcm, path)
 
     if re:
-        return tcm, tcm_chem_links, chem_protein_links
+        return tcm, tcm_chem_links, chem, chem_protein_links, proteins

@@ -41,8 +41,7 @@ if __name__ == '__main__':
     chem_protein_links1 = get.get_chem_protein_links('HVCID', chem_info1['HVCID'])
     chem_info1, tcm_info1 = score(chem_protein_links1, chem_info1, tcm_chem_links_info1, tcm_info1)
 
-    chem_protein_links2 = get.get_chem_protein_links('Ensembl_ID',
-                                                     {'ENSP0000026332': 'ACACA', 'ENSP00000398698': 'TNF'}, 0)
+    chem_protein_links2 = get.get_chem_protein_links('Ensembl_ID', ['ENSP0000026332', 'ENSP00000398698'], 0)
     chem_info2 = get.get_chemicals('HVCID', chem_protein_links2['HVCID'])
     tcm_chem_links_info2 = get.get_tcm_chem_links('HVCID', chem_info2['HVCID'])
     tcm_info2 = get.get_tcm('HVMID', tcm_chem_links_info2['HVMID'])

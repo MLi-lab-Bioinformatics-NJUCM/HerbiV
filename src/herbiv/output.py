@@ -7,7 +7,7 @@ def out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path='res
     输出Cytoscape用于作图的网络文件和属性文件
     :param chem_protein_links: pd.DataFrame类型，HerbiV_chemical_protein_links数据集数据集中包含目标基因且Combined_score大于等于score的记录
     :param chem: pd.DataFrame类型，chem_protein_links中化合物的信息及其Importance Score
-    :param genes: 字典类型，存储拟分析蛋白（基因）在STITCH中的ID与其名称的对应关系
+    :param genes: pd.DataFrame类型，存储拟分析蛋白（基因）在STITCH中的ID与其名称的对应关系
     :param tcm_chem_links: pd.DataFrame类型，包含filtered_chem中化合物的名称、STITCH数据库中的CID和HERB数据库中对应的中药
     :param tcm: pd.DataFrame类型，tcm_chem_links中中药的信息及其Importance Score
     :param path: 字符串类型，存放结果的目录
@@ -26,8 +26,9 @@ def out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path='res
     out_chem_protein_links.columns = ['SourceNode', 'TargetNode']
     out_chem_protein_links.loc[:, 'SourceNode'] = out_chem_protein_links.loc[:, 'SourceNode'].apply(
         lambda x: chem_c.loc[chem_c['HVCID'] == x]['Name'].iloc[0])
+    a = genes_c.loc[genes_c['Ensembl_ID'] == 'ENSP00000252519']['gene_name']
     out_chem_protein_links.loc[:, 'TargetNode'] = out_chem_protein_links.loc[:, 'TargetNode'].apply(
-        lambda x: genes_c.get(x))
+        lambda x: genes_c.loc[genes_c['Ensembl_ID'] == x]['gene_name'].iloc[0])
 
     out_tcm_chem = tcm_chem_links_c.iloc[:, 0:2]
     out_tcm_chem.columns = ['SourceNode', 'TargetNode']
@@ -44,7 +45,8 @@ def out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path='res
     out_tcm.columns = ['Key']
     out_tcm['Attribute'] = 'TCM'
 
-    out_gene = pd.DataFrame({'Key': [*genes_c.values()]})
+    out_gene = genes_c.loc[:, ['gene_name']]
+    out_gene.columns = ['Key']
     out_gene['Attribute'] = 'gene'
 
     # 输出Network文件
@@ -58,11 +60,12 @@ if __name__ == '__main__':
     import get
     import compute
 
-    genes_info = {'ENSP0000026332': 'ACACA', 'ENSP00000398698': 'TNF'}
+    genes_info = ['ENSP0000026332', 'ENSP00000398698']
+    proteins = get.get_proteins('Ensembl_ID', )
     chem_protein_links_info = get.get_chem_protein_links('Ensembl_ID', genes_info, 0)
     chem_info = get.get_chemicals('HVCID', chem_protein_links_info['HVCID'])
     tcm_chem_links_info = get.get_tcm_chem_links('HVCID', chem_info['HVCID'])
     tcm_info = get.get_tcm('HVMID', tcm_chem_links_info['HVMID'])
-    chem_protein_links_info, chem_info, tcm_info = compute.score(chem_protein_links_info, chem_info, tcm_chem_links_info, tcm_info)
+    chem_info, tcm_info = compute.score(chem_protein_links_info, chem_info, tcm_chem_links_info, tcm_info)
 
     out_for_cyto(chem_protein_links_info, chem_info, genes_info, tcm_chem_links_info, tcm_info)

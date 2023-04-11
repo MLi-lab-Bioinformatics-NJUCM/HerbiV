@@ -90,13 +90,37 @@ def get_chem_protein_links(by, items, score=900):
     return chem_protein_links
 
 
+def get_proteins(by, items):
+    r"""
+    从HerbiV_proteins中获得基因名与其对应的Ensemble_ID,从而可以被from_genes函数所调用，这样直接输入基因名即可
+    :param by: str类型，数据集中与items相匹配的列的列名
+    :param items: pd.DataFrame或其他任何可以使用in判断一个元素是否在其中的组合数据类型，存放要查询的蛋白质
+    :return:返回一个包含对应信息的字典
+    :return:返回一个数据框
+    """
+
+    # 数据的输入
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    proteins_all = pd.read_csv(current_directory + r'/data/HerbiV_proteins.csv')
+
+    # 在HerbiV_chemical_proteins中获取items中化合物的信息
+    proteins = proteins_all.loc[proteins_all[by].isin(items)].drop_duplicates(subset=['Ensembl_ID'])
+
+    # 重置索引
+    proteins.index = range(proteins.shape[0])
+
+    return proteins
+
+
 if __name__ == '__main__':
     tcm_info1 = get_tcm('cn_name', ['柴胡'])
     tcm_chem_links_info1 = get_tcm_chem_links('HVMID', tcm_info1['HVMID'])
     chem_info1 = get_chemicals('HVCID', tcm_chem_links_info1['HVCID'])
     chem_protein_links1 = get_chem_protein_links('HVCID', chem_info1['HVCID'])
+    protein1 = get_proteins('Ensembl_ID', chem_protein_links1['Ensembl_ID'])
 
-    chem_protein_links2 = get_chem_protein_links('Ensembl_ID', {'ENSP0000026332': 'ACACA', 'ENSP00000398698': 'TNF'}, 0)
+    protein2 = get_proteins('Ensembl_ID', ['ENSP00000252519', 'ENSP00000381588'])
+    chem_protein_links2 = get_chem_protein_links('Ensembl_ID', protein2['Ensembl_ID'], 0)
     chem_info2 = get_chemicals('HVCID', chem_protein_links2['HVCID'])
     tcm_chem_links_info2 = get_tcm_chem_links('HVCID', chem_info2['HVCID'])
     tcm_info2 = get_tcm('HVMID', tcm_chem_links_info2['HVMID'])
