@@ -1,5 +1,5 @@
 <h1 align="center">
-<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/logo.svg" width="200l0">
+<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/logo.png" width="200">
 </h1>
 
 [![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=green&right_color=blue&left_text=Downloads)](https://pepy.tech/project/herbiv)
