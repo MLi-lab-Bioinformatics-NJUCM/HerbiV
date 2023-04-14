@@ -100,6 +100,12 @@ analysis.from_genes(genes, score, out_for_cytoscape, re, path)
 
 - 重构了代码，增加了经典的正向网络药理学分析的功能。
 
+####  0.1a4(2023.4.14)
+
+- 增加了同时检索中药和靶点的功能;
+- 增加HerbiV_proteins数据集。
+
+
 # English
 
 ## Installation
