@@ -1,10 +1,6 @@
-import pandas as pd
-import numpy as np
-from functools import reduce
-
-import get
-import compute
-import output
+from . import get
+from . import compute
+from . import output
 
 
 def from_tcm(tcm,
@@ -47,7 +43,7 @@ def from_genes(genes,
     :return: tcm_chem_links: pd.DataFrame类型，中药-成分信息
     """
     proteins = get.get_proteins('Ensembl_ID', genes)
-    chem_protein_links = get.get_chem_protein_links('Ensembl_ID', proteins['Ensembl_ID'], 0)
+    chem_protein_links = get.get_chem_protein_links('Ensembl_ID', proteins['Ensembl_ID'], score)
     chem = get.get_chemicals('HVCID', chem_protein_links['HVCID'])
     tcm_chem_links = get.get_tcm_chem_links('HVCID', chem['HVCID'])
     tcm = get.get_tcm('HVMID', tcm_chem_links['HVMID'])
@@ -82,6 +78,7 @@ def from_tcm_protein(tcm,
     chem = chem_protein_links[chem_protein_links['HVCID'].isin(common['HVCID'])]
     chem = get.get_chemicals('HVCID', chem['HVCID'])
     chem.index = range(chem.shape[0])
+    chem, tcm = compute.score(chem_protein_links, chem, tcm_chem_links, tcm)
 
     if out_for_cytoscape:
         output.out_for_cyto(chem_protein_links, chem, protein, tcm_chem_links, tcm, path)
