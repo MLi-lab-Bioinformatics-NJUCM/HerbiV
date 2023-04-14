@@ -152,7 +152,7 @@ Its optional parameter includes
 - `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem_protein_links`, all of which are in pd.DataFrame form, storing the information of the traditional chinese medicine, the information of traditional chinese medicine-ingredients and the information of compound-protein or the target, respectively;
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
-### update log
+### Versions
 
 #### 0.0.1a1
 
