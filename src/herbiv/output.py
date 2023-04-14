@@ -24,18 +24,33 @@ def out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path='res
         os.mkdir(path)
     out_chem_protein_links = chem_protein_links_c.iloc[:, 0:2]
     out_chem_protein_links.columns = ['SourceNode', 'TargetNode']
+
     out_chem_protein_links.loc[:, 'SourceNode'] = out_chem_protein_links.loc[:, 'SourceNode'].apply(
-        lambda x: chem_c.loc[chem_c['HVCID'] == x]['Name'].iloc[0])
-    a = genes_c.loc[genes_c['Ensembl_ID'] == 'ENSP00000252519']['gene_name']
+        lambda x: chem_c.loc[chem_c['HVCID'] == x]['Name'].iloc[0] if len(
+            chem_c.loc[chem_c['HVCID'] == x]['Name']) > 0 else None)
+
+    out_chem_protein_links.dropna(subset=['SourceNode'], inplace=True)
+
     out_chem_protein_links.loc[:, 'TargetNode'] = out_chem_protein_links.loc[:, 'TargetNode'].apply(
-        lambda x: genes_c.loc[genes_c['Ensembl_ID'] == x]['gene_name'].iloc[0])
+        lambda x: genes_c.loc[genes_c['Ensembl_ID'] == x]['gene_name'].iloc[0] if len(
+            genes_c.loc[genes_c['Ensembl_ID'] == x]['gene_name']) > 0 else None)
+
+    out_chem_protein_links.dropna(subset=['TargetNode'], inplace=True)
 
     out_tcm_chem = tcm_chem_links_c.iloc[:, 0:2]
     out_tcm_chem.columns = ['SourceNode', 'TargetNode']
+
     out_tcm_chem.loc[:, 'SourceNode'] = out_tcm_chem.loc[:, 'SourceNode'].apply(
-        lambda x: tcm_c.loc[tcm_c['HVMID'] == x]['cn_name'].iloc[0])
+        lambda x: tcm_c.loc[tcm_c['HVMID'] == x]['cn_name'].iloc[0] if len(
+            tcm_c.loc[tcm_c['HVMID'] == x]['cn_name']) > 0 else None)
+
+    out_tcm_chem.dropna(subset=['SourceNode'], inplace=True)
+
     out_tcm_chem.loc[:, 'TargetNode'] = out_tcm_chem.loc[:, 'TargetNode'].apply(
-        lambda x: chem_c.loc[chem_c['HVCID'] == x]['Name'].iloc[0])
+        lambda x: chem_c.loc[chem_c['HVCID'] == x]['Name'].iloc[0] if len(
+            chem_c.loc[chem_c['HVCID'] == x]['Name']) > 0 else None)
+
+    out_tcm_chem.dropna(subset=['TargetNode'], inplace=True)
 
     out_chem = chem_c.loc[:, ['Name']]
     out_chem.columns = ['Key']
@@ -61,7 +76,7 @@ if __name__ == '__main__':
     import compute
 
     genes_info = ['ENSP0000026332', 'ENSP00000398698']
-    proteins = get.get_proteins('Ensembl_ID', )
+    proteins = get.get_proteins('Ensembl_ID', genes_info)
     chem_protein_links_info = get.get_chem_protein_links('Ensembl_ID', genes_info, 0)
     chem_info = get.get_chemicals('HVCID', chem_protein_links_info['HVCID'])
     tcm_chem_links_info = get.get_tcm_chem_links('HVCID', chem_info['HVCID'])
