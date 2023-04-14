@@ -155,11 +155,9 @@ Its optional parameter includes
 ### Versions
 
 #### 0.0.1a1
-
 - ROARING ACROSS THE HORIZON
 
 #### 0.1a1(2023.3.28)
-
 - From now on, the project's own data set can be utilized to run the analysis, which means the latest version will not rely on the public data set of other databases any more. Moreover, the whole analysis framework has been updated, which greatly accelerates the analysis speed;
 - A traditional Chinese medicine importance evaluation model based on Naive Bayes was added.
 
