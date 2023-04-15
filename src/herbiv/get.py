@@ -99,7 +99,7 @@ def get_proteins(by, items):
     :return:返回一个数据框
     """
 
-    # 数据的输入
+    # 读取数据集
     current_directory = os.path.dirname(os.path.abspath(__file__))
     proteins_all = pd.read_csv(current_directory + r'/data/HerbiV_proteins.csv')
 
