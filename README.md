@@ -146,7 +146,7 @@ In addition, you need to install the dependency `pandas`.
 
 ## Usage
 
-`herbiv.analysis` provides two pipeline functions which are employed for network pharmacology analysis.
+`herbiv.analysis` provides three pipeline functions which are employed for network pharmacology analysis.
 
 ### `from_tcm`
 
@@ -154,28 +154,45 @@ The pipeline function that is used in the classic network pharmacology analysis.
 
 ```python
 from herbiv import analysis
-from_tcm(tcm, score, re)
+from_tcm(tcm, score, ut_for_cytoscape, re, path)
 ```
 
-It needs a required parameter `tcm`, which is a list or a combined data type in any other form that can judge whether an element lying in it, e.g. `['柴胡', '黄芩']`.
+It needs a required parameter `tcm`, which is a combined data type that can judge whether an element lies in it using in, storing the chinese name of tcm that is supposed to be inquired, e.g. `['柴胡', '黄芩']`.
 
 Its optional parameter includes
 - `score`: int, which will not be picked out unless the combined_score is no less than it, `900` by default;
-- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem_protein_links`, all of which are in pd.DataFrame form, storing the information of the traditional chinese medicine, the information of traditional chinese medicine-ingredients and the information of compound-protein or the target, respectively.
+- `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping, `True` by default;
+- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `True`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
+- `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
-### `from_genes`
+### `from_proteins`
 
 ```python
 from herbiv import analysis
-analysis.from_genes(genes, score, out_for_cytoscape, re, path)
+analysis.from_proteins(proteins, score, out_for_cytoscape, re, path)
 ```
 
-It needs a required parameter `genes`, which is a dict that stores the Ensembl ID and name of certain genes which are encoding the target for analysis, e.g. `{'9606.ENSP00000265022': 'DGKG'}`.
+It needs a required parameter `proteins`,  which is a combined data type that can judge whether an element lies in it using in, storing the Ensembl_ID in STITCH of the proteins or targets which are supposed to be analyzed, e.g. `['ENSP00000381588', 'ENSP00000252519']`.
 
 Its optional parameter includes
-- `score`: int, which will not be picked out unless the combined_score is no less than it, `900` by default;
+- `score`: int, which will not be picked out unless the combined_score is no less than it, `0` by default;
 - `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping later, `True` by default;
-- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem_protein_links`, all of which are in pd.DataFrame form, storing the information of the traditional chinese medicine, the information of traditional chinese medicine-ingredients and the information of compound-protein or the target, respectively;
+- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
+- `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
+
+### `from_tcm_protein`
+
+```python
+from herbiv import analysis
+analysis.from_proteins(tcm, proteins, score, out_for_cytoscape, re, path)
+```
+
+It needs two required parameters `tcm` and `proteins`, either of which is a combined data type that can judge whether an element lies in it using in, storing the chinese name of tcm that is supposed to be inquired, e.g. `['柴胡', '黄芩']` and the Ensembl_ID in STITCH of the proteins or targets which are supposed to be analyzed, e.g. `['ENSP00000381588', 'ENSP00000252519']`.
+
+Its optional parameter includes
+- `score`: int, which will not be picked out unless the combined_score is no less than it, `0` by default;
+- `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping later, `True` by default;
+- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
 ### Versions
@@ -188,9 +205,15 @@ Its optional parameter includes
 - A traditional Chinese medicine importance evaluation model based on Naive Bayes was added.
 
 #### 0.1a2(2023.3.29)
-
 - The data set is downloaded with the herbiv database. There is no need to specify the storage path of the data set.
 
 #### 0.1a3(2023.4.9)
-
 - The code is refactored. The function of the classic network pharmacology analysis is added.
+
+#### 0.1a4(2023.4.14)
+- The pipline function `from_tcm_protein` is added, which allows searching for the tcm and the targets at the same time;
+- The data set Herbiv_proteins is added.
+
+#### 0.1a5(2023.4.18)
+- The stability increases, which means it will not output nodes that are isolated from the network;
+- The calling method of the functions is unified.
