@@ -6,7 +6,7 @@ def get_tcm(by, items):
     """
     读取HerbiV_tcm数据集，返回items中中药的信息
     :param by: str类型，数据集中与items相匹配的列的列名
-    :param items: pd.DataFrame或其他任何可以使用in判断一个元素是否在其中的组合数据类型，存放要查询的中药
+    :param items: 任何可以使用in判断一个元素是否在其中的组合数据类型，存放要查询的中药
     :return: pd.DataFrame类型，items中中药的信息
     """
 
@@ -68,7 +68,7 @@ def get_chem_protein_links(by, items, score=900):
     读取HerbiV_chemicals数据集，返回items中化合物/蛋白质的combined_score大于等于score的化合物-蛋白质（靶点）连接信息
     :param by: str类型，数据集中与items相匹配的列的列名
     :param items: pd.DataFrame或其他任何可以使用in判断一个元素是否在其中的组合数据类型，存放要查询的化合物/蛋白质
-    :param score: int类型，仅combined_score大于等于score的记录会被筛选出
+    :param score: int类型，仅combined_score大于等于score的记录会被筛选出，默认为900
     :return: pd.DataFrame类型，items中化合物/蛋白质的combined_score大于等于score的化合物-蛋白质（靶点）连接信息
     """
     # 读取数据集
@@ -113,14 +113,8 @@ def get_proteins(by, items):
 
 
 if __name__ == '__main__':
-    tcm_info1 = get_tcm('cn_name', ['柴胡'])
-    tcm_chem_links_info1 = get_tcm_chem_links('HVMID', tcm_info1['HVMID'])
-    chem_info1 = get_chemicals('HVCID', tcm_chem_links_info1['HVCID'])
-    chem_protein_links1 = get_chem_protein_links('HVCID', chem_info1['HVCID'])
-    protein1 = get_proteins('Ensembl_ID', chem_protein_links1['Ensembl_ID'])
-
-    protein2 = get_proteins('Ensembl_ID', ['ENSP00000252519', 'ENSP00000381588'])
-    chem_protein_links2 = get_chem_protein_links('Ensembl_ID', protein2['Ensembl_ID'], 0)
-    chem_info2 = get_chemicals('HVCID', chem_protein_links2['HVCID'])
-    tcm_chem_links_info2 = get_tcm_chem_links('HVCID', chem_info2['HVCID'])
-    tcm_info2 = get_tcm('HVMID', tcm_chem_links_info2['HVMID'])
+    tcm_info = get_tcm('cn_name', ['柴胡', '黄芩'])
+    tcm_chem_links_info = get_tcm_chem_links('HVMID', tcm_info['HVMID'])
+    chem_info = get_chemicals('HVCID', tcm_chem_links_info['HVCID'])
+    chem_protein_links_info = get_chem_protein_links('HVCID', chem_info['HVCID'])
+    protein_info = get_proteins('Ensembl_ID', chem_protein_links_info['Ensembl_ID'])
