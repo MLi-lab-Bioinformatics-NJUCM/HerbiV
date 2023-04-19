@@ -1,6 +1,6 @@
-import get
-import compute
-import output
+from . import get
+from . import compute
+from . import output
 
 
 def from_tcm(tcm,

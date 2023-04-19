@@ -67,6 +67,8 @@ from_tcm(tcm, score, out_for_cytoscape, re, path)
 
 ### `from_proteins`
 
+逆向网络药理学分析的pipeline函数。使用它仅需使用命令
+
 ```python
 from herbiv import analysis
 analysis.from_proteins(proteins, score, out_for_cytoscape, re, path)
@@ -84,6 +86,8 @@ analysis.from_proteins(proteins, score, out_for_cytoscape, re, path)
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
 ### `from_tcm_protein`
+
+同时对中药和靶点进行检索的pipeline函数。使用它仅需使用命令
 
 ```python
 from herbiv import analysis
@@ -126,7 +130,7 @@ analysis.from_proteins(tcm, proteins, score, out_for_cytoscape, re, path)
 - 增加了pipline函数`from_tcm_protein`，可同时检索中药和靶点;
 - 增加HerbiV_proteins数据集。
 
-#### 0.1a5(2023.4.18)
+#### 0.1a5(2023.4.19)
 - 不会输出游离于网络的节点，提高了稳定性；
 - 统一了函数的调用方法；
 
@@ -214,6 +218,6 @@ Its optional parameter includes
 - The pipline function `from_tcm_protein` is added, which allows searching for the tcm and the targets at the same time;
 - The data set Herbiv_proteins is added.
 
-#### 0.1a5(2023.4.18)
+#### 0.1a5(2023.4.19)
 - The stability increases, which means it will not output nodes that are isolated from the network;
 - The calling method of the functions is unified.
