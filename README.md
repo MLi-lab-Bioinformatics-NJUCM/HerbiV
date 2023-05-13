@@ -171,6 +171,8 @@ Its optional parameter includes
 
 ### `from_proteins`
 
+The pipeline function that is utilized for reverse network pharmacology. Only a few commands are needed to use it
+
 ```python
 from herbiv import analysis
 analysis.from_proteins(proteins, score, out_for_cytoscape, re, path)
@@ -185,6 +187,8 @@ Its optional parameter includes
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
 ### `from_tcm_protein`
+
+The pipeline function that searches for tcm and the targets at the same time. Only a few commands are needed to use it
 
 ```python
 from herbiv import analysis
