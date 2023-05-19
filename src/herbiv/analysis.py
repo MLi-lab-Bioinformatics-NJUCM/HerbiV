@@ -46,6 +46,7 @@ def from_tcm(tcm,
 
 def from_proteins(proteins,
                   score=0,
+                  random_state=None,
                   out_for_cytoscape=True,
                   re=True,
                   path='result/'):
@@ -53,6 +54,7 @@ def from_proteins(proteins,
     进行逆向网络药理学分析
     :param proteins: 任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白质（靶点）在STITCH中的Ensembl_ID
     :param score: int类型，仅combined_score大于等于score的记录会被筛选出，默认为0
+    :param random_state: int类型，指定随机数种子
     :param out_for_cytoscape: 布尔类型，是否输出用于Cytoscape绘图的文件
     :param re: 布尔类型，是否返回原始分析结果
     :param path: 字符串类型，存放结果的目录
@@ -67,14 +69,18 @@ def from_proteins(proteins,
     chem = get.get_chemicals('HVCID', chem_protein_links['HVCID'])
     tcm_chem_links = get.get_tcm_chem_links('HVCID', chem['HVCID'])
     tcm = get.get_tcm('HVMID', tcm_chem_links['HVMID'])
+    formula_tcm_links = get.get_formula_tcm_links('HVMID', tcm['HVMID'])
+    formula = get.get_formula('HVPID', formula_tcm_links['HVPID'])
 
-    tcm, chem = compute.score(tcm, tcm_chem_links, chem, chem_protein_links)
+    tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links, formula, formula_tcm_links)
+    tcms = compute.component(tcm.loc[tcm['Importance Score'] != 1.0], random_state)
+    formulas = compute.component(formula.loc[formula['Importance Score'] != 1.0], random_state)
 
     if out_for_cytoscape:
         output.out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path)
 
     if re:
-        return tcm, tcm_chem_links, chem, chem_protein_links, protein
+        return formula, tcm, tcm_chem_links, chem, chem_protein_links, protein, tcms, formulas
 
 
 def from_tcm_protein(tcm,
@@ -132,8 +138,8 @@ def from_tcm_protein(tcm,
 
 if __name__ == '__main__':
     tcm_ft, tcm_chem_links_ft, chem_ft, chem_protein_links_ft, protein_ft = from_tcm(['柴胡', '黄芩'])
-    tcm_fg, tcm_chem_links_fg, chem_fg, chem_protein_links_fg, protein_fg = from_proteins(['ENSP00000381588',
-                                                                                           'ENSP00000252519'])
+    tcm_fg, tcm_chem_links_fg, chem_fg, chem_protein_links_fg, protein_fg, tcms, formulas = from_proteins(
+        ['ENSP00000381588', 'ENSP00000252519'])
     tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = from_tcm_protein(['柴胡', '黄芩'],
                                                                                                   ['ENSP00000381588',
                                                                                                    'ENSP00000252519'])
