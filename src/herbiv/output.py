@@ -82,6 +82,7 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     if not os.path.exists(path):
         os.mkdir(path)
 
+
 if __name__ == '__main__':
     import get
 

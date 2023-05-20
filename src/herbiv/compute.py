@@ -108,8 +108,8 @@ def component(items_and_score, random_state=None, num=1000, c=10):
     # 计算Score的提升量
     components['Boost'] = components.apply(boost, axis=1, args=(items_and_score, by))
 
-    components.loc[:, 'items'] = components.loc[:, 'items'].apply(
-        lambda x: ';'.join([str(items_and_score.loc[items_and_score[by] == x][name].iloc[0]) for x in x.split(';')]))
+    #components.loc[:, 'items'] = components.loc[:, 'items'].apply(
+        #lambda x: ';'.join([str(items_and_score.loc[items_and_score[by] == x][name].iloc[0]) for x in x.split(';')]))
 
     # 根据boost降序排序
     components = components.sort_values(by='Boost', ascending=False)

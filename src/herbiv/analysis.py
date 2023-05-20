@@ -35,7 +35,7 @@ def from_tcm(tcm,
         # 重新编号（chem和tcm在计算score时会重新编号，此处不再重新编号）
         tcm_chem_links.index = range(tcm_chem_links.shape[0])
 
-    tcm, chem = compute.score(tcm, tcm_chem_links, chem, chem_protein_links)
+    tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links)
 
     if out_for_cytoscape:
         output.out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, proteins, path)
@@ -127,7 +127,7 @@ def from_tcm_protein(tcm,
     chem_protein_links.index = range(chem_protein_links.shape[0])
     proteins.index = range(proteins.shape[0])
 
-    tcm, chem = compute.score(tcm, tcm_chem_links, chem, chem_protein_links)
+    tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links)
 
     if out_for_cytoscape:
         output.out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, proteins, path)
@@ -138,7 +138,7 @@ def from_tcm_protein(tcm,
 
 if __name__ == '__main__':
     tcm_ft, tcm_chem_links_ft, chem_ft, chem_protein_links_ft, protein_ft = from_tcm(['柴胡', '黄芩'])
-    tcm_fg, tcm_chem_links_fg, chem_fg, chem_protein_links_fg, protein_fg, tcms, formulas = from_proteins(
+    formula_fg, tcm_fg, tcm_chem_l_fg, chem_fg, chem_protein_l_fg, protein_fg, tcms_fg, formulas_fg = from_proteins(
         ['ENSP00000381588', 'ENSP00000252519'])
     tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = from_tcm_protein(['柴胡', '黄芩'],
                                                                                                   ['ENSP00000381588',
