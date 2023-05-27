@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from math import ceil
 import random
+from tqdm import tqdm
 
 
 def score(tcm,
@@ -65,7 +66,7 @@ def component(items_and_score, random_state=None, num=1000, c=10):
     :param random_state:
     :param tcm:
     :param items_and_score: pd存储复方/中药信息
-    :param num:
+    :param num: 需要的解的组数
     :return:
     '''
     if 'HVPID' in items_and_score.columns:
@@ -86,13 +87,12 @@ def component(items_and_score, random_state=None, num=1000, c=10):
     if random_state is not None:
         random.seed(random_state)
 
-    for i in range(num):
+    for _ in tqdm(range(num)):
         random_indices = random.sample(range(len(weights)), n)
         weights = [weights[i] for i in random_indices]
         names = [names[i] for i in random_indices]
         values = [values[i] for i in random_indices]
-        if i%100 == 0:
-            print(i)
+
         # 不能再得出之前的解
         dp, items = knapsack(weights, n, items_ls, names, values, c)
         dps.append(dp)
@@ -190,4 +190,3 @@ if __name__ == '__main__':
                                               formula_tcm_links_info)
     tcms = component(tcm_info.loc[tcm_info['Importance Score'] != 1.0], random_state=138192, c=2)
     formulas = component(formula_info.loc[formula_info['Importance Score'] != 1.0], random_state=138192, c=5)
-    print()
