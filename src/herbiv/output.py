@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+from pyecharts import options as opts
+from pyecharts.charts import Graph
 
 
 def out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path='result/'):
@@ -71,16 +73,63 @@ def out_for_cyto(chem_protein_links, chem, genes, tcm_chem_links, tcm, path='res
     pd.concat([out_tcm, out_chem, out_gene]).to_csv(path + 'Type.csv', index=False)
 
 
+def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
+    r"""
+    使用NetworkX可视化分析结果
+    :param tcm: pd.DataFrame类型，中药信息
+    :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
+    :param chem: pd.DataFrame类型，化合物（中药成分）信息
+    :param chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
+    :param path: 字符串类型，存放结果的目录
+    """
+    # 若无path目录，先创建该目录
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    chem_protein_links = pd.DataFrame(chem_protein_links)
+    tcm_chem_links = pd.DataFrame(tcm_chem_links)
+
+    nodes = []
+    edges = []
+
+    for index, row in tcm_chem_links.iloc[1:].iterrows():
+            chinese_medicine = row[0]
+            chemical_component = row[1]
+            nodes.append({'name': chinese_medicine, "symbolSize": 10})
+            nodes.append({'name': chemical_component, "symbolSize": 20})
+            edges.append({'source': chinese_medicine, 'target': chemical_component})
+
+    for index, row in chem_protein_links.iloc[1:].iterrows():
+        chemical_component = row[0]
+        target = row[1]
+        nodes.append({'name': chemical_component, "symbolSize": 20})
+        nodes.append({'name': target, "symbolSize": 30})
+        edges.append({'source': chemical_component, 'target': target})
+
+    unique_list = list(set(tuple(item.items()) for item in nodes))
+    nodes = [dict(item) for item in unique_list]
+
+    unique_list = list(set(tuple(item.items()) for item in edges))
+    edges = [dict(item) for item in unique_list]
+
+    graph = (
+        Graph(init_opts=opts.InitOpts(width="1000px", height="600px"))
+        .add('', nodes, edges, repulsion=8000)
+        .set_global_opts(title_opts=opts.TitleOpts(title="中药、成分和靶点关系图"))
+        .render(path=path + "test_graph.html")
+    )
+
+
 if __name__ == '__main__':
     import get
-    import compute
 
-    genes_info = ['ENSP0000026332', 'ENSP00000398698']
-    proteins = get.get_proteins('Ensembl_ID', genes_info)
-    chem_protein_links_info = get.get_chem_protein_links('Ensembl_ID', genes_info, 0)
+    protein_info = get.get_proteins('Ensembl_ID', ['ENSP0000026332', 'ENSP00000398698'])
+    chem_protein_links_info = get.get_chem_protein_links('Ensembl_ID', protein_info['Ensembl_ID'])
     chem_info = get.get_chemicals('HVCID', chem_protein_links_info['HVCID'])
     tcm_chem_links_info = get.get_tcm_chem_links('HVCID', chem_info['HVCID'])
     tcm_info = get.get_tcm('HVMID', tcm_chem_links_info['HVMID'])
-    chem_info, tcm_info = compute.score(chem_protein_links_info, chem_info, tcm_chem_links_info, tcm_info)
 
-    out_for_cyto(chem_protein_links_info, chem_info, genes_info, tcm_chem_links_info, tcm_info)
+    from herbiv import analysis
+    tcm, tcm_chem_links, chem, chem_protein_links, protein = analysis.from_tcm(['柴胡', '黄芩'])
+    vis(tcm, tcm_chem_links, chem, chem_protein_links, protein)
+    out_for_cyto(tcm_info, tcm_chem_links_info, chem_info, chem_protein_links_info, protein_info)
