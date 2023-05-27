@@ -7224,6 +7224,7 @@ ENSP00000332773,Immunoglobulin superfamily DCC subclass member 3 (Putative neuro
 ENSP00000332788,Anoctamin-9 (Transmembrane protein 16J) (Tumor protein p53-inducible protein 5) (p53-induced gene 5 protein),ANO9 PIG5 TMEM16J TP53I5
 ENSP00000332790,Histone H2A type 2-B (H2A-clustered histone 21),H2AC21 HIST2H2AB
 ENSP00000332791,Kelch-like protein 15,KLHL15 KIAA1677
+ENSP00000258743,,IL6
 ENSP00000332805,Keratin-associated protein 8-1 (High glycine-tyrosine keratin-associated protein 8.1),KRTAP8-1 KAP8.1 KRTAP8.1
 ENSP00000332806,EMILIN-3 (EMILIN-5) (Elastin microfibril interface-located protein 3) (Elastin microfibril interfacer 3) (Elastin microfibril interface-located protein 5) (Elastin microfibril interfacer 5),EMILIN3 C20orf130 EMILIN5
 ENSP00000332809,Photoreceptor cilium actin regulator,PCARE C2orf71
@@ -14144,7 +14145,7 @@ ENSP00000468678,Pleckstrin homology domain-containing family H member 3 (PH doma
 ENSP00000468690,Glucose-6-phosphate isomerase,
 ENSP00000468720,Zinc finger protein 253 (Bone marrow zinc finger 1) (BMZF-1) (Zinc finger protein 411),ZNF253 BMZF1 ZNF411
 ENSP00000468969,PAT complex subunit Asterix (Protein associated with the ER translocon of 10kDa) (PAT-10) (PAT10) (WD repeat domain 83 opposite strand) (WDR83 opposite strand),WDR83OS C19orf56 CGI-140 My006 PTD008
-ENSP00000469049,"Tumor necrosis factor ligand superfamily member 14 (Herpes virus entry mediator ligand) (HVEM-L) (Herpesvirus entry mediator ligand) (CD antigen CD258) [Cleaved into: Tumor necrosis factor ligand superfamily member 14, membrane form; Tumor necrosis factor ligand superfamily member 14, soluble form]",TNFSF14 HVEML LIGHT UNQ391/PRO726
+ENSP00000469049,"Tumor necrosis factor ligand superfamily member 14 (Herpes virus entry mediator ligand) (HVEM-L) (Herpesvirus entry mediator ligand) (CD antigen CD258) [Cleaved into: Tumor necrosis factor ligand superfamily member 14, membrane form; Tumor necrosis factor ligand superfamily member 14, soluble form]",TNFSF14
 ENSP00000469315,Kallikrein-15 (EC 3.4.21.-) (ACO protease),KLK15
 ENSP00000469337,Leucine-rich repeat-containing protein 63,LRRC63
 ENSP00000469468,U6 snRNA-associated Sm-like protein LSm4 (Glycine-rich protein) (GRP),LSM4

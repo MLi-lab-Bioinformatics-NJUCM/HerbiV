@@ -116,20 +116,20 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
         Graph(init_opts=opts.InitOpts(width="1000px", height="600px"))
         .add('', nodes, edges, repulsion=8000)
         .set_global_opts(title_opts=opts.TitleOpts(title="中药、成分和靶点关系图"))
-        .render(path=path + "test_graph.html")
+        .render(path=path + "graph.html")
     )
 
 
 if __name__ == '__main__':
     import get
 
-    protein_info = get.get_proteins('Ensembl_ID', ['ENSP0000026332', 'ENSP00000398698'])
-    chem_protein_links_info = get.get_chem_protein_links('Ensembl_ID', protein_info['Ensembl_ID'])
-    chem_info = get.get_chemicals('HVCID', chem_protein_links_info['HVCID'])
-    tcm_chem_links_info = get.get_tcm_chem_links('HVCID', chem_info['HVCID'])
-    tcm_info = get.get_tcm('HVMID', tcm_chem_links_info['HVMID'])
+    formula_info = get_formula('HVPID', ['HVP1625'])
+    formula_tcm_links_info = get_formula_tcm_links('HVPID', formula_info['HVPID'])
+    tcm_info = get_tcm('HVMID', formula_tcm_links_info['HVMID'])
+    tcm_chem_links_info = get_tcm_chem_links('HVMID', tcm_info['HVMID'])
+    chem_info = get_chemicals('HVCID', tcm_chem_links_info['HVCID'])
+    chem_protein_links_info = get_chem_protein_links('HVCID', chem_info['HVCID'])
+    protein_info = get_proteins('Ensembl_ID', chem_protein_links_info['Ensembl_ID'])
 
-    from herbiv import analysis
-    tcm, tcm_chem_links, chem, chem_protein_links, protein = analysis.from_tcm(['柴胡', '黄芩'])
-    vis(tcm, tcm_chem_links, chem, chem_protein_links, protein)
+    vis(tcm_info, tcm_chem_links_info, chem_info, chem_protein_links_info, protein_info)
     out_for_cyto(tcm_info, tcm_chem_links_info, chem_info, chem_protein_links_info, protein_info)
