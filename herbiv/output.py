@@ -3,7 +3,6 @@ import pandas as pd
 from pyecharts import options as opts
 from pyecharts.charts import Graph
 from pyecharts.globals import ThemeType
-from herbiv import get
 
 
 def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
@@ -81,30 +80,27 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
     :param chem: pd.DataFrame类型，化合物（中药成分）信息
     :param chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
+    :param protein: pd.DataFrame类型，蛋白质（靶点）连接信息
     :param path: 字符串类型，存放结果的目录
     """
     # 若无path目录，先创建该目录
     if not os.path.exists(path):
         os.mkdir(path)
 
-    tcm_info = get.get_tcm('HVMID', tcm_chem_links['HVMID'])
-    chem_info = get.get_chemicals('HVCID', tcm_chem_links['HVCID'])
-    protein_info = get.get_proteins('Ensembl_ID', chem_protein_links['Ensembl_ID'])
+    #chem_protein_links = pd.DataFrame(chem_protein_links)
+    #tcm_chem_links = pd.DataFrame(tcm_chem_links)
 
-    chem_protein_links = pd.DataFrame(chem_protein_links)
-    tcm_chem_links = pd.DataFrame(tcm_chem_links)
-
-    tcm_chem_merged_1 = pd.merge(tcm_chem_links, tcm_info, on='HVMID', how='left')
+    tcm_chem_merged_1 = pd.merge(tcm_chem_links, tcm, on='HVMID', how='left')
     tcm_chem_links['HVMID'] = tcm_chem_merged_1['pinyin_name']
 
-    tcm_chem_merged_2 = pd.merge(tcm_chem_links, chem_info, on='HVCID', how='left')
+    tcm_chem_merged_2 = pd.merge(tcm_chem_links, chem, on='HVCID', how='left')
     tcm_chem_links['HVCID'] = tcm_chem_merged_2['Name']
 
     tcm_chem_links = tcm_chem_links[['HVMID', 'HVCID']]
 
-    chem_protein_merged_1 = pd.merge(chem_protein_links, chem_info, on='HVCID', how='right')
+    chem_protein_merged_1 = pd.merge(chem_protein_links, chem, on='HVCID', how='right')
     chem_protein_links['HVCID'] = chem_protein_merged_1['Name']
-    chem_protein_merged_2 = pd.merge(chem_protein_links, protein_info, on='Ensembl_ID', how='left')
+    chem_protein_merged_2 = pd.merge(chem_protein_links, protein, on='Ensembl_ID', how='left')
     chem_protein_links['Ensembl_ID'] = chem_protein_merged_2['gene_name']
 
     chem_protein_links = chem_protein_links[['HVCID', 'Ensembl_ID']]
@@ -113,11 +109,11 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     edges = []
 
     for index, row in tcm_chem_links.iloc[1:].iterrows():
-            chinese_medicine = row[0]
-            chemical_component = row[1]
-            nodes.append({'name': chinese_medicine, "symbolSize": 10})
-            nodes.append({'name': chemical_component, "symbolSize": 20})
-            edges.append({'source': chinese_medicine, 'target': chemical_component})
+        chinese_medicine = row[0]
+        chemical_component = row[1]
+        nodes.append({'name': chinese_medicine, "symbolSize": 10})
+        nodes.append({'name': chemical_component, "symbolSize": 20})
+        edges.append({'source': chinese_medicine, 'target': chemical_component})
 
     for index, row in chem_protein_links.iloc[1:].iterrows():
         chemical_component = row[0]
@@ -132,21 +128,11 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     unique_list = list(set(tuple(item.items()) for item in edges))
     edges = [dict(item) for item in unique_list]
 
-    graph = (
-        Graph(init_opts=opts.InitOpts(width="2500px", height="1200px", theme=ThemeType.LIGHT))
-        .add('',
-             nodes,
-             edges,
-             repulsion=8000,
-             layout="circular",
-             is_rotate_label=True,
-             linestyle_opts=opts.LineStyleOpts(color="source", curve=0.3),
-             label_opts=opts.LabelOpts(position="right"),)
-        .set_global_opts(
-            title_opts=opts.TitleOpts(title="中药、成分和靶点关系图"),
-            legend_opts=opts.LegendOpts(orient="vertical", pos_left="2%", pos_top="20%"),)
-        .render(path=path + "test_graph.html")
-    )
+    Graph(init_opts=opts.InitOpts(width="2500px", height="1200px", theme=ThemeType.LIGHT)).add(
+        '', nodes, edges, repulsion=8000, layout="circular", is_rotate_label=True, linestyle_opts=opts.LineStyleOpts(
+            color="source", curve=0.3), label_opts=opts.LabelOpts(position="right")).set_global_opts(
+        title_opts=opts.TitleOpts(title=''), legend_opts=opts.LegendOpts(
+            orient="vertical", pos_left="2%", pos_top="20%")).render(path=path + "Graph.html")
 
 
 if __name__ == '__main__':
@@ -157,8 +143,14 @@ if __name__ == '__main__':
     tcm_info = get.get_tcm('HVMID', formula_tcm_links_info['HVMID'])
     tcm_chem_links_info = get.get_tcm_chem_links('HVMID', tcm_info['HVMID'])
     chem_info = get.get_chemicals('HVCID', tcm_chem_links_info['HVCID'])
-    chem_protein_links_info = get.get_chem_protein_links('HVCID', chem_info['HVCID'])
+    chem_protein_links_info = get.get_chem_protein_links('HVCID', chem_info['HVCID'], 990)
     protein_info = get.get_proteins('Ensembl_ID', chem_protein_links_info['Ensembl_ID'])
+
+    chem_info = chem_info.loc[chem_info.loc[:, 'HVCID'].isin(chem_protein_links_info['HVCID'])]
+    tcm_chem_links_info = tcm_chem_links_info.loc[tcm_chem_links_info.loc[:, 'HVCID'].isin(chem_info['HVCID'])]
+    tcm_info = tcm_info.loc[tcm_info.loc[:, 'HVMID'].isin(tcm_chem_links_info['HVMID'])]
+    # 重新编号（chem和tcm在计算score时会重新编号，此处不再重新编号）
+    tcm_chem_links_info.index = range(tcm_chem_links_info.shape[0])
 
     vis(tcm_info, tcm_chem_links_info, chem_info, chem_protein_links_info, protein_info)
     out_for_cyto(tcm_info, tcm_chem_links_info, chem_info, chem_protein_links_info, protein_info)
