@@ -7,25 +7,14 @@
 
 HerbiV是一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
 
-HerbiV is a multifunctional traditional chinese medicine network pharmacology analysis tool 
-under development for classical network pharmacology and reverse network pharmacology.
-
 <!-- toc -->
 
-- [中文](#中文)
-  - [安装](#安装)
-  - [使用](#使用)
-    - [`from_tcm`](#from_tcm)
-    - [`from_genes`](#from_genes)
-    - [`from_tcm_protein`](#from_tcm_protein)
-  - [更新日志](#更新日志)
-  
-- [English](#english)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [`from_tcm`](#from_tcm)
-    - [`from_genes`](#from_genes)
-  - [Versions](#versions) 
+ - [安装](#安装)
+ - [使用](#使用)
+   - [`from_tcm`](#from_tcm)
+   - [`from_proteins`](#from_proteins)
+   - [`from_tcm_protein`](#from_tcm_protein)
+ - [更新日志](#更新日志)
  
 <!-- tocstop -->
 
