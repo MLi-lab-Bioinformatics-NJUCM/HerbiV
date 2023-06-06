@@ -1,6 +1,6 @@
-import get
-import compute
-import output
+from . import get
+from . import compute
+from . import output
 
 
 def from_tcm_or_formula(tcm_or_formula,
@@ -109,7 +109,7 @@ def from_proteins(proteins,
         return formula, tcm, tcm_chem_links, chem, chem_protein_links, protein, tcms, formulas
 
 
-def from_tcm_or_tcm_protein(tcm_or_formula,
+def from_tcm_or_formula_protein(tcm_or_formula,
                             proteins,
                             score=0,
                             out_for_cytoscape=True,
@@ -185,6 +185,6 @@ if __name__ == '__main__':
     formula_fg, tcm_fg, tcm_chem_l_fg, chem_fg, chem_protein_l_fg, protein_fg, tcms_fg, formulas_fg = from_proteins(
         ['ENSP00000381588', 'ENSP00000252519'], num=10)
     tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = \
-        from_tcm_or_tcm_protein(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
+        from_tcm_or_formula_protein(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
     formula_ffp, formula_tcm_links_ffp, tcm_ffp, tcm_chem_links_ffp, chem_ffp, chem_protein_links_ffp, protein_ffp = \
-        from_tcm_or_tcm_protein(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'])
+        from_tcm_or_formula_protein(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'])
