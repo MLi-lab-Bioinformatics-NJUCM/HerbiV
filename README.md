@@ -9,18 +9,16 @@ HerbiV是一个开发中的具有多种功能的中药网络药理学分析工�
 
 <!-- toc -->
 
- - [安装](#安装)
- - [使用](#使用)
-   - [`from_tcm`](#from_tcm)
-   - [`from_proteins`](#from_proteins)
-   - [`from_tcm_protein`](#from_tcm_protein)
- - [更新日志](#更新日志)
+- [安装](#安装)
+- [使用](#使用)
+  - [`from_tcm`](#from_tcm)
+  - [`from_proteins`](#from_proteins)
+  - [`from_tcm_protein`](#from_tcm_protein)
+- [更新日志](#更新日志)
  
 <!-- tocstop -->
 
-# 中文
-
-## 安装
+# 安装
 
 可以使用pip安装`herbiv`。
 
@@ -30,12 +28,12 @@ HerbiV是一个开发中的具有多种功能的中药网络药理学分析工�
 
 `pip install pandas`或`conda install pandas`
 
-## 使用
+# 使用
 
 
 `herbiv.analysis`中提供了3个进行网络药理学分析的pipeline函数。
 
-### `from_tcm`
+## `from_tcm`
 
 经典的正向网络药理学分析的pipeline函数。使用它仅需使用命令
 
@@ -55,7 +53,7 @@ from_tcm(tcm, score, out_for_cytoscape, re, path)
 分别存储了中药信息、中药-化合物（中药成分）连接信息、 化合物（中药成分）信息、化合物（中药成分）-蛋白质（靶点）连接信息和蛋白质（靶点）信息；
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
-### `from_proteins`
+## `from_proteins`
 
 逆向网络药理学分析的pipeline函数。使用它仅需使用命令
 
@@ -75,7 +73,7 @@ analysis.from_proteins(proteins, score, out_for_cytoscape, re, path)
 分别存储了中药信息、中药-化合物（中药成分）连接信息、 化合物（中药成分）信息、化合物（中药成分）-蛋白质（靶点）连接信息和蛋白质（靶点）信息；
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
-### `from_tcm_protein`
+## `from_tcm_protein`
 
 同时对中药和靶点进行检索的pipeline函数。使用它仅需使用命令
 
@@ -96,30 +94,34 @@ analysis.from_proteins(tcm, proteins, score, out_for_cytoscape, re, path)
 分别存储了中药信息、中药-化合物（中药成分）连接信息、 化合物（中药成分）信息、化合物（中药成分）-蛋白质（靶点）连接信息和蛋白质（靶点）信息；
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
-### 更新日志
+## 更新日志
 
-#### 0.0.1a1
+### 0.0.1a1
 
 - 横空出世
 
-#### 0.1a1(2023.3.28)
+### 0.1a1(2023.3.28)
 
 - 使用本项目自己的数据集进行分析，不再使用其他数据库的公共数据集，更新了整个分析架构，大大加快了分析速度；
 - 加入了基于朴素贝叶斯的中药重要性评价模型。
 
-####  0.1a2(2023.3.29)
+###  0.1a2(2023.3.29)
 
 - 数据集随herbiv库下载，无需指定数据集存放路径。
 
-####  0.1a3(2023.4.9)
+###  0.1a3(2023.4.9)
 
 - 重构了代码，增加了经典的正向网络药理学分析的功能。
 
-####  0.1a4(2023.4.14)
+###  0.1a4(2023.4.14)
 
 - 增加了pipline函数`from_tcm_protein`，可同时检索中药和靶点;
 - 增加HerbiV_proteins数据集。
 
-#### 0.1a5(2023.4.19)
+### 0.1a5(2023.4.19)
 - 不会输出游离于网络的节点，提高了稳定性；
-- 统一了函数的调用方法；
+- 统一了函数的调用方法。
+
+### 0.1a6(2023.5.27)
+- output中增加了vis函数，可以输出基于ECharts的网络图；
+- pipline函数也做了相应的修改。
