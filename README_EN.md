@@ -5,8 +5,7 @@
 
 [![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=brightgreen&right_color=blue&left_text=Downloads)](https://pepy.tech/project/herbiv)
 
-HerbiV is a multifunctional traditional chinese medicine network pharmacology analysis tool 
-under development for classical network pharmacology and reverse network pharmacology.
+HerbiV is a multifunctional traditional chinese medicine network pharmacology analysis tool under development for classical network pharmacology and reverse network pharmacology.
 
 <!-- toc -->
 
@@ -18,7 +17,6 @@ under development for classical network pharmacology and reverse network pharmac
  - [Versions](#versions) 
  
 <!-- tocstop -->
-
 
 # Installation
 
@@ -33,6 +31,7 @@ In addition, you need to install the dependency `pandas`.
 # Usage
 
 `herbiv.analysis` provides three pipeline functions which are employed for network pharmacology analysis.
+
 
 ## `from_tcm`
 
@@ -107,3 +106,7 @@ Its optional parameter includes
 ### 0.1a5(2023.4.19)
 - The stability increases, which means it will not output nodes that are isolated from the network;
 - The calling method of the functions is unified.
+
+### 0.1a6(2023.5.27)
+- The vis function is added in output, which can output network graphics based on ECharts.
+-  The pipline function is modified accordingly.
