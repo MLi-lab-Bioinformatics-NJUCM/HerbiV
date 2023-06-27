@@ -153,6 +153,25 @@ def get_proteins(by, items):
     return proteins
 
 
+def get_tcm_or_formula(tcm_or_formula):
+    """
+    获取tcm_or_formula中元素对应的中药、复方及其连接信息
+    :param tcm_or_formula: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟获取的中药或复方的ID
+    :return: formula: pd.DataFrame类型，复方信息
+    :return: tcm: pd.DataFrame类型，中药信息
+    :return: formula_tcm_links: pd.DataFrame类型，复方-中药连接信息
+    """
+    if tcm_or_formula[0][2] == 'P':  # 判断输入是否为复方的HVPID
+        formula = get_formula('HVPID', tcm_or_formula)
+        formula_tcm_links = get_formula_tcm_links('HVPID', formula['HVPID'])
+        tcm = get_tcm('HVMID', formula_tcm_links['HVMID'])
+    else:
+        formula = None
+        formula_tcm_links = None
+        tcm = get_tcm('HVMID', tcm_or_formula)
+    return formula, tcm, formula_tcm_links
+
+
 if __name__ == '__main__':
     formula_info = get_formula('HVPID', ['HVP1625'])
     formula_tcm_links_info = get_formula_tcm_links('HVPID', formula_info['HVPID'])
@@ -161,3 +180,5 @@ if __name__ == '__main__':
     chem_info = get_chemicals('HVCID', tcm_chem_links_info['HVCID'])
     chem_protein_links_info = get_chem_protein_links('HVCID', chem_info['HVCID'])
     protein_info = get_proteins('Ensembl_ID', chem_protein_links_info['Ensembl_ID'])
+    formula_info1, tcm_info1, formula_tcm_links_info1 = get_tcm_or_formula(['HVP1625'])
+    formula_info2, tcm_info2, formula_tcm_links_info2 = get_tcm_or_formula(['HVM0367', 'HVM1695'])
