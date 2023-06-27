@@ -1,6 +1,6 @@
-from . import get
-from . import compute
-from . import output
+import get
+import compute
+import output
 
 
 def from_tcm_or_formula(tcm_or_formula,
@@ -23,14 +23,7 @@ def from_tcm_or_formula(tcm_or_formula,
     :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
     :return: proteins: pd.DataFrame类型，蛋白质（靶点）信息
     """
-    if tcm_or_formula[0][2] == 'P':
-        formula = get.get_formula('HVPID', tcm_or_formula)
-        formula_tcm_links = get.get_formula_tcm_links('HVPID', formula['HVPID'])
-        tcm = get.get_tcm('HVMID', formula_tcm_links['HVMID'])
-    else:
-        formula = None
-        formula_tcm_links = None
-        tcm = get.get_tcm('HVMID', tcm_or_formula)
+    formula, tcm, formula_tcm_links = get.get_tcm_or_formula(tcm_or_formula)
 
     tcm_chem_links = get.get_tcm_chem_links('HVMID', tcm['HVMID'])
     chem = get.get_chemicals('HVCID', tcm_chem_links['HVCID'])
@@ -110,12 +103,12 @@ def from_proteins(proteins,
 
 
 def from_tcm_or_formula_protein(tcm_or_formula,
-                            proteins,
-                            score=0,
-                            out_for_cytoscape=True,
-                            out_graph=True,
-                            re=True,
-                            path='result/'):
+                                proteins,
+                                score=0,
+                                out_for_cytoscape=False,
+                                out_graph=False,
+                                re=True,
+                                path='result/'):
     r"""
     进行经典的正向网络药理学分析，并根据给定的靶点筛选结果
     :param tcm_or_formula: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟分析的中药或复方的ID
@@ -129,34 +122,21 @@ def from_tcm_or_formula_protein(tcm_or_formula,
     :return: tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
     :return: chem: pd.DataFrame类型，化合物（中药成分）信息
     :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
-    :return: protein: pd.DataFrame类型，蛋白质（靶点）信息
+    :return: proteins: pd.DataFrame类型，蛋白质（靶点）信息
     """
-
-    if tcm_or_formula[0][2] == 'P':
-        formula = get.get_formula('HVPID', tcm_or_formula)
-        formula_tcm_links = get.get_formula_tcm_links('HVPID', formula['HVPID'])
-        tcm = get.get_tcm('HVMID', formula_tcm_links['HVMID'])
-    else:
-        formula = None
-        formula_tcm_links = None
-        tcm = get.get_tcm('HVMID', tcm_or_formula)
-
+    formula, tcm, formula_tcm_links = get.get_tcm_or_formula(tcm_or_formula)
     proteins = get.get_proteins('Ensembl_ID', proteins)
 
     # 根据中药和蛋白质（靶点）获取中药-化合物（中药成分）连接和化合物（中药成分）-蛋白质（靶点）连接
     tcm_chem_links = get.get_tcm_chem_links('HVMID', tcm['HVMID'])
     chem_protein_links = get.get_chem_protein_links('Ensembl_ID', proteins['Ensembl_ID'], score)
 
-    # 获取中药-化合物（中药成分）连接和化合物（中药成分）-蛋白质（靶点）连接中化合物（中药成分）的交集
-    chem_from_tcm_chem_links = get.get_chemicals('HVCID', tcm_chem_links['HVCID'])
-    chem_from_chem_protein_links = get.get_chemicals('HVCID', chem_protein_links['HVCID'])
-    chem = chem_from_tcm_chem_links.loc[chem_from_tcm_chem_links['HVCID'].isin(chem_from_chem_protein_links['HVCID'])]
+    # 最终得到的化合物必须与中药和蛋白均有连接，故此处仅get一次，选择中药是为了节省内存
+    chem = get.get_chemicals('HVCID', tcm_chem_links['HVCID'])
 
-    # 根据化合物（中药成分）的交集过滤中药-化合物（中药成分）连接和化合物（中药成分）-蛋白质（靶点）连接以及中药和蛋白质（靶点）
-    tcm_chem_links = tcm_chem_links.loc[tcm_chem_links.loc[:, 'HVCID'].isin(chem['HVCID'])]
-    tcm = tcm.loc[tcm.loc[:, 'HVMID'].isin(tcm_chem_links['HVMID'])]
-    chem_protein_links = chem_protein_links.loc[chem_protein_links.loc[:, 'HVCID'].isin(chem['HVCID'])]
-    proteins = proteins.loc[proteins.loc[:, 'Ensembl_ID'].isin(chem_protein_links['Ensembl_ID'])]
+    # 深度优先搜索筛选有效节点
+    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = dfs_filter(
+        formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins)
 
     # 重新编号（chem和tcm在计算score时会重新编号，此处不再重新编号）
     tcm_chem_links.index = range(tcm_chem_links.shape[0])
@@ -176,6 +156,50 @@ def from_tcm_or_formula_protein(tcm_or_formula,
             return formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins
         else:
             return tcm, tcm_chem_links, chem, chem_protein_links, proteins
+
+
+def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins):
+    """深度优先搜索筛选有效节点（在完整的（复方-）中药-化合物-蛋白通路中的节点）
+    :param formula: pd.DataFrame类型，复方信息
+    :param formula_tcm_links: pd.DataFrame类型，复方-中药连接信息
+    :param tcm: pd.DataFrame类型，中药信息
+    :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
+    :param chem: pd.DataFrame类型，化合物（中药成分）信息
+    :param chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
+    :param proteins: pd.DataFrame类型，蛋白质（靶点）信息
+    :return: formula: pd.DataFrame类型，复方信息
+    :return: formula_tcm_links: pd.DataFrame类型，复方-中药连接信息
+    :return: tcm: pd.DataFrame类型，中药信息
+    :return: tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
+    :return: chem: pd.DataFrame类型，化合物（中药成分）信息
+    :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
+    :return: proteins: pd.DataFrame类型，蛋白质（靶点）信息
+    """
+    formula_id = set()
+    tcm_id = set()
+    chem_id = set()
+    proteins_id = set()
+
+    for f in formula['HVPID'] if formula_tcm_links is not None else [0]:
+        for m in tcm['HVMID'] if formula_tcm_links is None else set(formula_tcm_links.loc[
+                                                                        formula_tcm_links['HVPID'] == f]['HVMID']):
+            for c in set(tcm_chem_links.loc[tcm_chem_links['HVMID'] == m]['HVCID']):
+                for p in set(chem_protein_links.loc[chem_protein_links['HVCID'] == c]['Ensembl_ID']):
+                    formula_id.add(f)
+                    tcm_id.add(m)
+                    chem_id.add(c)
+                    proteins_id.add(p)
+
+    formula = None if formula is None else formula.loc[formula['HVPID'].isin(formula_id)]
+    tcm = tcm.loc[tcm['HVMID'].isin(tcm_id)]
+    chem = chem.loc[chem['HVCID'].isin(chem_id)]
+    proteins = proteins.loc[proteins['Ensembl_ID'].isin(proteins_id)]
+    formula_tcm_links = None if formula_tcm_links is None else formula_tcm_links.loc[
+        formula_tcm_links['HVPID'].isin(formula_id) & formula_tcm_links['HVMID'].isin(tcm_id)]
+    tcm_chem_links = tcm_chem_links.loc[tcm_chem_links['HVMID'].isin(tcm_id) & tcm_chem_links['HVCID'].isin(chem_id)]
+    chem_protein_links = chem_protein_links.loc[chem_protein_links['HVCID'].isin(chem_id) &
+                                                chem_protein_links['Ensembl_ID'].isin(proteins_id)]
+    return formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins
 
 
 if __name__ == '__main__':
