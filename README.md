@@ -5,8 +5,7 @@
 
 [![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=brightgreen&right_color=blue&left_text=Downloads)](https://pepy.tech/project/herbiv)
 
-HerbiV是一个开发中的具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。
-
+HerbiV——新时代中医药领域盛世修典的引领者。它既是一个数据库，又是一个强大的数据分析平台，集成了50多万条方剂、中药、成分、靶点数据，以及经过检验的中药和中药组合对疾病靶点潜在作用的评价模型和中药及复方组合的优化模型，旨在推动中医药现代化进程。
 <!-- toc -->
 
 - [安装](#安装)
