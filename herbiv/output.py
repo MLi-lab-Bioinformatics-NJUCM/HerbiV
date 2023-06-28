@@ -87,52 +87,73 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     if not os.path.exists(path):
         os.mkdir(path)
 
-    tcm_chem_links_c = tcm_chem_links.copy()
-    chem_protein_links_c = chem_protein_links.copy()
+    #chem_protein_links = pd.DataFrame(chem_protein_links)
+    #tcm_chem_links = pd.DataFrame(tcm_chem_links)
 
-    tcm_chem_merged_1 = pd.merge(tcm_chem_links_c, tcm, on='HVMID', how='left')
-    tcm_chem_links_c['HVMID'] = tcm_chem_merged_1['pinyin_name']
+    tcm_chem_merged_1 = pd.merge(tcm_chem_links, tcm, on='HVMID', how='left')
+    tcm_chem_links['HVMID'] = tcm_chem_merged_1['pinyin_name']
 
-    tcm_chem_merged_2 = pd.merge(tcm_chem_links_c, chem, on='HVCID', how='left')
-    tcm_chem_links_c['HVCID'] = tcm_chem_merged_2['Name']
+    tcm_chem_merged_2 = pd.merge(tcm_chem_links, chem, on='HVCID', how='left')
+    tcm_chem_links['HVCID'] = tcm_chem_merged_2['Name']
 
-    tcm_chem_links_c = tcm_chem_links_c[['HVMID', 'HVCID']]
+    tcm_chem_links = tcm_chem_links[['HVMID', 'HVCID']]
 
-    chem_protein_merged_1 = pd.merge(chem_protein_links_c, chem, on='HVCID', how='right')
-    chem_protein_links_c['HVCID'] = chem_protein_merged_1['Name']
-    chem_protein_merged_2 = pd.merge(chem_protein_links_c, protein, on='Ensembl_ID', how='left')
-    chem_protein_links_c['Ensembl_ID'] = chem_protein_merged_2['gene_name']
+    chem_protein_merged_1 = pd.merge(chem_protein_links, chem, on='HVCID', how='right')
+    chem_protein_links['HVCID'] = chem_protein_merged_1['Name']
+    chem_protein_merged_2 = pd.merge(chem_protein_links, protein, on='Ensembl_ID', how='left')
+    chem_protein_links['Ensembl_ID'] = chem_protein_merged_2['gene_name']
 
-    chem_protein_links_c = chem_protein_links_c[['HVCID', 'Ensembl_ID']]
+    chem_protein_links = chem_protein_links[['HVCID', 'Ensembl_ID']]
+
+    tcm_chem_links = tcm_chem_links.rename(columns = {"HCMID": "pinyin_name", "HVCID": "Name"})
+    chem_protein_links = chem_protein_links.rename(columns = {"HVCID": "Name", "Ensembl_ID": "gene_name"})
 
     nodes = []
     edges = []
 
-    for index, row in tcm_chem_links_c.iloc[1:].iterrows():
+    categories = [
+        {"name": "中药", "color": "#61a0a8"},
+        {"name": "化学成分", "color": "#f47920"},
+        {"name": "靶点", "color": "#ca8622"},
+    ]
+
+    for index, row in tcm_chem_links.iloc[1:].iterrows():
         chinese_medicine = row[0]
         chemical_component = row[1]
-        nodes.append({'name': chinese_medicine, "symbolSize": 10})
-        nodes.append({'name': chemical_component, "symbolSize": 20})
+        nodes.append({'name': chinese_medicine, "symbolSize": 20, 'category': 0, "color": "#1FA9E9"})
+        nodes.append({'name': chemical_component, "symbolSize": 20, 'category': 1, "color": "#FFFF00"})
         edges.append({'source': chinese_medicine, 'target': chemical_component})
 
-    for index, row in chem_protein_links_c.iloc[1:].iterrows():
+    for index, row in chem_protein_links.iloc[1:].iterrows():
         chemical_component = row[0]
         target = row[1]
-        nodes.append({'name': chemical_component, "symbolSize": 20})
-        nodes.append({'name': target, "symbolSize": 30})
+        nodes.append({'name': chemical_component, "symbolSize": 20, 'category': 1, "color": "#FFFF00"})
+        nodes.append({'name': target, "symbolSize": 20, 'category': 2, "color": "#000000"})
         edges.append({'source': chemical_component, 'target': target})
+    unique_list = list(set(tuple(item.items()) for item in nodes))
+    nodes = [dict(item) for item in unique_list]
 
     unique_list = list(set(tuple(item.items()) for item in nodes))
     nodes = [dict(item) for item in unique_list]
 
-    unique_list = list(set(tuple(item.items()) for item in edges))
-    edges = [dict(item) for item in unique_list]
+    Graph(init_opts=opts.InitOpts(width="2400px", height="1200px"))\
+        .add(
+        '',
+        nodes=nodes,
+        links=edges,
+        categories=categories,
+        repulsion=8000,
+        layout="circular",
+        is_rotate_label=True,
+        linestyle_opts=opts.LineStyleOpts(color="source", curve=0.3),
+        label_opts=opts.LabelOpts(position="right")
+    )\
+        .set_global_opts(
+        title_opts=opts.TitleOpts(title=''),
+        legend_opts=opts.LegendOpts(orient="vertical", pos_left="2%", pos_top="20%")
+    )\
+        .render(path=path + "Graph.html")
 
-    Graph(init_opts=opts.InitOpts(width="2500px", height="1200px", theme=ThemeType.LIGHT)).add(
-        '', nodes, edges, repulsion=8000, layout="circular", is_rotate_label=True, linestyle_opts=opts.LineStyleOpts(
-            color="source", curve=0.3), label_opts=opts.LabelOpts(position="right")).set_global_opts(
-        title_opts=opts.TitleOpts(title=''), legend_opts=opts.LegendOpts(
-            orient="vertical", pos_left="2%", pos_top="20%")).render(path=path + "Graph.html")
 
 
 if __name__ == '__main__':
