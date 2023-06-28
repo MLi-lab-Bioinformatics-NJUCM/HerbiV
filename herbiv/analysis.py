@@ -102,13 +102,13 @@ def from_proteins(proteins,
         return formula, tcm, tcm_chem_links, chem, chem_protein_links, protein, tcms, formulas
 
 
-def from_tcm_or_formula_protein(tcm_or_formula,
-                                proteins,
-                                score=0,
-                                out_for_cytoscape=False,
-                                out_graph=False,
-                                re=True,
-                                path='result/'):
+def from_tcm_or_formula_proteins(tcm_or_formula,
+                                 proteins,
+                                 score=0,
+                                 out_for_cytoscape=True,
+                                 out_graph=True,
+                                 re=True,
+                                 path='result/'):
     r"""
     进行经典的正向网络药理学分析，并根据给定的靶点筛选结果
     :param tcm_or_formula: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟分析的中药或复方的ID
@@ -143,6 +143,7 @@ def from_tcm_or_formula_protein(tcm_or_formula,
     chem_protein_links.index = range(chem_protein_links.shape[0])
     proteins.index = range(proteins.shape[0])
 
+    # 计算Score
     tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links, formula, formula_tcm_links)
 
     if out_for_cytoscape:
@@ -180,6 +181,7 @@ def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_prote
     chem_id = set()
     proteins_id = set()
 
+    # 深度优先搜索得到有效节点的ID
     for f in formula['HVPID'] if formula_tcm_links is not None else [0]:
         for m in tcm['HVMID'] if formula_tcm_links is None else set(formula_tcm_links.loc[
                                                                         formula_tcm_links['HVPID'] == f]['HVMID']):
@@ -190,6 +192,7 @@ def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_prote
                     chem_id.add(c)
                     proteins_id.add(p)
 
+    # 根据有效节点的ID更新formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins
     formula = None if formula is None else formula.loc[formula['HVPID'].isin(formula_id)]
     tcm = tcm.loc[tcm['HVMID'].isin(tcm_id)]
     chem = chem.loc[chem['HVCID'].isin(chem_id)]
@@ -199,6 +202,7 @@ def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_prote
     tcm_chem_links = tcm_chem_links.loc[tcm_chem_links['HVMID'].isin(tcm_id) & tcm_chem_links['HVCID'].isin(chem_id)]
     chem_protein_links = chem_protein_links.loc[chem_protein_links['HVCID'].isin(chem_id) &
                                                 chem_protein_links['Ensembl_ID'].isin(proteins_id)]
+
     return formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins
 
 
@@ -207,8 +211,9 @@ if __name__ == '__main__':
     formula_ff, formula_tcm_links_ff, tcm_ff, tcm_chem_links_ff, chem_ff, chem_protein_links_ff, protein_ff = \
         from_tcm_or_formula(['HVP1625'])
     formula_fg, tcm_fg, tcm_chem_l_fg, chem_fg, chem_protein_l_fg, protein_fg, tcms_fg, formulas_fg = from_proteins(
-        ['ENSP00000381588', 'ENSP00000252519'], num=10)
+        ['ENSP00000381588', 'ENSP00000252519'], score=900, num=10)
     tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = \
-        from_tcm_or_formula_protein(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
+        from_tcm_or_formula_proteins(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
     formula_ffp, formula_tcm_links_ffp, tcm_ffp, tcm_chem_links_ffp, chem_ffp, chem_protein_links_ffp, protein_ffp = \
-        from_tcm_or_formula_protein(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'])
+        from_tcm_or_formula_proteins(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'])
+    print(1)

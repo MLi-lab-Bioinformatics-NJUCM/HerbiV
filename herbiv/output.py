@@ -87,35 +87,35 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     if not os.path.exists(path):
         os.mkdir(path)
 
-    #chem_protein_links = pd.DataFrame(chem_protein_links)
-    #tcm_chem_links = pd.DataFrame(tcm_chem_links)
+    tcm_chem_links_c = tcm_chem_links.copy()
+    chem_protein_links_c = chem_protein_links.copy()
 
-    tcm_chem_merged_1 = pd.merge(tcm_chem_links, tcm, on='HVMID', how='left')
-    tcm_chem_links['HVMID'] = tcm_chem_merged_1['pinyin_name']
+    tcm_chem_merged_1 = pd.merge(tcm_chem_links_c, tcm, on='HVMID', how='left')
+    tcm_chem_links_c['HVMID'] = tcm_chem_merged_1['pinyin_name']
 
-    tcm_chem_merged_2 = pd.merge(tcm_chem_links, chem, on='HVCID', how='left')
-    tcm_chem_links['HVCID'] = tcm_chem_merged_2['Name']
+    tcm_chem_merged_2 = pd.merge(tcm_chem_links_c, chem, on='HVCID', how='left')
+    tcm_chem_links_c['HVCID'] = tcm_chem_merged_2['Name']
 
-    tcm_chem_links = tcm_chem_links[['HVMID', 'HVCID']]
+    tcm_chem_links_c = tcm_chem_links_c[['HVMID', 'HVCID']]
 
-    chem_protein_merged_1 = pd.merge(chem_protein_links, chem, on='HVCID', how='right')
-    chem_protein_links['HVCID'] = chem_protein_merged_1['Name']
-    chem_protein_merged_2 = pd.merge(chem_protein_links, protein, on='Ensembl_ID', how='left')
-    chem_protein_links['Ensembl_ID'] = chem_protein_merged_2['gene_name']
+    chem_protein_merged_1 = pd.merge(chem_protein_links_c, chem, on='HVCID', how='right')
+    chem_protein_links_c['HVCID'] = chem_protein_merged_1['Name']
+    chem_protein_merged_2 = pd.merge(chem_protein_links_c, protein, on='Ensembl_ID', how='left')
+    chem_protein_links_c['Ensembl_ID'] = chem_protein_merged_2['gene_name']
 
-    chem_protein_links = chem_protein_links[['HVCID', 'Ensembl_ID']]
+    chem_protein_links_c = chem_protein_links_c[['HVCID', 'Ensembl_ID']]
 
     nodes = []
     edges = []
 
-    for index, row in tcm_chem_links.iloc[1:].iterrows():
+    for index, row in tcm_chem_links_c.iloc[1:].iterrows():
         chinese_medicine = row[0]
         chemical_component = row[1]
         nodes.append({'name': chinese_medicine, "symbolSize": 10})
         nodes.append({'name': chemical_component, "symbolSize": 20})
         edges.append({'source': chinese_medicine, 'target': chemical_component})
 
-    for index, row in chem_protein_links.iloc[1:].iterrows():
+    for index, row in chem_protein_links_c.iloc[1:].iterrows():
         chemical_component = row[0]
         target = row[1]
         nodes.append({'name': chemical_component, "symbolSize": 20})
