@@ -1,6 +1,6 @@
 [**中文**](./README.md) | [**English**](./README_EN.md)
 <h1 align="center">
-<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/slogan.png" width="1000">
+<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/slogan.png" width="2000">
 </h1>
 
 [![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=brightgreen&right_color=blue&left_text=Downloads)](https://pepy.tech/project/herbiv)
