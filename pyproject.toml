@@ -3,13 +3,15 @@ requires = [
     "hatchling",
     "numpy",
     "pandas",
+    "tqdm",
+    "pyecharts",
     "typing-extensions",
 ]
 build-backend = "hatchling.build"
 
 [project]
 name = "herbiv"
-version = "0.1a5"
+version = "0.1a6"
 authors = [
   { name="王皓阳", email="Wesady@qq.com" },
 ]
