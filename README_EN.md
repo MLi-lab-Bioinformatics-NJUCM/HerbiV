@@ -5,7 +5,7 @@
 
 [![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=brightgreen&right_color=blue&left_text=Downloads)](https://pepy.tech/project/herbiv)
 
-HerbiV (Bidirectional and Visible Database of Herb) is a leader in the field of traditional Chinese medicine in the new era, deepening the study and development of prime medical literature. It is far more than a database, which is also a powerful data analysis platform that integrates more than 500,000 prescriptions, traditional Chinese medicine, ingredients and target data. Moreover, two tested models: the evaluation model of potential effects of TCM and TCM combinations on disease targets and the optimization model of TCM and prescription, are contained in HerbiV. All these efforts are aimed at promoting the modernization of traditional Chinese medicine.
+HerbiV (Bidirectional and Visible Database of Herb) is far more than a database, which is also a powerful data analysis platform that integrates more than 500,000 prescriptions, traditional Chinese medicine, ingredients and target data. Moreover, two tested models: the evaluation model of potential effects of TCM and TCM combinations on disease targets and the optimization model of TCM and prescription, are contained in HerbiV. All these efforts are aimed at promoting the modernization of traditional Chinese medicine.
 
 <!-- toc -->
 
