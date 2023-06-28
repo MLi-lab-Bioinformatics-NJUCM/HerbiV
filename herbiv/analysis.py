@@ -4,7 +4,7 @@ import output
 
 
 def from_tcm_or_formula(tcm_or_formula,
-                        score=900,
+                        score=990,
                         out_for_cytoscape=True,
                         out_graph=True,
                         re=True,
@@ -30,13 +30,9 @@ def from_tcm_or_formula(tcm_or_formula,
     chem_protein_links = get.get_chem_protein_links('HVCID', chem['HVCID'], score)
     proteins = get.get_proteins('Ensembl_ID', chem_protein_links['Ensembl_ID'])
 
-    # 若化合物（中药成分）-蛋白质（靶点）连接使用了score过滤，则需要依照过滤结果修改chem、tcm_chem_links和tcm
-    if score > 0:
-        chem = chem.loc[chem.loc[:, 'HVCID'].isin(chem_protein_links['HVCID'])]
-        tcm_chem_links = tcm_chem_links.loc[tcm_chem_links.loc[:, 'HVCID'].isin(chem['HVCID'])]
-        tcm = tcm.loc[tcm.loc[:, 'HVMID'].isin(tcm_chem_links['HVMID'])]
-        # 重新编号（chem和tcm在计算score时会重新编号，此处不再重新编号）
-        tcm_chem_links.index = range(tcm_chem_links.shape[0])
+    # 深度优先搜索筛选有效节点
+    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = dfs_filter(
+        formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins)
 
     tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links, formula, formula_tcm_links)
 
@@ -79,13 +75,17 @@ def from_proteins(proteins,
     :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
     :return: protein: pd.DataFrame类型，蛋白质（靶点）信息
     """
-    protein = get.get_proteins('Ensembl_ID', proteins)
-    chem_protein_links = get.get_chem_protein_links('Ensembl_ID', protein['Ensembl_ID'], score)
+    proteins = get.get_proteins('Ensembl_ID', proteins)
+    chem_protein_links = get.get_chem_protein_links('Ensembl_ID', proteins['Ensembl_ID'], score)
     chem = get.get_chemicals('HVCID', chem_protein_links['HVCID'])
     tcm_chem_links = get.get_tcm_chem_links('HVCID', chem['HVCID'])
     tcm = get.get_tcm('HVMID', tcm_chem_links['HVMID'])
     formula_tcm_links = get.get_formula_tcm_links('HVMID', tcm['HVMID'])
     formula = get.get_formula('HVPID', formula_tcm_links['HVPID'])
+
+    # 深度优先搜索筛选有效节点
+    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = dfs_filter(
+        formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins)
 
     # 计算Score
     tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links, formula, formula_tcm_links)
@@ -96,10 +96,10 @@ def from_proteins(proteins,
                                  random_state, num) if formula_component else None
 
     if out_for_cytoscape:
-        output.out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path)
+        output.out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, proteins, path)
 
     if re:
-        return formula, tcm, tcm_chem_links, chem, chem_protein_links, protein, tcms, formulas
+        return formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins, tcms, formulas
 
 
 def from_tcm_or_formula_proteins(tcm_or_formula,
@@ -137,11 +137,6 @@ def from_tcm_or_formula_proteins(tcm_or_formula,
     # 深度优先搜索筛选有效节点
     formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = dfs_filter(
         formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins)
-
-    # 重新编号（chem和tcm在计算score时会重新编号，此处不再重新编号）
-    tcm_chem_links.index = range(tcm_chem_links.shape[0])
-    chem_protein_links.index = range(chem_protein_links.shape[0])
-    proteins.index = range(proteins.shape[0])
 
     # 计算Score
     tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links, formula, formula_tcm_links)
@@ -203,6 +198,11 @@ def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_prote
     chem_protein_links = chem_protein_links.loc[chem_protein_links['HVCID'].isin(chem_id) &
                                                 chem_protein_links['Ensembl_ID'].isin(proteins_id)]
 
+    # 重新编号（chem、tcm和formula在计算score时会重新编号，此处不再重新编号）
+    tcm_chem_links.index = range(tcm_chem_links.shape[0])
+    chem_protein_links.index = range(chem_protein_links.shape[0])
+    proteins.index = range(proteins.shape[0])
+
     return formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins
 
 
@@ -211,9 +211,8 @@ if __name__ == '__main__':
     formula_ff, formula_tcm_links_ff, tcm_ff, tcm_chem_links_ff, chem_ff, chem_protein_links_ff, protein_ff = \
         from_tcm_or_formula(['HVP1625'])
     formula_fg, tcm_fg, tcm_chem_l_fg, chem_fg, chem_protein_l_fg, protein_fg, tcms_fg, formulas_fg = from_proteins(
-        ['ENSP00000381588', 'ENSP00000252519'], score=900, num=10)
+        ['ENSP00000381588', 'ENSP00000252519'], num=10)
     tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = \
         from_tcm_or_formula_proteins(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
     formula_ffp, formula_tcm_links_ffp, tcm_ffp, tcm_chem_links_ffp, chem_ffp, chem_protein_links_ffp, protein_ffp = \
         from_tcm_or_formula_proteins(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'])
-    print(1)
