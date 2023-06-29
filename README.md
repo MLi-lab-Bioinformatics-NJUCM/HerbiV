@@ -125,5 +125,8 @@ analysis.from_proteins(tcm, proteins, score, out_for_cytoscape, re, path)
 - output中增加了vis函数，可以输出基于ECharts的网络图；
 - pipline函数也做了相应的修改。
 
-## 0.1a7(2023.6.29)
+### 0.1a7(2023.6.29)
 - 增加过滤无效节点的函数，提高系统的稳定性。
+
+### 0.1a8(2023.6.30)
+- vis函数绘制的网络图可为不同类节点赋予不同颜色。
