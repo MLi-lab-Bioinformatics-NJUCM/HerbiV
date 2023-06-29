@@ -7,8 +7,8 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="herbiv",
-    version="0.1a6",
-    description="HerbiV是一个具有多种功能的中药网络药理学分析工具，可进行经典的网络药理学及反向网络药理学分析。HerbiV is a multi-functional traditional chinese medicine network pharmacology analysis tool for classical network pharmacology and reverse network pharmacology.",
+    version="0.1a7",
+    description="HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是一个强大的数据分析平台，集成了50多万条方剂、中药、成分、靶点数据，以及经过检验的数据挖掘模型。HerbiV is far more than a database, which is also a powerful data analysis platform that integrates more than 500,000 prescriptions, traditional Chinese medicine, ingredients and target data. Moreover, two tested data mining models are contained in HerbiV.",
     # Optional
     long_description=long_description,
     long_description_content_type="text/markdown",
