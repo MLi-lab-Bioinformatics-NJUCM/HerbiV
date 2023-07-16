@@ -10,9 +10,9 @@ HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是
 
 - [安装](#安装)
 - [使用](#使用)
-  - [`from_tcm_or_formula`](#from_tcm_or_formula)
-  - [`from_proteins`](#from_proteins)
-  - [`from_tcm_protein`](#from_tcm_protein)
+ - [`from_tcm_or_formula`](#from_tcm_or_formula)
+ - [`from_proteins`](#from_proteins)
+ - [`from_tcm_protein`](#from_tcm_protein)
 - [更新日志](#更新日志)
  
 <!-- tocstop -->
