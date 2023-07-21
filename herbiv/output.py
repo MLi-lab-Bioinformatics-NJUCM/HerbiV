@@ -5,24 +5,20 @@ from pyecharts.charts import Graph
 from pyecharts.globals import ThemeType
 
 
-def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
+def re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein):
     r"""
-    输出Cytoscape用于作图的网络文件和属性文件
     :param tcm: pd.DataFrame类型，中药信息
     :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
     :param chem: pd.DataFrame类型，化合物（中药成分）信息
     :param chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
-    :param path: 字符串类型，存放结果的目录
+    :param protein: pd.DataFrame类型，靶点信息
+    :return: 返回清洗过的数据
     """
     tcm_c = tcm.copy()
     tcm_chem_links_c = tcm_chem_links.copy()
     chem_c = chem.copy()
     chem_protein_links_c = chem_protein_links.copy()
     protein_c = protein.copy()
-
-    # 若无path目录，先创建该目录
-    if not os.path.exists(path):
-        os.mkdir(path)
 
     out_chem_protein_links = chem_protein_links_c.iloc[:, 0:2]
     out_chem_protein_links.columns = ['SourceNode', 'TargetNode']
@@ -66,16 +62,29 @@ def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='r
     out_gene.columns = ['Key']
     out_gene['Attribute'] = 'Proteins'
 
+    return out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene
+
+
+def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
+    r"""
+    输出Cytoscape用于作图的网络文件和属性文件
+    :param tcm: pd.DataFrame类型，中药信息
+    :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
+    :param chem: pd.DataFrame类型，化合物（中药成分）信息
+    :param chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
+    :param path: 字符串类型，存放结果的目录
+    """
+
     # 输出Network文件
-    pd.concat([out_chem_protein_links, out_tcm_chem]).to_csv(path + 'Network.csv', index=False)
+    pd.concat([chem_protein_links, tcm_chem_links]).to_csv(path + 'Network.csv', index=False)
 
     # 输出Type文件
-    pd.concat([out_tcm, out_chem, out_gene]).to_csv(path + 'Type.csv', index=False)
+    pd.concat([tcm, chem, protein]).to_csv(path + 'Type.csv', index=False)
 
 
 def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     r"""
-    使用NetworkX可视化分析结果
+    使用pyecharts可视化分析结果
     :param tcm: pd.DataFrame类型，中药信息
     :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
     :param chem: pd.DataFrame类型，化合物（中药成分）信息
@@ -87,27 +96,6 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     if not os.path.exists(path):
         os.mkdir(path)
 
-    #chem_protein_links = pd.DataFrame(chem_protein_links)
-    #tcm_chem_links = pd.DataFrame(tcm_chem_links)
-
-    tcm_chem_merged_1 = pd.merge(tcm_chem_links, tcm, on='HVMID', how='left')
-    tcm_chem_links['HVMID'] = tcm_chem_merged_1['pinyin_name']
-
-    tcm_chem_merged_2 = pd.merge(tcm_chem_links, chem, on='HVCID', how='left')
-    tcm_chem_links['HVCID'] = tcm_chem_merged_2['Name']
-
-    tcm_chem_links = tcm_chem_links[['HVMID', 'HVCID']]
-
-    chem_protein_merged_1 = pd.merge(chem_protein_links, chem, on='HVCID', how='right')
-    chem_protein_links['HVCID'] = chem_protein_merged_1['Name']
-    chem_protein_merged_2 = pd.merge(chem_protein_links, protein, on='Ensembl_ID', how='left')
-    chem_protein_links['Ensembl_ID'] = chem_protein_merged_2['gene_name']
-
-    chem_protein_links = chem_protein_links[['HVCID', 'Ensembl_ID']]
-
-    tcm_chem_links = tcm_chem_links.rename(columns = {"HCMID": "pinyin_name", "HVCID": "Name"})
-    chem_protein_links = chem_protein_links.rename(columns = {"HVCID": "Name", "Ensembl_ID": "gene_name"})
-
     nodes = []
     edges = []
 
@@ -117,19 +105,20 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
         {"name": "靶点", "color": "#ca8622"},
     ]
 
-    for index, row in tcm_chem_links.iloc[1:].iterrows():
+    for index, row in tcm_chem_links.iloc[0:].iterrows():
         chinese_medicine = row[0]
         chemical_component = row[1]
         nodes.append({'name': chinese_medicine, "symbolSize": 20, 'category': 0, "color": "#1FA9E9"})
         nodes.append({'name': chemical_component, "symbolSize": 20, 'category': 1, "color": "#FFFF00"})
         edges.append({'source': chinese_medicine, 'target': chemical_component})
 
-    for index, row in chem_protein_links.iloc[1:].iterrows():
+    for index, row in chem_protein_links.iloc[0:].iterrows():
         chemical_component = row[0]
         target = row[1]
         nodes.append({'name': chemical_component, "symbolSize": 20, 'category': 1, "color": "#FFFF00"})
         nodes.append({'name': target, "symbolSize": 20, 'category': 2, "color": "#000000"})
         edges.append({'source': chemical_component, 'target': target})
+
     unique_list = list(set(tuple(item.items()) for item in nodes))
     nodes = [dict(item) for item in unique_list]
 

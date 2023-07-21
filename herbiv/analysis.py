@@ -39,10 +39,14 @@ def from_tcm_or_formula(tcm_or_formula,
     tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links, formula, formula_tcm_links)
 
     if out_for_cytoscape:
-        output.out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, proteins, path)
+        out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene =\
+            output.re_name(tcm, tcm_chem_links, chem, chem_protein_links, proteins)
+        output.out_for_cyto(out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene, path)
 
     if out_graph:
-        output.vis(tcm, tcm_chem_links, chem, chem_protein_links, proteins, path)
+        out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene =\
+            output.re_name(tcm, tcm_chem_links, chem, chem_protein_links, proteins)
+        output.vis(out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene, path)
 
     if re:
         if tcm_or_formula[0][2] == 'P':
@@ -213,7 +217,7 @@ if __name__ == '__main__':
     formula_ff, formula_tcm_links_ff, tcm_ff, tcm_chem_links_ff, chem_ff, chem_protein_links_ff, protein_ff = \
         from_tcm_or_formula(['HVP1625'])
     formula_fg, tcm_fg, tcm_chem_l_fg, chem_fg, chem_protein_l_fg, protein_fg, tcms_fg, formulas_fg = from_proteins(
-        ['ENSP00000381588', 'ENSP00000252519'], num=10)
+        ['ENSP00000381588', 'ENSP00000252519'], num=3)
     tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = \
         from_tcm_or_formula_proteins(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
     formula_ffp, formula_tcm_links_ffp, tcm_ffp, tcm_chem_links_ffp, chem_ffp, chem_protein_links_ffp, protein_ffp = \
