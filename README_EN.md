@@ -33,20 +33,21 @@ In addition, you need to install the dependency `pandas`.
 `herbiv.analysis` provides three pipeline functions which are employed for network pharmacology analysis.
 
 
-## `from_tcm`
+## `from_tcm_or_formula`
 
 The pipeline function that is used in the classic network pharmacology analysis. Nothing except for your command is required when using it.
 
 ```python
 from herbiv import analysis
-from_tcm(tcm, score, ut_for_cytoscape, re, path)
+from_tcm_or_formula(tcm_or_formula, score, out_graph, out_for_cytoscape, re, path)
 ```
 
-It needs a required parameter `tcm`, which is a combined data type that can judge whether an element lies in it using in, storing the chinese name of tcm that is supposed to be inquired, e.g. `['柴胡', '黄芩']`.
+It needs a required parameter `tcm_or_formula`, which is a combined data type that can judge whether an element lies in it using in, storing the ID of tcm or prescription that is supposed to be inquired, e.g. `['HVM0367', 'HVM1695']`.
 
 Its optional parameter includes
-- `score`: int, which will not be picked out unless the combined_score is no less than it, `900` by default;
+- `score`: int, which will not be picked out unless the combined_score is no less than it, `990` by default;
 - `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping, `True` by default;
+- `out_graph`: boolean, decides whether to output the network visualization in html format based on ECharts, `True` by default;
 - `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `True`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
@@ -109,4 +110,11 @@ Its optional parameter includes
 
 ### 0.1a6(2023.5.27)
 - The vis function is added in output, which can output network graphics based on ECharts.
--  The pipline function is modified accordingly.
+- The pipline function is modified accordingly.
+
+### 0.1a7(2023.6.29)
+- The function for removing invalid nodes is added, improving the stability of the system.
+
+### 0.1a8(2023.6.30)
+- Differnet colors can be given to different types of nodes in the network diagram drawn by the vis function.
+
