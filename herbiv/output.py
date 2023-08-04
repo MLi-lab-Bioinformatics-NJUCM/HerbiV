@@ -75,11 +75,15 @@ def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='r
     :param path: 字符串类型，存放结果的目录
     """
 
+    out_tcm, out_tcm_chem, out_chem, out_chem_protein, out_gene = \
+        re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
     # 输出Network文件
-    pd.concat([chem_protein_links, tcm_chem_links]).to_csv(path + 'Network.csv', index=False)
+    pd.concat([out_chem_protein, out_tcm_chem]).to_csv(path + 'Network.csv', index=False)
 
     # 输出Type文件
-    pd.concat([tcm, chem, protein]).to_csv(path + 'Type.csv', index=False)
+    out_tcm, out_tcm_chem, out_chem, out_chem_protein, out_gene = \
+        re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
+    pd.concat([out_tcm, out_chem, out_gene]).to_csv(path + 'Type.csv', index=False)
 
 
 def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
