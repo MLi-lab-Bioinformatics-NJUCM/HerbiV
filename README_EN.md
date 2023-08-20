@@ -64,6 +64,10 @@ It needs a required parameter `proteins`,  which is a combined data type that ca
 
 Its optional parameter includes
 - `score`: int, which will not be picked out unless the combined_score is no less than it, `0` by default;
+- `random_state`: int, which specifies a random number seed thaT is applied in the optimization model, `None` by default, which means no random number seed is specified;
+- `num`: int, which specifies the number of sets of solutions to be generated when optimizing, `1000` by default;
+- `tcm_component`:boolean, decides whether start the optimization of tcm combination, `True` by default;
+- `formula_component`:boolean, decides whether start the optimization of formula combination, `True` by default;
 - `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping later, `True` by default;
 - `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
