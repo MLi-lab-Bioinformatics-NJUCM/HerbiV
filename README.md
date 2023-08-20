@@ -52,8 +52,8 @@ analysis.from_tcm_or_formula(tcm_or_formula, score, out_graph, out_for_cytoscape
 - `out_graph`: boolean类型，是否输出基于ECharts的html格式的网络可视化图，默认为`True`；
 - `re`: boolean类型，是否返回原始分析结果（复方（仅输入为HVPID时）、中药、化合物（中药成分）、蛋白（靶点）及其连接信息），默认为`True`。
 若`re`为`True`，则函数将返回运行结果`formula`、`formula_tcm_links`、`tcm`、`tcm_chem_links`、`chem`、`chem_protein_links`
-和`proteins`（`formula`、`formula_tcm_links`仅在输入为HVPID时返回）， 它们均为pd.DataFrame类型， 分别存储了复方信息、复方-中药连接信息、
-中药信息、中药-化合物（中药成分）连接信息、 化合物（中药成分）信息、化合物（中药成分）-蛋白（靶点）连接信息和蛋白（靶点）信息；
+和`proteins`（`formula`、`formula_tcm_links`仅在输入为HVPID时返回），它们均为pd.DataFrame类型，分别存储了复方信息、复方-中药连接信息、
+中药信息、中药-化合物（中药成分）连接信息、化合物（中药成分）信息、化合物（中药成分）-蛋白（靶点）连接信息和蛋白（靶点）信息；
 - `path`: str类型，存放结果的路径，默认为`results/`。若无此路径，将自动建立相应的目录。
 
 ## `from_proteins`
