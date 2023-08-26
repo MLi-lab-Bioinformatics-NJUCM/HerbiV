@@ -17,8 +17,8 @@ def from_tcm_or_formula(tcm_or_formula,
     :param out_graph: 布尔类型，是否输出基于ECharts的html格式的网络可视化图，默认为True
     :param re: 布尔类型，是否返回原始分析结果（中药、化合物（中药成分）、蛋白（靶点）及其连接信息）
     :param path: 字符串类型，存放结果的目录
-    :return: formula: pd.DataFrame类型，复方信息（仅在输入为HVPID时返回）
-    :return: formula_tcm_links: pd.DataFrame类型，复方-中药连接信息（仅在输入为HVPID时返回）
+    :return: formula: pd.DataFrame类型，复方信息（仅在输入的tcm_or_formula为HVPID时返回）
+    :return: formula_tcm_links: pd.DataFrame类型，复方-中药连接信息（仅在输入的tcm_or_formula为HVPID时返回）
     :return: tcm: pd.DataFrame类型，中药信息
     :return: tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
     :return: chem: pd.DataFrame类型，化合物（中药成分）信息
@@ -119,11 +119,13 @@ def from_tcm_or_formula_proteins(tcm_or_formula,
     进行经典的正向网络药理学分析，并根据给定的靶点筛选结果
     :param tcm_or_formula: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟分析的中药或复方的ID
     :param proteins: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟分析蛋白（靶点）在STITCH中的Ensembl_ID
-    :param score: int类型，仅combined_score大于等于score的记录会被筛选出
-    :param out_for_cytoscape: 布尔类型，是否输出用于Cytoscape绘图的文件
-    :param out_graph: 布尔类型，是否输出图
+    :param score: int类型，HerbiV_chemical_protein_links数据集中仅combined_score大于等于score的记录会被筛选出
+    :param out_for_cytoscape: 布尔类型，是否输出用于Cytoscape绘图的文件，默认为True
+    :param out_graph: 布尔类型，是否输出基于ECharts的html格式的网络可视化图，默认为True
     :param re: 布尔类型，是否返回原始分析结果
     :param path: 字符串类型，存放结果的目录
+    :return: formula: pd.DataFrame类型，复方信息（仅在输入的tcm_or_formula为HVPID时返回）
+    :return: formula_tcm_links: pd.DataFrame类型，复方-中药连接信息（仅在输入的tcm_or_formula为HVPID时返回）
     :return: tcm: pd.DataFrame类型，中药信息
     :return: tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
     :return: chem: pd.DataFrame类型，化合物（中药成分）信息
