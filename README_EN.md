@@ -35,20 +35,22 @@ In addition, you need to install the dependency `pandas`.
 
 ## `from_tcm_or_formula`
 
+ALL THE WORD 'FORMULA' BELOW IS EXACTLY EQUIVALENT TO 'PRESCRIPTION', VICE VERSA! 
+
 The pipeline function that is used in the classic network pharmacology analysis. Nothing except for your command is required when using it.
 
 ```python
 from herbiv import analysis
-from_tcm_or_formula(tcm_or_formula, score, out_graph, out_for_cytoscape, re, path)
+analysis. from_tcm_or_formula(tcm_or_formula, score, out_graph, out_for_cytoscape, re, path)
 ```
 
 It needs a required parameter `tcm_or_formula`, which is a combined data type that can judge whether an element lies in it using in, storing the ID of tcm or prescription that is supposed to be inquired, e.g. `['HVM0367', 'HVM1695']`.
 
 Its optional parameter includes
-- `score`: int, which will not be picked out unless the combined_score is no less than it, `990` by default;
+- `score`: int, only the record whose combined_score is no less than it will be picked out, `990` by default;
 - `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping, `True` by default;
 - `out_graph`: boolean, decides whether to output the network visualization in html format based on ECharts, `True` by default;
-- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `True`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
+- `re`: boolean, decides whether to return to the original analysis results (prescription (only when HVPID is input), tcm, compounds (ingredients), proteins (targets), and the links), `True` by default. If `re` is `True`, the function will return to the result of `formula`, `formula_tcm_links`, `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins` (return to `formula` and `formula_tcm_links` only when HVPID is input), all of which are in pd.DataFrame form, storing the information of tcm, the information of prescription-tcm connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
 ## `from_proteins`
@@ -57,15 +59,19 @@ The pipeline function that is utilized for reverse network pharmacology. Only a 
 
 ```python
 from herbiv import analysis
-analysis.from_proteins(proteins, score, out_for_cytoscape, re, path)
+analysis.from_proteins(proteins, score, random_state, num, tcm_component, formula_component, out_for_cytoscape, re, path)
 ```
 
 It needs a required parameter `proteins`,  which is a combined data type that can judge whether an element lies in it using in, storing the Ensembl_ID in STITCH of the proteins or targets which are supposed to be analyzed, e.g. `['ENSP00000381588', 'ENSP00000252519']`.
 
 Its optional parameter includes
 - `score`: int, which will not be picked out unless the combined_score is no less than it, `0` by default;
+- `random_state`: int, which specifies a random number seed thaT is applied in the optimization model, `None` by default, which means no random number seed is specified;
+- `num`: int, which specifies the number of sets of solutions to be generated when optimizing, `1000` by default;
+- `tcm_component`:boolean, decides whether start the optimization of tcm combination, `True` by default;
+- `formula_component`:boolean, decides whether start the optimization of formula combination, `True` by default;
 - `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping later, `True` by default;
-- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
+- `re`: boolean, decides whether to return to the original analysis results (prescriptions, tcm, compounds(ingredients), proteins(targets) and their links), `True` by default. If `re` is `true`, the function will return to the result of `formula`, `formula_tcm_links`, `tcm`, `tcm_chem links`, `chem`, `chem_protein_links`,`proteins`, `tcms` and `formulas` all of which are in pd.DataFrame form, storing the information of prescription, the information of prescription-tcm link, the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection, the information of the proteins or targets, the information of the tcm combination that is produced by the optimization model (ID of the tcms in the combination, potential effects of the combination on the disease-related targets, potential increase before and after combination) and the information of the prescription combination that is produced by the optimization model (ID of the prescriptions in the combination, potential effects of the combination on the disease-related targets, potential increase before and after combination)  respectively;
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
 ## `from_tcm_proteins`
