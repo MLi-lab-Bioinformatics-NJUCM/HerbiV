@@ -13,7 +13,7 @@ HerbiV (Bidirectional and Visible Database of Herb) is far more than a database,
  - [Usage](#usage)
    - [`from_tcm_or_formula`](#from_tcm_or_formula)
    - [`from_proteins`](#from_proteins)
-   - [`from_tcm_proteins`](#from_tcm_proteins)
+   - [`from_tcm_or_formula_proteins`](#from_tcm_or_formula_proteins)
  - [Versions](#versions) 
  
 <!-- tocstop -->
@@ -50,8 +50,8 @@ Its optional parameter includes
 - `score`: int, only the record whose combined_score is no less than it will be picked out, `990` by default;
 - `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping, `True` by default;
 - `out_graph`: boolean, decides whether to output the network visualization in html format based on ECharts, `True` by default;
-- `re`: boolean, decides whether to return to the original analysis results (prescription (only when HVPID is input), tcm, compounds (ingredients), proteins (targets), and the links), `True` by default. If `re` is `True`, the function will return to the result of `formula`, `formula_tcm_links`, `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins` (return to `formula` and `formula_tcm_links` only when HVPID is input), all of which are in pd.DataFrame form, storing the information of tcm, the information of prescription-tcm connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
-- `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
+-  `re`: boolean, decides whether to return to the original analysis results (prescription (only when the input tcm_or_formula is HVPID), tcm, compounds (ingredients), proteins (targets), and the links), `True` by default. If `re` is `True`, the function will return to the result of `formula`, `formula_tcm_links`, `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins` (return to `formula` and `formula_tcm_links` only when the input tcm_or_formula is HVPID), all of which are in pd.DataFrame form, storing the information of tcm, the information of prescription-tcm connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
+- `path`: str, which is the path to store the results, defaulted to `result/`. A corresponding catalogue will be established automatically if the path can not be found.
 
 ## `from_proteins`
 
@@ -74,21 +74,22 @@ Its optional parameter includes
 - `re`: boolean, decides whether to return to the original analysis results (prescriptions, tcm, compounds(ingredients), proteins(targets) and their links), `True` by default. If `re` is `true`, the function will return to the result of `formula`, `formula_tcm_links`, `tcm`, `tcm_chem links`, `chem`, `chem_protein_links`,`proteins`, `tcms` and `formulas` all of which are in pd.DataFrame form, storing the information of prescription, the information of prescription-tcm link, the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection, the information of the proteins or targets, the information of the tcm combination that is produced by the optimization model (ID of the tcms in the combination, potential effects of the combination on the disease-related targets, potential increase before and after combination) and the information of the prescription combination that is produced by the optimization model (ID of the prescriptions in the combination, potential effects of the combination on the disease-related targets, potential increase before and after combination)  respectively;
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
-## `from_tcm_proteins`
+## `from_tcm_or_formula_proteins`
 
 The pipeline function that searches for tcm and the targets at the same time. Only a few commands are needed to use it
 
 ```python
 from herbiv import analysis
-analysis.from_proteins(tcm, proteins, score, out_for_cytoscape, re, path)
+analysis.from_proteins(tcm_or_formula, proteins, score, out_for_cytoscape, out_graph, re, path)
 ```
 
-It needs two required parameters `tcm` and `proteins`, either of which is a combined data type that can judge whether an element lies in it using in, storing the chinese name of tcm that is supposed to be inquired, e.g. `['柴胡', '黄芩']` and the Ensembl_ID in STITCH of the proteins or targets which are supposed to be analyzed, e.g. `['ENSP00000381588', 'ENSP00000252519']`.
+It needs two required parameters `tcm_or_formula` and `proteins`, either of which is a combined data type that can judge whether an element lies in it using in, storing the ID of tcm or formula that is supposed to be inquired, e.g. `['HVP1625']` and the Ensembl_ID in STITCH of the proteins or targets which are supposed to be analyzed, e.g. `['ENSP00000381588', 'ENSP00000252519']`.
 
 Its optional parameter includes
-- `score`: int, which will not be picked out unless the combined_score is no less than it, `0` by default;
+- `score`: int, which will not be picked out from HerbiV_chemical_protein_links data set unless the combined_score is no less than it, `0` by default;
 - `out_for_cytoscape`: boolean, decides whether to output the file which will be used for Cytoscape mapping later, `True` by default;
-- `re`: boolean, decides whether to return to the original analysis results, `True` by default. If `re` is `true`, the function will turn to the result of `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
+- `out_graph`: boolean, decides whether to output the network visualization graph in html form based on ECharts, `True` by default;
+- `re`: boolean, decides whether to return to the original analysis results, (prescription (only when the input tcm_or_formula is HVPID), tcm, compounds (ingredients), proteins (targets), and the links), `True` by default. If `re` is `true`, the function will turn to the result of `formula`, `formula_tcm_links`, `tcm`, `tcm_chem links`, `chem`, `chem_protein_links` and `proteins`, (return to `formula` and `formula_tcm_links` only when the input tcm_or_formula is HVPID), all of which are in pd.DataFrame form, storing the information of tcm, the information of tcm-componds or ingredients connection, the information of the compounds or the ingredients, the information of the compounds or ingredients-proteins or the targets connection and the information of the proteins or targets, respectively;
 - `path`: str, which is the path to store the results, defaulted to `result/`. A corrsponding catalogue will be established automatically if the path can not be found.
 
 # Versions
