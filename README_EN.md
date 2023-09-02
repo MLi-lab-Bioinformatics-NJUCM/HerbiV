@@ -14,7 +14,7 @@ HerbiV (Bidirectional and Visible Database of Herb) is far more than a database,
    - [`from_tcm_or_formula`](#from_tcm_or_formula)
    - [`from_proteins`](#from_proteins)
    - [`from_tcm_or_formula_proteins`](#from_tcm_or_formula_proteins)
- - [Versions](#versions) 
+- [Versions](#versions)
  
 <!-- tocstop -->
 
