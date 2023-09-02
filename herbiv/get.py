@@ -4,17 +4,28 @@ import pandas as pd
 
 def get_formula(by, items):
     """
-    读取HerbiV_formula数据集，返回items中复方的信息
-    :param by: str类型，数据集中与items相匹配的列的列名
-    :param items: 任何可以使用in判断一个元素是否在其中的组合数据类型，存放要查询的复方
-    :return: pd.DataFrame类型，items中复方的信息
+        读取HerbiV_formula数据集，返回items中复方的信息。
+        Read the HerbiV_formula dataset and return the information about the compound party in items.
+
+        Args:
+            by (str): 数据集中与items相匹配的列的列名。The column name of the column in the dataset that matches items.
+            items (collections.abc.Iterable): 要查询的复方
+
+        Returns:
+            pandas.DataFrame: items中复方的信息。Information on compounding in items.
+
+        Examples:
+            >>> get_formula('HVPID', ['HVP1625'])
+                 HVPID  ... Source Document
+            0  HVP1625  ...   shang han lun
+            [1 rows x 6 columns]
+
     """
 
     # 读取数据集
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    formula_all = pd.read_csv(current_directory + r'/data/HerbiV_formula.csv')
+    formula_all = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + r'/data/HerbiV_formula.csv')
 
-    # 在HerbiV_tcm中获取items中复方的信息
+    # 在HerbiV_formula中获取items中复方的信息
     formula = formula_all.loc[formula_all[by].isin(items)].copy()
 
     # 重新设置索引
@@ -31,8 +42,8 @@ def get_formula_tcm_links(by, items):
     :return: pd.DataFrame类型，items中复方/中药的复方-中药连接信息
     """
     # 读取数据集
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    formula_tcm_links_all = pd.read_csv(current_directory + r'/data/HerbiV_formula_tcm_links.csv')
+    formula_tcm_links_all = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) +
+                                        r'/data/HerbiV_formula_tcm_links.csv')
 
     # 在HerbiV_formula_tcm_links中获取items中复方/中药的复方-中药连接信息
     formula_tcm_links = formula_tcm_links_all.loc[formula_tcm_links_all[by].isin(items)].copy()
@@ -52,8 +63,7 @@ def get_tcm(by, items):
     """
 
     # 读取数据集
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    tcm_all = pd.read_csv(current_directory + r'/data/HerbiV_tcm.csv')
+    tcm_all = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + r'/data/HerbiV_tcm.csv')
 
     # 在HerbiV_tcm中获取items中中药的信息
     tcm = tcm_all.loc[tcm_all[by].isin(items)].copy()
