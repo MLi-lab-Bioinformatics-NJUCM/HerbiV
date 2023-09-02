@@ -74,6 +74,9 @@ def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='r
     :param chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
     :param path: 字符串类型，存放结果的目录
     """
+    # 若无path目录，先创建该目录
+    if not os.path.exists(path):
+        os.mkdir(path)
 
     out_tcm, out_tcm_chem, out_chem, out_chem_protein, out_gene = \
         re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
