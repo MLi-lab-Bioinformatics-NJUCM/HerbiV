@@ -7,6 +7,9 @@
 
 HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是一个强大的数据分析平台，集成了50多万条方剂、中药、成分、靶点数据，
 以及经过检验的中药和中药组合对疾病靶点潜在作用的评价模型和中药及复方组合的优化模型，旨在推动中医药现代化进程。
+<h1 align="center">
+<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/gra_abstract.tif" width="2000">
+</h1>
 <!-- toc -->
 
 - [安装](#安装)
