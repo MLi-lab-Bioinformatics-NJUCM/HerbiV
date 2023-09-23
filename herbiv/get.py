@@ -36,11 +36,23 @@ def get_formula(by, items):
 
 def get_formula_tcm_links(by, items):
     """
-    读取HerbiV_formula_tcm_links数据集，返回items中复方/中药的复方-中药连接信息
-    :param by: str类型，数据集中与items相匹配的列的列名
-    :param items: pd.DataFrame或其他任何可以使用in判断一个元素是否在其中的组合数据类型，存放要查询的复方/中药
-    :return: pd.DataFrame类型，items中复方/中药的复方-中药连接信息
+            读取HerbiV_formula_tcm_links数据集，返回items中复方/中药的复方-中药连接信息。
+
+            Args:
+                by (str): str类型，数据集中与items相匹配的列的列名。
+                items (collections.abc.Iterable): 查询的复方/中药
+
+            Returns:
+                pandas.DataFrame: items中复方/中药的复方-中药连接信息。
+
+            Examples:
+                >>> get_formula('HVPID', ['HVP1625'])
+                     HVPID  ... Source Document
+                0  HVP1625  ...   shang han lun
+                [1 rows x 6 columns]
+
     """
+
     # 读取数据集
     formula_tcm_links_all = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) +
                                         r'/data/HerbiV_formula_tcm_links.csv')
