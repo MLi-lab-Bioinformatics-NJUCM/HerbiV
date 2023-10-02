@@ -1,9 +1,15 @@
 [**中文**](./README.md) | [**English**](./README_EN.md)
 <h1 align="center">
-<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/slogan_EN.png" width="2000">
+<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/slogan_EN_grey.png" width="2000">
 </h1>
 
-[![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=brightgreen&right_color=blue&left_text=Downloads)](https://pepy.tech/project/herbiv)
+<div align="center">
+
+# Deep Condolences to TCM Master Prof. 周仲瑛
+
+</div>
+
+[![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=grey&right_color=black&left_text=Downloads)](https://pepy.tech/project/herbiv)
 
 HerbiV (Bidirectional and Visible Database of Herb) is far more than a database, 
 which is also a powerful data analysis platform that integrates more than 500,000 prescriptions, 
@@ -11,9 +17,6 @@ traditional Chinese medicine, ingredients and target data. Moreover, two tested 
 the evaluation model of potential effects of TCM and TCM combinations on disease targets and the optimization model of 
 TCM and prescription, are contained in HerbiV. 
 All these efforts are aimed at promoting the modernization of traditional Chinese medicine.
-<h1 align="center">
-<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/gra_abstract.tif" width="2000">
-</h1>
 <!-- toc -->
 
  - [Installation](#installation)
