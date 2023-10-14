@@ -46,10 +46,14 @@ def get_formula_tcm_links(by, items):
                 pandas.DataFrame: items中复方/中药的复方-中药连接信息。
 
             Examples:
-                >>> get_formula('HVPID', ['HVP1625'])
-                     HVPID  ... Source Document
-                0  HVP1625  ...   shang han lun
-                [1 rows x 6 columns]
+                >>> get_formula_tcm_links('HVPID', ['HVP1625'])
+                     HVPID    HVMID
+                0  HVP1625  HVM0367
+                1  HVP1625  HVM0735
+                2  HVP1625  HVM0766
+                3  HVP1625  HVM1695
+                4  HVP1625  HVM3203
+                5  HVP1625  HVM4463
 
     """
 
