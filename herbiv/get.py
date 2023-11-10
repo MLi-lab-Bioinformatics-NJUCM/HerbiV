@@ -36,24 +36,24 @@ def get_formula(by, items):
 
 def get_formula_tcm_links(by, items):
     """
-            读取HerbiV_formula_tcm_links数据集，返回items中复方/中药的复方-中药连接信息。
+        读取HerbiV_formula_tcm_links数据集，返回items中复方/中药的复方-中药连接信息。
 
-            Args:
-                by (str): str类型，数据集中与items相匹配的列的列名。
-                items (collections.abc.Iterable): 要查询的复方/中药
+        Args:
+            by (str): 数据集中与items相匹配的列的列名。
+            items (collections.abc.Iterable): 要查询的复方/中药
 
-            Returns:
-                pandas.DataFrame: items中复方/中药的复方-中药连接信息。
+        Returns:
+            pandas.DataFrame: items中复方/中药的复方-中药连接信息。
 
-            Examples:
-                >>> get_formula_tcm_links('HVPID', ['HVP1625'])
-                     HVPID    HVMID
-                0  HVP1625  HVM0367
-                1  HVP1625  HVM0735
-                2  HVP1625  HVM0766
-                3  HVP1625  HVM1695
-                4  HVP1625  HVM3203
-                5  HVP1625  HVM4463
+        Examples:
+            >>> get_formula_tcm_links('HVPID', ['HVP1625'])
+                 HVPID    HVMID
+            0  HVP1625  HVM0367
+            1  HVP1625  HVM0735
+            2  HVP1625  HVM0766
+            3  HVP1625  HVM1695
+            4  HVP1625  HVM3203
+            5  HVP1625  HVM4463
 
     """
 
@@ -82,7 +82,7 @@ def get_tcm(by, items):
                 pandas.DataFrame: items中中药的信息
 
             Examples:
-                >>> get_tcm('HVMID', formula_tcm_links_info['HVMID'])
+                >>> get_tcm('HVMID', ['HVM0367', 'HVM1695'])
                     HVMID cn_name  pinyin_name  ... TCM_ID_id SymMap_id TCMSP_id
                 0  HVM0367      柴胡      CHAI HU  ...    3396.0      58.0     80.0
                 1  HVM0735      大枣       DA ZAO  ...    1076.0      90.0    193.0
