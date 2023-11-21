@@ -78,15 +78,14 @@ def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='r
     if not os.path.exists(path):
         os.mkdir(path)
 
-    out_tcm, out_tcm_chem, out_chem, out_chem_protein, out_gene = \
+    tcm, tcm_chem_links, chem, chem_protein_links, protein = \
         re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
+
     # 输出Network文件
-    pd.concat([out_chem_protein, out_tcm_chem]).to_csv(path + 'Network.csv', index=False)
+    pd.concat([chem_protein_links, tcm_chem_links]).to_csv(path + 'Network.csv', index=False)
 
     # 输出Type文件
-    out_tcm, out_tcm_chem, out_chem, out_chem_protein, out_gene = \
-        re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
-    pd.concat([out_tcm, out_chem, out_gene]).to_csv(path + 'Type.csv', index=False)
+    pd.concat([tcm, chem, protein]).to_csv(path + 'Type.csv', index=False)
 
 
 def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
@@ -102,6 +101,9 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     # 若无path目录，先创建该目录
     if not os.path.exists(path):
         os.mkdir(path)
+
+    tcm, tcm_chem_links, chem, chem_protein_links, protein = \
+        re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
 
     nodes = []
     edges = []
@@ -132,7 +134,7 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     unique_list = list(set(tuple(item.items()) for item in nodes))
     nodes = [dict(item) for item in unique_list]
 
-    Graph(init_opts=opts.InitOpts(width="2400px", height="1200px"))\
+    Graph(init_opts=opts.InitOpts(width="2400px", height="1200px")) \
         .add(
         '',
         nodes=nodes,
@@ -143,13 +145,12 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
         is_rotate_label=True,
         linestyle_opts=opts.LineStyleOpts(color="source", curve=0.3),
         label_opts=opts.LabelOpts(position="right")
-    )\
+    ) \
         .set_global_opts(
         title_opts=opts.TitleOpts(title=''),
         legend_opts=opts.LegendOpts(orient="vertical", pos_left="2%", pos_top="20%")
-    )\
+    ) \
         .render(path=path + "Graph.html")
-
 
 
 if __name__ == '__main__':
