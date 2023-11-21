@@ -68,12 +68,20 @@ def re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein):
 def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
     r"""
     输出Cytoscape用于作图的网络文件和属性文件
+    :param protein:
     :param tcm: pd.DataFrame类型，中药信息
     :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
     :param chem: pd.DataFrame类型，化合物（中药成分）信息
     :param chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白质（靶点）连接信息
     :param path: 字符串类型，存放结果的目录
     """
+    # 若无path目录，先创建该目录
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    tcm, tcm_chem_links, chem, chem_protein_links, protein = \
+        re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
+
     # 若无path目录，先创建该目录
     if not os.path.exists(path):
         os.mkdir(path)
