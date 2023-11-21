@@ -39,14 +39,10 @@ def from_tcm_or_formula(tcm_or_formula,
     tcm, chem, formula = compute.score(tcm, tcm_chem_links, chem, chem_protein_links, formula, formula_tcm_links)
 
     if out_for_cytoscape:
-        out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene =\
-            output.re_name(tcm, tcm_chem_links, chem, chem_protein_links, proteins)
-        output.out_for_cyto(out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene, path)
+        output.out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, proteins, path)
 
     if out_graph:
-        out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene =\
-            output.re_name(tcm, tcm_chem_links, chem, chem_protein_links, proteins)
-        output.vis(out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene, path)
+        output.vis(tcm, tcm_chem_links, chem, chem_protein_links, proteins, path)
 
     if re:
         if tcm_or_formula[0][2] == 'P':
