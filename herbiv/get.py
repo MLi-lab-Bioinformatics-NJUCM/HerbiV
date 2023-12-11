@@ -1,4 +1,6 @@
 import os
+from typing import Tuple, Optional
+import pandas
 import pandas as pd
 
 
@@ -12,7 +14,7 @@ def get_formula(by, items):
             items (collections.abc.Iterable): 要查询的复方
 
         Returns:
-            pandas.DataFrame: items中复方的信息。Information on compounding in items.
+            formula (pandas.DataFrame): items中复方的信息。Information on compounding in items.
 
         Examples:
             >>> get_formula('HVPID', ['HVP1625'])
@@ -43,7 +45,7 @@ def get_formula_tcm_links(by, items):
             items (collections.abc.Iterable): 要查询的复方/中药
 
         Returns:
-            pandas.DataFrame: items中复方/中药的复方-中药连接信息。
+            formula_tcm_links(pandas.DataFrame): items中复方/中药的复方-中药连接信息。
 
         Examples:
                 >>> get_formula_tcm_links('HVPID', ['HVP1625'])
@@ -198,7 +200,6 @@ def get_proteins(by, items):
         Returns:
             pandas.DataFrame: items中蛋白质的信息
 
-
     """
 
     # 数据的输入
@@ -214,7 +215,7 @@ def get_proteins(by, items):
     return proteins
 
 
-def get_tcm_or_formula(tcm_or_formula):
+def get_tcm_or_formula(tcm_or_formula)-> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
         获取tcm_or_formula中元素对应的中药、复方及其连接信息
 
@@ -222,10 +223,10 @@ def get_tcm_or_formula(tcm_or_formula):
             tcm_or_formula (collections.abc.Iterable): 要查询的中药或复方的ID
 
         Returns:
-            pandas.DataFrame: tcm_or_formula中的复方信息
-            pandas.DataFrame: tcm_or_formula中的中药信息
-            pandas.DataFrame: tcm_or_formula中的复方-中药连接信息
-
+            Tuple:一个包含三个 DataFrame 的元组。
+                - formula: tcm_or_formula中的复方信息.
+                - tcm: tcm_or_formula中的中药信息.
+                - formula_tcm_links: tcm_or_formula中的复方-中药连接信息.
 
     """
 
