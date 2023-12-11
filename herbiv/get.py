@@ -224,9 +224,9 @@ def get_tcm_or_formula(tcm_or_formula)-> Tuple[pd.DataFrame, pd.DataFrame, pd.Da
 
         Returns:
             Tuple:一个包含三个 DataFrame 的元组。
-                - formula: tcm_or_formula中的复方信息.
-                - tcm: tcm_or_formula中的中药信息.
-                - formula_tcm_links: tcm_or_formula中的复方-中药连接信息.
+                - tcm_or_formula中的复方信息.
+                - tcm_or_formula中的中药信息.
+                - tcm_or_formula中的复方-中药连接信息.
 
     """
 
