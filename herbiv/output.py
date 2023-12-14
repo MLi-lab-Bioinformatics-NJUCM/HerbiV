@@ -82,13 +82,6 @@ def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='r
     tcm, tcm_chem_links, chem, chem_protein_links, protein = \
         re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
 
-    # 若无path目录，先创建该目录
-    if not os.path.exists(path):
-        os.mkdir(path)
-
-    tcm, tcm_chem_links, chem, chem_protein_links, protein = \
-        re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
-
     # 输出Network文件
     pd.concat([chem_protein_links, tcm_chem_links]).to_csv(path + 'Network.csv', index=False)
 
