@@ -1,20 +1,20 @@
 import os
-from typing import Tuple, Optional
+from typing import Tuple
 import pandas
 import pandas as pd
 
 
-def get_formula(by, items):
+def get_formula(by, items) -> pd.DataFrame:
     """
         读取HerbiV_formula数据集，返回items中复方的信息。
         Read the HerbiV_formula dataset and return the information about the compound party in items.
 
         Args:
             by (str): 数据集中与items相匹配的列的列名。The column name of the column in the dataset that matches items.
-            items (collections.abc.Iterable): 要查询的复方
+            items (collections.abc.Iterable): 要查询的复方。
 
         Returns:
-            formula (pandas.DataFrame): items中复方的信息。Information on compounding in items.
+            formula: items中复方的信息。Information on compounding in items.
 
         Examples:
             >>> get_formula('HVPID', ['HVP1625'])
@@ -36,7 +36,7 @@ def get_formula(by, items):
     return formula
 
 
-def get_formula_tcm_links(by, items):
+def get_formula_tcm_links(by, items) -> pd.DataFrame:
     """
         读取HerbiV_formula_tcm_links数据集，返回items中复方/中药的复方-中药连接信息。
 
@@ -215,7 +215,7 @@ def get_proteins(by, items):
     return proteins
 
 
-def get_tcm_or_formula(tcm_or_formula)-> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def get_tcm_or_formula(tcm_or_formula) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
         获取tcm_or_formula中元素对应的中药、复方及其连接信息
 
