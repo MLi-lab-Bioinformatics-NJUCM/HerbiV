@@ -25,7 +25,7 @@ def from_tcm_or_formula(tcm_or_formula,
     :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白（靶点）连接信息
     :return: proteins: pd.DataFrame类型，蛋白（靶点）信息
     """
-    formula, tcm, formula_tcm_links = get.get_tcm_or_formula(tcm_or_formula)
+    formula, tcm, formula_tcm_links = get.get_tcm_and_formula(tcm_or_formula)
 
     tcm_chem_links = get.get_tcm_chem_links('HVMID', tcm['HVMID'])
     chem = get.get_chemicals('HVCID', tcm_chem_links['HVCID'])
@@ -132,7 +132,7 @@ def from_tcm_or_formula_proteins(tcm_or_formula,
     :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白（靶点）连接信息
     :return: proteins: pd.DataFrame类型，蛋白（靶点）信息
     """
-    formula, tcm, formula_tcm_links = get.get_tcm_or_formula(tcm_or_formula)
+    formula, tcm, formula_tcm_links = get.get_tcm_and_formula(tcm_or_formula)
     proteins = get.get_proteins('Ensembl_ID', proteins)
 
     # 根据中药和蛋白（靶点）获取中药-化合物（中药成分）连接和化合物（中药成分）-蛋白（靶点）连接

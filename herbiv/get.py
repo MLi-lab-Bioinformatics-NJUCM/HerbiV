@@ -16,7 +16,7 @@ def get_formula(by, items) -> pd.DataFrame:
             formula: items中复方的信息。Information on compounding in items.
 
         Examples:
-            >>> get_formula('HVPID', ['HVP1625'])# 获取HVPID为HVP1625的复方的信息
+            >>> get_formula('HVPID', ['HVP1625'])# 获取HVPID为HVP1625的复方（小柴胡汤）的信息
                  HVPID  ... Source Document
             0  HVP1625  ...   shang han lun
             [1 rows x 6 columns]
@@ -46,7 +46,7 @@ def get_formula_tcm_links(by, items) -> pd.DataFrame:
             formula_tcm_links(pandas.DataFrame): items中复方/中药的复方-中药连接信息。
 
         Examples:
-            >>> get_formula_tcm_links('HVPID', ['HVP1625'])# 获取复方HVP1625的复方-中药连接信息
+            >>> get_formula_tcm_links('HVPID', ['HVP1625'])# 获取HVPID为HVP1625的复方（小柴胡汤）的复方-中药连接信息
                  HVPID    HVMID
             0  HVP1625  HVM0367
             1  HVP1625  HVM0735
@@ -81,7 +81,7 @@ def get_tcm(by, items) -> pd.DataFrame:
             pandas.DataFrame: items中中药的信息。
 
         Examples:
-            >>> get_tcm('cn_name', ['柴胡', '黄芩'])# # 获取cn_name（中文名）为柴胡和黄芩的中药的信息（不建议使用中文名检索）
+            >>> get_tcm('cn_name', ['柴胡', '黄芩'])# 获取cn_name（中文名）为柴胡和黄芩的中药的信息（不建议使用中文名检索）
                  HVMID cn_name pinyin_name  ... TCM_ID_id SymMap_id TCMSP_id
             0  HVM0367      柴胡     CHAI HU  ...    3396.0      58.0     80.0
             1  HVM1695      黄芩   HUANG QIN  ...    6700.0     188.0    371.0
@@ -102,7 +102,7 @@ def get_tcm(by, items) -> pd.DataFrame:
 
 def get_tcm_chem_links(by, items) -> pd.DataFrame:
     """
-        读取HerbiV_tcm_chemical_links数据集，返回items中中药/化合物的中药-成分连接信息。
+        读取HerbiV_tcm_chemical_links数据集，返回items中中药/化合物的中药-成分（化合物）连接信息。
 
         Args:
             by (str): 数据集中与items相匹配的列的列名。
@@ -110,8 +110,9 @@ def get_tcm_chem_links(by, items) -> pd.DataFrame:
 
         Returns:
             pandas.DataFrame: items中中药/化合物的中药-成分连接信息。
+
         Examples:
-            >>> get_tcm_chem_links('HVMID', ['HVM0367'])# 获取中药HVP1625的中药-成分连接信息
+            >>> get_tcm_chem_links('HVMID', ['HVM0367'])# 获取HVMID为HVM0367的中药（柴胡）的中药-成分连接信息
                    HVMID    HVCID
             0    HVM0367  HVC0284
             1    HVM0367  HVC3018
@@ -150,9 +151,10 @@ def get_chemicals(by, items) -> pd.DataFrame:
 
         Returns:
             pandas.DataFrame: items中化合物的信息。
+
         Examples:
-            >>> chaihu = get_tcm_chem_links('HVMID', ['HVM0367'])# 获取中药HVP1625（柴胡）的中药-成分连接信息
-            >>> get_chemicals('HVCID', chaihu['HVCID'])# 获取柴胡的成分的化合物信息
+            >>> chaihu = get_tcm_chem_links('HVMID', ['HVM0367'])# 获取HVMID为HVM0367的中药（柴胡）的中药-成分连接信息
+            >>> get_chemicals('HVCID', chaihu['HVCID'])# 获取柴胡的成分的信息
                    HVCID                                     Name  ...     STITCH_id     HERB_id
             0    HVC0034                                allantoin  ...  CIDm00000204  HBIN015193
             1    HVC0036                                  glucose  ...  CIDm00000206  HBIN001003
@@ -183,24 +185,29 @@ def get_chemicals(by, items) -> pd.DataFrame:
 
 def get_chem_protein_links(by, items, score=900) -> pd.DataFrame:
     """
-        读取HerbiV_chemicals数据集，返回items中化合物/蛋白的combined_score大于等于score的化合物-蛋白（靶点）连接信息。
+        读取HerbiV_chemicals数据集，返回items中化合物/蛋白的化合物-靶点（蛋白）连接的combined_score大于等于score的连接信息。
 
         Args:
             by (str): 数据集中与items相匹配的列的列名。
             items (collections.abc.Iterable): 要查询的化合物/蛋白。
-            score (int): 仅combined_score大于等于score的记录会被筛选出，默认为900。
+            score (int): 仅combined_score大于等于score的记录会被筛选出，默认为900，最大为1000，最小为0。
 
         Returns:
-            pandas.DataFrame: items中化合物/蛋白的combined_score大于等于score的化合物-蛋白（靶点）连接信息。
+            pandas.DataFrame: items中化合物/蛋白的化合物-靶点（蛋白）连接的combined_score大于等于score的连接信息。
 
-
+        Examples:
+            >>> # 获取Ensembl ID为ENSP00000335062的蛋白（PDCD1）的化合物-靶点连接信息
+            >>> get_chem_protein_links('Ensembl_ID', ['ENSP00000335062'])
+                 HVCID       Ensembl_ID  Combined_score
+            0  HVC5134  ENSP00000335062           0.202
+            1  HVC0159  ENSP00000335062           0.795
     """
 
-    # 读取数据集
+    # 读取HerbiV_chemical_protein_links数据集
     current_directory = os.path.dirname(os.path.abspath(__file__))
     chem_protein_links_all = pd.read_csv(current_directory + r'/data/HerbiV_chemical_protein_links.csv')
 
-    # 在HerbiV_chemical_protein_links中获取items中化合物/蛋白质的combined_score大于等于score的化合物-蛋白质（靶点）连接信息
+    # 在数据集中获取items中化合物/蛋白的化合物-靶点（蛋白）连接的combined_score大于等于score的连接信息
     chem_protein_links = chem_protein_links_all.loc[
         (chem_protein_links_all[by].isin(items)) &
         (chem_protein_links_all['Combined_score'] >= score)].copy()
@@ -226,13 +233,17 @@ def get_proteins(by, items) -> pd.DataFrame:
         Returns:
             pandas.DataFrame: items中蛋白的信息。
 
+        Examples:
+            >>> get_proteins('protein_name', ['PDCD1 PD1'])# 获取gene_name（基因名）为PDCD1 PD1的蛋白的信息（不建议使用名称检索）
+                    Ensembl_ID  ...  gene_name
+            0  ENSP00000335062  ...  PDCD1 PD1
     """
 
-    # 数据的输入
+    # 读取HerbiV_proteins数据集
     current_directory = os.path.dirname(os.path.abspath(__file__))
     proteins_all = pd.read_csv(current_directory + r'/data/HerbiV_proteins.csv')
 
-    # 在HerbiV_chemical_proteins中获取items中化合物的信息
+    # 在数据集中获取items中蛋白的信息
     proteins = proteins_all.loc[proteins_all[by].isin(items)].drop_duplicates(subset=['Ensembl_ID'])
 
     # 重置索引
@@ -241,29 +252,28 @@ def get_proteins(by, items) -> pd.DataFrame:
     return proteins
 
 
-def get_tcm_or_formula(tcm_or_formula) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def get_tcm_and_formula(tcm_and_formula) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
-        获取tcm_or_formula中元素对应（或连接）的中药、复方及其连接信息。
+        获取tcm_or_formula中元素对应（及连接）的中药、复方及其连接信息。
 
         Args:
-            tcm_or_formula (collections.abc.Iterable): 要查询的中药或复方的ID
+            tcm_and_formula (collections.abc.Iterable): 要查询的中药或复方的ID
 
         Returns:
-            Tuple:一个包含三个 DataFrame 的元组。
-                - tcm_or_formula中的复方信息.
-                - tcm_or_formula中的中药信息.
-                - tcm_or_formula中的复方-中药连接信息.
+            - formula：tcm_or_formula中的（或中药对应的）复方的信息。
+            - tcm：tcm_or_formula中的（或复方对应的）中药的信息。
+            - formula_tcm_links：tcm_or_formula中的复方或中药的复方-中药连接信息。
 
     """
 
-    if tcm_or_formula[0][2] == 'P':  # 判断输入是否为复方的HVPID
-        formula = get_formula('HVPID', tcm_or_formula)
+    if tcm_and_formula[0][2] == 'P':  # 判断输入是否为复方的HVPID
+        formula = get_formula('HVPID', tcm_and_formula)# 获取该复方的信息
         formula_tcm_links = get_formula_tcm_links('HVPID', formula['HVPID'])
         tcm = get_tcm('HVMID', formula_tcm_links['HVMID'])
     else:
         formula = None
         formula_tcm_links = None
-        tcm = get_tcm('HVMID', tcm_or_formula)
+        tcm = get_tcm('HVMID', tcm_and_formula)
     return formula, tcm, formula_tcm_links
 
 
@@ -275,5 +285,5 @@ if __name__ == '__main__':
     chem_info = get_chemicals('HVCID', tcm_chem_links_info['HVCID'])
     chem_protein_links_info = get_chem_protein_links('HVCID', chem_info['HVCID'])
     protein_info = get_proteins('Ensembl_ID', chem_protein_links_info['Ensembl_ID'])
-    formula_info1, tcm_info1, formula_tcm_links_info1 = get_tcm_or_formula(['HVP1625'])
-    formula_info2, tcm_info2, formula_tcm_links_info2 = get_tcm_or_formula(['HVM0367', 'HVM1695'])
+    formula_info1, tcm_info1, formula_tcm_links_info1 = get_tcm_and_formula(['HVP1625'])
+    formula_info2, tcm_info2, formula_tcm_links_info2 = get_tcm_and_formula(['HVM0367', 'HVM1695'])
