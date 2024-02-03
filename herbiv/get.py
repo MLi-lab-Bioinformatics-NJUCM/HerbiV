@@ -3,6 +3,8 @@ import os
 from typing import Tuple
 
 
+# TODO: 为各函数增加抛出异常功能，若无法查询到相关信息，则抛出异常。
+
 def get_formula(by, items) -> pd.DataFrame:
     """
         读取HerbiV_formula数据集，返回items中复方的信息。
@@ -267,7 +269,7 @@ def get_tcm_and_formula(tcm_and_formula) -> Tuple[pd.DataFrame, pd.DataFrame, pd
     """
 
     if tcm_and_formula[0][2] == 'P':  # 判断输入是否为复方的HVPID
-        formula = get_formula('HVPID', tcm_and_formula)# 获取该复方的信息
+        formula = get_formula('HVPID', tcm_and_formula)  # 获取该复方的信息
         formula_tcm_links = get_formula_tcm_links('HVPID', formula['HVPID'])
         tcm = get_tcm('HVMID', formula_tcm_links['HVMID'])
     else:

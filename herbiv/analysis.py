@@ -1,8 +1,9 @@
-import get
-import compute
-import output
+from . import get
+from . import compute
+from . import output
 
 
+# TODO: 将文档修改为get中的格式。
 def from_tcm_or_formula(tcm_or_formula,
                         score=990,
                         out_for_cytoscape=True,
@@ -25,6 +26,8 @@ def from_tcm_or_formula(tcm_or_formula,
     :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白（靶点）连接信息
     :return: proteins: pd.DataFrame类型，蛋白（靶点）信息
     """
+    # TODO: 将该函数与from_tcm_or_formula_proteins合并。即保留该函数，并增加protein参数，若protein参数为None（默认），则完成原有功能，否则完成from_tcm_or_formula_proteins的功能。
+    # TODO: 删除get.get_tcm_and_formula，将其功能合并到此处。
     formula, tcm, formula_tcm_links = get.get_tcm_and_formula(tcm_or_formula)
 
     tcm_chem_links = get.get_tcm_chem_links('HVMID', tcm['HVMID'])
