@@ -269,9 +269,9 @@ def get_tcm_and_formula(tcm_and_formula) -> Tuple[pd.DataFrame, pd.DataFrame, pd
             tcm_and_formula (collections.abc.Iterable): 要查询的中药或复方的ID。ID of TCM or compund to be queried.
 
         Returns:
-            - formula：tcm_or_formula中的（或中药对应的）复方的信息。Compound information in tcm_or_formula.
-            - tcm：tcm_or_formula中的（或复方对应的）中药的信息。TCM information in tcm_or_formula.
-            - formula_tcm_links：tcm_or_formula中的复方或中药的复方-中药连接信息。Compound-TCM connection information in tcm_or_formula.
+            - formula：tcm_or_formula中的（或中药对应的）复方的信息。Compound information in tcm_or_formula (or corresponding to TCM).
+            - tcm：tcm_or_formula中的（或复方对应的）中药的信息。TCM information in tcm_or_formula (or corresponding to compound).
+            - formula_tcm_links：tcm_or_formula中的复方或中药的复方-中药连接信息。Compound-TCM connection of compound or TCM in tcm_or_formula.
 
     """
 
