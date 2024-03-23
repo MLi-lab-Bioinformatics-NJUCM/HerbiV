@@ -8,14 +8,14 @@ from typing import Tuple
 def get_formula(by, items) -> pd.DataFrame:
     """
         读取HerbiV_formula数据集，返回items中复方的信息。
-        Read the HerbiV_formula dataset and return the compound information in items.
+        Read the HerbiV_formula dataset and return the formula(s) information in items.
 
         Args:
             by (str): 数据集中与items相匹配的列的列名。Column name of the column in the dataset that matches items.
-            items (collections.abc.Iterable): 要查询的复方。Compounds to be queried.
+            items (collections.abc.Iterable): 要查询的复方。Formula(s) to be queried.
 
         Returns:
-            formula: items中复方的信息。Compound information in items.
+            formula: items中复方的信息。Formula(s) information in items.
 
         Examples:
             >>> get_formula('HVPID', ['HVP1625'])# 获取HVPID为HVP1625的复方（小柴胡汤）的信息
@@ -39,14 +39,16 @@ def get_formula(by, items) -> pd.DataFrame:
 def get_formula_tcm_links(by, items) -> pd.DataFrame:
     """
         读取HerbiV_formula_tcm_links数据集，返回items中复方/中药的复方-中药连接信息。
-        Read the HerbiV_formula_tcm_links dataset and return the compound-TCM connection information of Compound/TCM in items.
+        Read the HerbiV_formula_tcm_links dataset
+        and return the formula(s)-TCM connection information of formula(s)/TCM in items.
 
         Args:
             by (str):数据集中与items相匹配的列的列名。Column name of the column in the dataset that matches items.
-            items (collections.abc.Iterable): 要查询的复方/中药。Compound/TCM to be queried.
+            items (collections.abc.Iterable): 要查询的复方/中药。Formula(s)/TCM to be queried.
 
         Returns:
-            formula_tcm_links(pandas.DataFrame): items中复方/中药的复方-中药连接信息。Compound-TCM connection information of Compound/TCM in items.
+            formula_tcm_links(pandas.DataFrame): items中复方/中药的复方-中药连接信息。
+            Formula(s)-TCM connection information of formula(s)/TCM in items.
 
         Examples:
             >>> get_formula_tcm_links('HVPID', ['HVP1625'])# 获取HVPID为HVP1625的复方（小柴胡汤）的复方-中药连接信息
@@ -107,14 +109,15 @@ def get_tcm(by, items) -> pd.DataFrame:
 def get_tcm_chem_links(by, items) -> pd.DataFrame:
     """
         读取HerbiV_tcm_chemical_links数据集，返回items中中药/化合物的中药-成分（化合物）连接信息。
-        Read the HerbiV_tcm_chemical_links dataset and return the TCM-ingredient information of TCM/chemicals in items.
+        Read the HerbiV_tcm_chemical_links dataset and
+        return the TCM-ingredient(s)(chemical(s)) information of TCM/chemical(s) in items.
 
         Args:
             by (str): 数据集中与items相匹配的列的列名。Column name of the column in the dataset that matches items.
-            items (collections.abc.Iterable): 要查询的中药/化合物。TCM/chemicals to be queried.
+            items (collections.abc.Iterable): 要查询的中药/化合物。TCM/chemical(s) to be queried.
 
         Returns:
-            pandas.DataFrame: items中中药/化合物的中药-成分连接信息。TCM-ingredient information of TCM/chemicals in items.
+            pandas.DataFrame: items中中药/化合物的中药-成分连接信息。TCM-ingredient(s) information of TCM/chemical(s) in items.
 
         Examples:
             >>> get_tcm_chem_links('HVMID', ['HVM0367'])# 获取HVMID为HVM0367的中药（柴胡）的中药-成分连接信息
@@ -149,14 +152,14 @@ def get_tcm_chem_links(by, items) -> pd.DataFrame:
 def get_chemicals(by, items) -> pd.DataFrame:
     """
         读取HerbiV_chemicals数据集，返回items中化合物的信息。
-        Read the HerbiV_formula dataset and return the chemical information in items.
+        Read the HerbiV_chemicals dataset and return the chemical(s) information in items.
 
         Args:
             by (str): 数据集中与items相匹配的列的列名。Column name of the column in the dataset that matches items.
-            items (collections.abc.Iterable): 要查询的化合物。Chemical to be queried.
+            items (collections.abc.Iterable): 要查询的化合物。Chemical(s) to be queried.
 
         Returns:
-            pandas.DataFrame: items中化合物的信息。Chemical information in items.
+            pandas.DataFrame: items中化合物的信息。Chemical(s) information in items.
 
         Examples:
             >>> chaihu = get_tcm_chem_links('HVMID', ['HVM0367'])# 获取HVMID为HVM0367的中药（柴胡）的中药-成分连接信息
@@ -191,16 +194,22 @@ def get_chemicals(by, items) -> pd.DataFrame:
 
 def get_chem_protein_links(by, items, score=900) -> pd.DataFrame:
     """
-        读取HerbiV_chemicals数据集，返回items中化合物/蛋白的化合物-靶点（蛋白）连接的combined_score大于等于score的连接信息。
-        Read the HerbiV_chemicals dataset and return chemical-protein(target) connection information for which the combined_score of the chemical/protein in items is no less than the score.
+        读取HerbiV_chemical_protein_links数据集，
+        返回items中化合物/蛋白的化合物-靶点（蛋白）连接的combined_score(s)大于等于score的连接信息。
+        Read the HerbiV_chemical_protein_links dataset and
+        return chemical(s)-target(s)(protein(s)) connection information
+        for which the combined_score of the chemical(s)/protein(s) in items is no less than the score.
 
         Args:
             by (str): 数据集中与items相匹配的列的列名。Column name of the column in the dataset that matches items.
-            items (collections.abc.Iterable): 要查询的化合物/蛋白。Chemical/protein to be queried.
-            score (int): 仅combined_score大于等于score的记录会被筛选出，默认为900，最大为1000，最小为0。Records with combined_score no less than score will be filtered out, 900 by default.
+            items (collections.abc.Iterable): 要查询的化合物/蛋白。Chemical(s)/protein(s) to be queried.
+            score (int): 仅combined_score大于等于score的记录会被筛选出，默认为900，最大为1000，最小为0。
+            Record(s) with combined_score no less than score will be filtered out, 900 by default.
 
         Returns:
-            pandas.DataFrame: items中化合物/蛋白的化合物-靶点（蛋白）连接的combined_score大于等于score的连接信息。Chemical-protein(target) connection information for which the combined_score of the chemical/protein is no less than the score in items.
+            pandas.DataFrame: items中化合物/蛋白的化合物-靶点（蛋白）连接的combined_score大于等于score的连接信息。
+            Chemical(s)-target(s)(protein(s)) connection information for which
+            the combined_score of the chemical(s)/protein(s) is no less than the score in items.
 
         Examples:
             >>> # 获取Ensembl ID为ENSP00000335062的蛋白（PDCD1）的化合物-靶点连接信息
@@ -232,11 +241,11 @@ def get_chem_protein_links(by, items, score=900) -> pd.DataFrame:
 def get_proteins(by, items) -> pd.DataFrame:
     """
         读取HerbiV_proteins数据集，返回items中蛋白的信息。
-        Read the HerbiV_proteins dataset and return the protein information in items.
+        Read the HerbiV_proteins dataset and return the protein(s) information in items.
 
         Args:
             by (str): 数据集中与items相匹配的列的列名。Column name of the column in the dataset that matches items.
-            items (collections.abc.Iterable): 要查询的蛋白。Protein to be queried.
+            items (collections.abc.Iterable): 要查询的蛋白。Protein(s) to be queried.
 
         Returns:
             pandas.DataFrame: items中蛋白的信息。Protein information in items.
@@ -284,15 +293,3 @@ def get_tcm_and_formula(tcm_and_formula) -> Tuple[pd.DataFrame, pd.DataFrame, pd
         formula_tcm_links = None
         tcm = get_tcm('HVMID', tcm_and_formula)
     return formula, tcm, formula_tcm_links
-
-
-if __name__ == '__main__':
-    formula_info = get_formula('HVPID', ['HVP1625'])
-    formula_tcm_links_info = get_formula_tcm_links('HVPID', formula_info['HVPID'])
-    tcm_info = get_tcm('HVMID', formula_tcm_links_info['HVMID'])
-    tcm_chem_links_info = get_tcm_chem_links('HVMID', tcm_info['HVMID'])
-    chem_info = get_chemicals('HVCID', tcm_chem_links_info['HVCID'])
-    chem_protein_links_info = get_chem_protein_links('HVCID', chem_info['HVCID'])
-    protein_info = get_proteins('Ensembl_ID', chem_protein_links_info['Ensembl_ID'])
-    formula_info1, tcm_info1, formula_tcm_links_info1 = get_tcm_and_formula(['HVP1625'])
-    formula_info2, tcm_info2, formula_tcm_links_info2 = get_tcm_and_formula(['HVM0367', 'HVM1695'])
