@@ -162,8 +162,8 @@ def get_chemicals(by, items) -> pd.DataFrame:
             pandas.DataFrame: items中化合物的信息。Chemical(s) information in items.
 
         Examples:
-            >>> chaihu = get_tcm_chem_links('HVMID', ['HVM0367'])# 获取HVMID为HVM0367的中药（柴胡）的中药-成分连接信息
-            >>> get_chemicals('HVCID', chaihu['HVCID'])# 获取柴胡的成分的信息
+            >>> chai_hu = get_tcm_chem_links('HVMID', ['HVM0367'])# 获取HVMID为HVM0367的中药（柴胡）的中药-成分连接信息
+            >>> get_chemicals('HVCID', chai_hu['HVCID'])# 获取柴胡的成分的信息
                    HVCID                                     Name  ...     STITCH_id     HERB_id
             0    HVC0034                                allantoin  ...  CIDm00000204  HBIN015193
             1    HVC0036                                  glucose  ...  CIDm00000206  HBIN001003
@@ -267,29 +267,3 @@ def get_proteins(by, items) -> pd.DataFrame:
     proteins.index = range(proteins.shape[0])
 
     return proteins
-
-
-def get_tcm_and_formula(tcm_and_formula) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """
-        获取tcm_or_formula中元素对应（及连接）的中药、复方及其连接信息。
-        Obtain the TCM, compound and their connection corresponding to elements in tcm_or_formula.
-
-        Args:
-            tcm_and_formula (collections.abc.Iterable): 要查询的中药或复方的ID。ID of TCM or compund to be queried.
-
-        Returns:
-            - formula：tcm_or_formula中的（或中药对应的）复方的信息。Compound information in tcm_or_formula (or corresponding to TCM).
-            - tcm：tcm_or_formula中的（或复方对应的）中药的信息。TCM information in tcm_or_formula (or corresponding to compound).
-            - formula_tcm_links：tcm_or_formula中的复方或中药的复方-中药连接信息。Compound-TCM connection of compound or TCM in tcm_or_formula.
-
-    """
-
-    if tcm_and_formula[0][2] == 'P':  # 判断输入是否为复方的HVPID
-        formula = get_formula('HVPID', tcm_and_formula)  # 获取该复方的信息
-        formula_tcm_links = get_formula_tcm_links('HVPID', formula['HVPID'])
-        tcm = get_tcm('HVMID', formula_tcm_links['HVMID'])
-    else:
-        formula = None
-        formula_tcm_links = None
-        tcm = get_tcm('HVMID', tcm_and_formula)
-    return formula, tcm, formula_tcm_links
