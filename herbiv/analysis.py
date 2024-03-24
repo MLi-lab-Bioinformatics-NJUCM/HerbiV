@@ -39,8 +39,9 @@ def from_tcm_or_formula(tcm_or_formula_id,
         >>> from_tcm_or_formula(['HVM0367', 'HVM1695'])
         See more at :demo
 
-        **From Formula and Proteins
-        >>> from_tcm_or_formula(['HVP1625'],['ENSP00000381588', 'ENSP00000252519'], score=0)
+        **From Formula and Proteins**
+
+        >>> from_tcm_or_formula(['HVP1625'],['ENSP00000381588', 'ENSP00000252519'], score=400)# medium confidence in STITCH
 
     """
 
@@ -166,10 +167,11 @@ def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_prote
                                                                         formula_tcm_links['HVPID'] == f]['HVMID']):
             for c in set(tcm_chem_links.loc[tcm_chem_links['HVMID'] == m]['HVCID']):
                 for p in set(chem_protein_links.loc[chem_protein_links['HVCID'] == c]['Ensembl_ID']):
-                    formula_id.add(f)
-                    tcm_id.add(m)
-                    chem_id.add(c)
-                    proteins_id.add(p)
+                    if p in proteins['Ensembl_ID'].tolist():
+                        formula_id.add(f)
+                        tcm_id.add(m)
+                        chem_id.add(c)
+                        proteins_id.add(p)
 
     # 根据有效节点的ID更新formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins
     formula = None if formula is None else formula.loc[formula['HVPID'].isin(formula_id)]
@@ -191,7 +193,7 @@ def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_prote
 
 
 if __name__ == '__main__':
-    from_tcm_or_formula(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'])
+    from_tcm_or_formula(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'], score=0)
     tcm_ft, tcm_chem_links_ft, chem_ft, chem_protein_links_ft, protein_ft = from_tcm_or_formula(['HVM0735'], )
     formula_ff, formula_tcm_links_ff, tcm_ff, tcm_chem_links_ff, chem_ff, chem_protein_links_ff, protein_ff = \
         from_tcm_or_formula(['HVP1625'], )
