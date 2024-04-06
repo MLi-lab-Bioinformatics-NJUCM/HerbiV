@@ -13,7 +13,6 @@ HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是
 - [使用](#使用)
   - [`from_tcm_or_formula`](#from_tcm_or_formula)
   - [`from_proteins`](#from_proteins)
-  - [`from_tcm_or_formula_proteins`](#from_tcm_or_formula_proteins)
 - [更新日志](#更新日志)
  
 <!-- tocstop -->
@@ -90,29 +89,6 @@ analysis.from_proteins(proteins,
 化合物（中药成分）信息、化合物（中药成分）-蛋白（靶点）连接信息、蛋白（靶点）信息、优化模型得到的中药组合信息（中药组合中各中药的ID、
 组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量）和优化模型得到的复方组合信息（复方组合中各复方的ID、组合对疾病相关靶点集合的潜在作用、
 组合前后潜在作用的提升量）；
-- `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
-
-## `from_tcm_or_formula_proteins`
-
-同时对中药和靶点进行检索的pipeline函数。使用它仅需使用命令
-
-```python
-from herbiv import analysis
-analysis.from_proteins(tcm_or_formula, proteins, score, out_for_cytoscape, out_graph, re, path)
-```
-
-它需要2个必需形参`tcm_or_formula`和`proteins`，它们都是任何可以使用in判断一个元素是否在其中的组合数据类型，分别存储拟分析的的中药或复方的ID 
-（如`['HVP1625']`）和拟分析蛋白（靶点）在STITCH中的Ensembl_ID （如`['ENSP00000381588', 'ENSP00000252519']`）。
-
-它的可选形参有
-- `score`: int类型，HerbiV_chemical_protein_links数据集中仅combined_score大于等于score的记录会被筛选出，默认为`0`；
-- `out_for_cytoscape`: boolean类型，是否输出用于Cytoscape绘图的文件，默认为`True`；
-- `out_graph`: boolean类型，是否输出基于ECharts的html格式的网络可视化图，默认为`True`；
-- `re`: boolean类型，是否返回原始分析结果（复方（仅输入的tcm_or_formula为HVPID时）、中药、化合物（中药成分）、蛋白（靶点）及其连接信息），
-默认为`True`。若`re`为`True`，则函数将返回运行结果`formula`、`formula_tcm_links`、`tcm`、`tcm_chem_links`、`chem`、
-`chem_protein_links`和`proteins`（`formula`、`formula_tcm_links`仅在输入的tcm_or_formula为HVPID时返回），
-它们均为pd.DataFrame类型，分别存储了复方信息、复方-中药连接信息、中药信息、中药-化合物（中药成分）连接信息、化合物（中药成分）信息、
-化合物（中药成分）-蛋白（靶点）连接信息和蛋白（靶点）信息；
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
 # 更新日志
