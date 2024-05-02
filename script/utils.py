@@ -42,6 +42,12 @@ def check_id(ids: list[str], check_fun) -> bool:
 
 
 def json_prettier(json_str: str):
+    """
+    输出格式化的 json 字符串
+    Args:
+        json_str:
+    Returns:
+    """
     _dict = json.loads(json_str)
     pretty_json = json.dumps(_dict, sort_keys=True, indent=4, separators=(',', ':'), ensure_ascii=False)
     print(pretty_json)
@@ -49,9 +55,10 @@ def json_prettier(json_str: str):
 
 def nan_converter(data: pd.DataFrame):
     """
-    将 data 中的 NaN 转化为 None
-    :param data:
-    :return:
+    为了解决 json 不支持 NaN 的问题，将 data 中的 NaN 转化为 None
+    Args:
+        data:
+    Returns:
     """
     data.replace(np.nan, None, inplace=True)
     return data

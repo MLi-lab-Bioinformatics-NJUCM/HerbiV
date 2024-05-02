@@ -90,8 +90,9 @@ def score(tcm: pd.DataFrame,
             5883  HVP4643     黄蜡丸  ...                     0.000000         0.075000
             [5884 rows x 9 columns]
     """
-
-    formula_and_score = formula.copy()
+    formula_and_score = None
+    if formula is not None:
+        formula_and_score = formula.copy()
     tcm_and_score = tcm.copy()
     chem_and_score = chem.copy()
 

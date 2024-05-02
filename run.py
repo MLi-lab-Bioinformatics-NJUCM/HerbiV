@@ -1,22 +1,24 @@
+#!/usr/bin/python3
 import json
 import argparse
-
-import utils
+from script import utils
 from herbiv import analysis
 import warnings
 # 消除 pandas Future Warning
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
-def from_tcm(tcms: list[str]):
+def from_tcm(tcms: list[str], path: str):
     """
     对中药分析
     :param tcms: 中药 id 列表, 如 ['HVM0367', 'HVM1695']
+    :param path: pyechart 图像输出路径
     :return: json 字符串
     """
     if not utils.check_id(tcms, utils.check_tcm_id):
+        # should never be here
         return json.dumps({'msg': 'Wrong TCM ID'})
-    result = analysis.from_tcm_or_formula(tcms)
+    result = analysis.from_tcm_or_formula(tcms, out_for_cytoscape=False, out_graph=True, path=path)
     tmp = []
     for e in result:
         tmp.append(utils.nan_converter(e))
@@ -65,7 +67,7 @@ def from_tcm_proteins(tcms: list[str], proteins: list[str]):
     pass
 
 
-def from_formula_proteins(formulas:list[str], proteins:list[str]):
+def from_formula_proteins(formulas: list[str], proteins: list[str]):
     """
     给定复方和靶点分析
     :param formulas: 复方 id 列表，如 ['HVP1625']
@@ -76,8 +78,8 @@ def from_formula_proteins(formulas:list[str], proteins:list[str]):
         assert False, "Wrong formula id"
     if not utils.check_id(proteins, utils.check_protein_id):
         assert False, "Wrong protein id"
-    result = analysis.from_tcm_or_formula_proteins(formulas, proteins)
-    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = result
+    # result = analysis.from_tcm_or_formula_proteins(formulas, proteins)
+    # formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = result
 
 
 # TODO
@@ -105,12 +107,15 @@ def main():
     parser.add_argument('--tcms', nargs="+", type=str, help='TCM ids')
     parser.add_argument('--formulas', nargs="+", type=str, help='Formula ids')
     parser.add_argument('--proteins', nargs="+", type=str, help='Protein ids')
+    parser.add_argument('--path', "-p", type=str, help='Output Path', required=True)
     args = parser.parse_args()
 
     if args.function == "tcm":
-        print(from_tcm(args.tcms))
+        print(from_tcm(args.tcms, args.path))
     elif args.function == "formula":
         print(from_formula(args.formulas))
+    elif args.function == "protein":
+        print(from_proteins(args.proteins))
 
 
 if __name__ == '__main__':
