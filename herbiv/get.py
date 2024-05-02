@@ -23,7 +23,6 @@ def get_formula(by, items) -> pd.DataFrame:
             0  HVP1625  ...   shang han lun
             [1 rows x 6 columns]
     """
-
     # 读取HerbiV_formula数据集
     formula_all = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + r'/data/HerbiV_formula.csv')
 
