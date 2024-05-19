@@ -1,6 +1,6 @@
 [**中文**](./README.md) | [**English**](./README_EN.md)
 <h1 align="center">
-<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/slogan.png" width="2000">
+<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/slogan.png" width="2000" alt="slogan">
 </h1>
 
 [![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=brightgreen&right_color=blue&left_text=Downloads)](https://pepy.tech/project/herbiv)
@@ -91,6 +91,25 @@ analysis.from_proteins(proteins,
 组合前后潜在作用的提升量）；
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
+# CLI(Command Line Interface)
+
+herbiv-cli 是对 herbiv 的命令行封装，用法如下
+
+- 命令行工具帮助文档
+```bash
+python herbiv-cli.py -h
+```
+
+- 给定 tcm 分析
+```bash
+python herbiv-cli.py --function tcm --tcms HVM0367 HVM1695 --path result
+```
+
+- 给定 formula 分析
+```bash
+python herbiv-cli.py --function formula --formulas HVP1625 --path result
+```
+
 # 更新日志
 
 ## 0.0.1a1
@@ -123,3 +142,10 @@ analysis.from_proteins(proteins,
 
 ## 0.1a8(2023.6.30)
 - vis函数绘制的网络图可为不同类节点赋予不同颜色。
+
+## 0.2(2024.5.19)
+- 修复 analysis.py 导入时出现 `ModuleNotFoundError` 问题
+- 修复 computer.score 函数可能出现 `'NoneType' object has no attribute 'copy'` 的问题
+- 路径统一用 os.path.join 处理
+- 新增 herbiv-cli.py(Beta) 及其帮助文档, 以后可以直接从命令行调用 herbiv 了
+- 删除没有用到的 import 语句

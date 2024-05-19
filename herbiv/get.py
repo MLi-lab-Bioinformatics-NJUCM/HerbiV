@@ -1,6 +1,5 @@
 import pandas as pd
 import os
-from typing import Tuple
 
 
 # TODO: 为各函数增加抛出异常功能，若无法查询到相关信息，则抛出异常。
