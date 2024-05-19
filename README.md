@@ -96,56 +96,32 @@ analysis.from_proteins(proteins,
 herbiv-cli 是对 herbiv 的命令行封装，用法如下
 
 - 命令行工具帮助文档
-```bash
+```shell
 python herbiv-cli.py -h
 ```
 
 - 给定 tcm 分析
-```bash
+```shell
 python herbiv-cli.py --function tcm --tcms HVM0367 HVM1695 --path result
 ```
 
 - 给定 formula 分析
-```bash
+```shell
 python herbiv-cli.py --function formula --formulas HVP1625 --path result
 ```
 
-# 更新日志
+- 给定 tcm 和 protein 分析
+```shell
+python herbiv-cli.py --function tcm_protein --tcms HVM0367 HVM1695 --proteins HVP1625 --path result
+```
 
-## 0.0.1a1
-- 横空出世
+- 给定 formula 和 protein 分析
+```shell
+python herbiv-cli.py --function formula_protein --formulas HVP1625 --protein HVP1625 --path result
+```
 
-## 0.1a1(2023.3.28)
-- 使用本项目自己的数据集进行分析，不再使用其他数据库的公共数据集，更新了整个分析架构，大大加快了分析速度；
-- 加入了基于朴素贝叶斯的中药重要性评价模型。
+- 给定 protein 分析
+```shell
+python herbiv-cli.py --function protein --proteins HVP1625
+```
 
-##  0.1a2(2023.3.29)
-- 数据集随herbiv库下载，无需指定数据集存放路径。
-
-##  0.1a3(2023.4.9)
-- 重构了代码，增加了经典的正向网络药理学分析的功能。
-
-##  0.1a4(2023.4.14)
-- 增加了pipline函数`from_tcm_protein`，可同时检索中药和靶点;
-- 增加HerbiV_proteins数据集。
-
-## 0.1a5(2023.4.19)
-- 不会输出游离于网络的节点，提高了稳定性；
-- 统一了函数的调用方法。
-
-## 0.1a6(2023.5.27)
-- output中增加了vis函数，可以输出基于ECharts的网络图；
-- pipline函数也做了相应的修改。
-
-## 0.1a7(2023.6.29)
-- 增加过滤无效节点的函数，提高系统的稳定性。
-
-## 0.1a8(2023.6.30)
-- vis函数绘制的网络图可为不同类节点赋予不同颜色。
-
-## 0.2(2024.5.19)
-- 修复 analysis.py 导入时出现 `ModuleNotFoundError` 问题
-- 修复 computer.score 函数可能出现 `'NoneType' object has no attribute 'copy'` 的问题
-- 路径统一用 os.path.join 处理
-- 新增 herbiv-cli.py(Beta) 及其帮助文档, 以后可以直接从命令行调用 herbiv 了
-- 删除没有用到的 import 语句

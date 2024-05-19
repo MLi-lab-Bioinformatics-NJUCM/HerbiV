@@ -12,6 +12,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 HerbiV Command Line Interface
 """
 
+
 # Utils
 def check_tcm_id(hvmid: str) -> bool:
     """
@@ -178,13 +179,14 @@ def from_protein(proteins: list[str]):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--function', "-f", choices=["tcm", "formula", "protein"], required=True, help='Functions')
+    parser.add_argument('--function', "-f", choices=["tcm", "formula", "protein", "tcm_protein", "formula_protein"], required=True, help='Functions')
     parser.add_argument('--tcms', nargs="+", type=str, help='TCM ids')
     parser.add_argument('--formulas', nargs="+", type=str, help='Formula ids')
     parser.add_argument('--proteins', nargs="+", type=str, help='Protein ids')
-    parser.add_argument('--path', "-p", type=str, help='Graph Output Path', required=True)
-    parser.add_argument('--prettier', type=str, help='输出格式化的 json', required=True)
+    parser.add_argument('--path', "-p", type=str, help='Graph Output Path', default="result")
+    parser.add_argument('--prettier', action='store_true', help='输出格式化的 json')
     args = parser.parse_args()
+    print(args.prettier)
 
     if args.function == "tcm":
         print(from_tcm(args.tcms, args.path))
@@ -192,6 +194,10 @@ def main():
         print(from_formula(args.formulas))
     elif args.function == "protein":
         print(from_protein(args.proteins))
+    elif args.function == "tcm_protein":
+        print()
+    elif args.function == "formula_protein":
+        print()
 
 
 if __name__ == '__main__':
