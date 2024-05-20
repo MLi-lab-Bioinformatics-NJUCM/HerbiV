@@ -2,7 +2,6 @@ import os
 import pandas as pd
 from pyecharts import options as opts
 from pyecharts.charts import Graph
-from pyecharts.globals import ThemeType
 
 
 def re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein):
@@ -65,7 +64,7 @@ def re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein):
     return out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene
 
 
-def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
+def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result'):
     r"""
     输出Cytoscape用于作图的网络文件和属性文件
     :param protein:
@@ -83,13 +82,13 @@ def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='r
         re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein)
 
     # 输出Network文件
-    pd.concat([chem_protein_links, tcm_chem_links]).to_csv(path + 'Network.csv', index=False)
+    pd.concat([chem_protein_links, tcm_chem_links]).to_csv(os.path.join(path, 'Network.csv'), index=False)
 
     # 输出Type文件
-    pd.concat([tcm, chem, protein]).to_csv(path + 'Type.csv', index=False)
+    pd.concat([tcm, chem, protein]).to_csv(os.path.join(path, "Type.csv"), index=False)
 
 
-def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
+def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result'):
     r"""
     使用pyecharts可视化分析结果
     :param tcm: pd.DataFrame类型，中药信息
@@ -151,7 +150,7 @@ def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
         title_opts=opts.TitleOpts(title=''),
         legend_opts=opts.LegendOpts(orient="vertical", pos_left="2%", pos_top="20%")
     ) \
-        .render(path=path + "Graph.html")
+        .render(path=os.path.join(path, "Graph.html"))
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
-import get
-import compute
-import output
+from herbiv import get
+from herbiv import compute
+from herbiv import output
 
 
 # TODO: 将文档修改为get中的格式。
@@ -10,11 +10,11 @@ def from_tcm_or_formula(tcm_or_formula_id,
                         out_for_cytoscape=True,
                         out_graph=True,
                         re=True,
-                        path='results/'):
+                        path='results'):
     r"""
     进行经典的正向网络药理学分析
     :param tcm_or_formula_id: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟分析的中药或复方的ID
-    :param proteins_id: None或任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID。
+    :param proteins_id: None 或任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID。
     默认为None
     :param score: int类型，HerbiV_chemical_protein_links数据集中仅combined_score大于等于score的记录会被筛选出，默认为990
     :param out_for_cytoscape: 布尔类型，是否输出用于Cytoscape绘图的文件，默认为True
@@ -90,7 +90,7 @@ def from_proteins(proteins,
                   formula_component=True,
                   out_for_cytoscape=True,
                   re=True,
-                  path='result/'):
+                  path='result'):
     r"""
     进行逆向网络药理学分析
     :param proteins: 任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID
@@ -102,15 +102,15 @@ def from_proteins(proteins,
     :param out_for_cytoscape: 布尔类型，是否输出用于Cytoscape绘图的文件
     :param re: 布尔类型，是否返回原始分析结果
     :param path: 字符串类型，存放结果的目录
-    :return: formula: pd.DataFrame类型，复方信息
-    :return: formula_tcm_links: pd.DataFrame类型，复方-中药连接信息
-    :return: tcm: pd.DataFrame类型，中药信息
-    :return: tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
-    :return: chem: pd.DataFrame类型，化合物（中药成分）信息
+    :return: formula:            pd.DataFrame类型，复方信息
+    :return: formula_tcm_links:  pd.DataFrame类型，复方-中药连接信息
+    :return: tcm:                pd.DataFrame类型，中药信息
+    :return: tcm_chem_links:     pd.DataFrame类型，中药-化合物（中药成分）连接信息
+    :return: chem:               pd.DataFrame类型，化合物（中药成分）信息
     :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白（靶点）连接信息
-    :return: proteins: pd.DataFrame类型，蛋白（靶点）信息
-    :return: tcms: pd.DataFrame类型，包含优化模型得到的中药组合中各中药的ID、组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量
-    :return: formulas: pd.DataFrame类型，包含优化模型得到的复方组合中各复方的ID、组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量
+    :return: proteins:           pd.DataFrame类型，蛋白（靶点）信息
+    :return: tcms:               pd.DataFrame类型，包含优化模型得到的中药组合中各中药的ID、组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量
+    :return: formulas:           pd.DataFrame类型，包含优化模型得到的复方组合中各复方的ID、组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量
     """
     proteins = get.get_proteins('Ensembl_ID', proteins)
     chem_protein_links = get.get_chem_protein_links('Ensembl_ID', proteins['Ensembl_ID'], score)
@@ -199,7 +199,7 @@ if __name__ == '__main__':
         from_tcm_or_formula(['HVP1625'], )
     formula_fg, tcm_fg, tcm_chem_l_fg, chem_fg, chem_protein_l_fg, protein_fg, tcms_fg, formulas_fg = from_proteins(
         ['ENSP00000381588', 'ENSP00000252519'], num=3)
-    tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = \
-        from_tcm_or_formula_proteins(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
-    formula_ffp, formula_tcm_links_ffp, tcm_ffp, tcm_chem_links_ffp, chem_ffp, chem_protein_links_ffp, protein_ffp = \
-        from_tcm_or_formula_proteins(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'])
+    # tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = \
+    #     from_tcm_or_formula_proteins(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
+    # formula_ffp, formula_tcm_links_ffp, tcm_ffp, tcm_chem_links_ffp, chem_ffp, chem_protein_links_ffp, protein_ffp = \
+    #     from_tcm_or_formula_proteins(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'])

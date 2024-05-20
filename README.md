@@ -1,6 +1,6 @@
 [**中文**](./README.md) | [**English**](./README_EN.md)
 <h1 align="center">
-<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/slogan.png" width="2000">
+<img src="https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV/blob/main/slogan.png" width="2000" alt="slogan">
 </h1>
 
 [![Downloads](https://static.pepy.tech/personalized-badge/herbiv?period=total&units=international_system&left_color=brightgreen&right_color=blue&left_text=Downloads)](https://pepy.tech/project/herbiv)
@@ -91,35 +91,37 @@ analysis.from_proteins(proteins,
 组合前后潜在作用的提升量）；
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
-# 更新日志
+# CLI(Command Line Interface)
 
-## 0.0.1a1
-- 横空出世
+herbiv-cli 是对 herbiv 的命令行封装，用法如下
 
-## 0.1a1(2023.3.28)
-- 使用本项目自己的数据集进行分析，不再使用其他数据库的公共数据集，更新了整个分析架构，大大加快了分析速度；
-- 加入了基于朴素贝叶斯的中药重要性评价模型。
+- 查看帮助文档
+```shell
+python herbiv-cli.py -h
+```
 
-##  0.1a2(2023.3.29)
-- 数据集随herbiv库下载，无需指定数据集存放路径。
+- 给定 tcm 分析
+```shell
+python herbiv-cli.py --function tcm --tcms HVM0367 HVM1695 --path result
+```
 
-##  0.1a3(2023.4.9)
-- 重构了代码，增加了经典的正向网络药理学分析的功能。
+- 给定 formula 分析
+```shell
+python herbiv-cli.py --function formula --formulas HVP1625 --path result
+```
 
-##  0.1a4(2023.4.14)
-- 增加了pipline函数`from_tcm_protein`，可同时检索中药和靶点;
-- 增加HerbiV_proteins数据集。
+- 给定 tcm 和 protein 分析
+```shell
+python herbiv-cli.py --function tcm_protein --tcms HVM0367 HVM1695 --proteins ENSP00000043402 --path result
+```
 
-## 0.1a5(2023.4.19)
-- 不会输出游离于网络的节点，提高了稳定性；
-- 统一了函数的调用方法。
+- 给定 formula 和 protein 分析
+```shell
+python herbiv-cli.py --function formula_protein --formulas HVP1625 --protein ENSP00000043402 ENSP00000223366 --path result
+```
 
-## 0.1a6(2023.5.27)
-- output中增加了vis函数，可以输出基于ECharts的网络图；
-- pipline函数也做了相应的修改。
+- 给定 protein 分析
+```shell
+python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 600
+```
 
-## 0.1a7(2023.6.29)
-- 增加过滤无效节点的函数，提高系统的稳定性。
-
-## 0.1a8(2023.6.30)
-- vis函数绘制的网络图可为不同类节点赋予不同颜色。
