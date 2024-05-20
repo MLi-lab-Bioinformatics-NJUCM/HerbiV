@@ -31,9 +31,14 @@
 ## 0.1a8(2023.6.30)
 - vis函数绘制的网络图可为不同类节点赋予不同颜色。
 
-## 0.2(2024.5.19)
-- 修复 analysis.py 导入时出现 `ModuleNotFoundError` 问题
-- 修复 computer.score 函数可能出现 `'NoneType' object has no attribute 'copy'` 的问题
-- 路径统一用 os.path.join 处理
-- 新增 herbiv-cli.py(Beta) 及其帮助文档, 以后可以直接从命令行调用 herbiv 了
-- 删除没有用到的 import 语句
+## 0.2(2024.5.20)
+- herbiv
+  - 修复 analysis.py 导包时出现 `ModuleNotFoundError` 问题
+  - 修复 computer.score 函数可能出现 `'NoneType' object has no attribute 'copy'` 的问题
+  - 路径统一用 os.path.join 处理，path 默认值可以用 "result" 而不是 "result/"，增强兼容性
+  - 删除多余的 import 语句
+- herbiv-cli.py(dev) 
+  - 以后可以从命令行调用 herbiv
+  - 在 README 中新增 herbiv-cli 的使用手册
+- 将更新日志单独放到 CHANGELOG.md 中
+- 新增 TODO.md 文件，记录当前程序存在的问题

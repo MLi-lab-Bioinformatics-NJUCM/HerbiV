@@ -64,7 +64,7 @@ def re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein):
     return out_tcm, out_tcm_chem, out_chem, out_chem_protein_links, out_gene
 
 
-def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
+def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result'):
     r"""
     输出Cytoscape用于作图的网络文件和属性文件
     :param protein:
@@ -88,7 +88,7 @@ def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='r
     pd.concat([tcm, chem, protein]).to_csv(os.path.join(path, "Type.csv"), index=False)
 
 
-def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result/'):
+def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result'):
     r"""
     使用pyecharts可视化分析结果
     :param tcm: pd.DataFrame类型，中药信息

@@ -95,7 +95,7 @@ analysis.from_proteins(proteins,
 
 herbiv-cli 是对 herbiv 的命令行封装，用法如下
 
-- 命令行工具帮助文档
+- 查看帮助文档
 ```shell
 python herbiv-cli.py -h
 ```
@@ -112,16 +112,16 @@ python herbiv-cli.py --function formula --formulas HVP1625 --path result
 
 - 给定 tcm 和 protein 分析
 ```shell
-python herbiv-cli.py --function tcm_protein --tcms HVM0367 HVM1695 --proteins HVP1625 --path result
+python herbiv-cli.py --function tcm_protein --tcms HVM0367 HVM1695 --proteins ENSP00000043402 --path result
 ```
 
 - 给定 formula 和 protein 分析
 ```shell
-python herbiv-cli.py --function formula_protein --formulas HVP1625 --protein HVP1625 --path result
+python herbiv-cli.py --function formula_protein --formulas HVP1625 --protein ENSP00000043402 ENSP00000223366 --path result
 ```
 
 - 给定 protein 分析
 ```shell
-python herbiv-cli.py --function protein --proteins HVP1625
+python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 600
 ```
 

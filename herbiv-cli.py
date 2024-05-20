@@ -6,8 +6,7 @@ import pandas as pd
 from herbiv import analysis
 import warnings
 # 消除 pandas Future Warning
-warnings.simplefilter(action='ignore', category=FutureWarning)
-
+# warnings.simplefilter(action='ignore', category=FutureWarning)
 """
 HerbiV Command Line Interface
 """
@@ -73,21 +72,21 @@ def nan_converter(data: pd.DataFrame):
     Returns:
     """
     data.replace(np.nan, None, inplace=True)
-    return data
+    return data.where((data.applymap(lambda x: True if str(x) != 'nan' else False)), None)
 
 
-def from_tcm(tcms: list[str], path: str):
+def from_tcm(tcms: list[str], score: int, path: str):
     """
     给定中药分析
     Args:
         tcms: 中药 id 列表, 如 ['HVM0367', 'HVM1695']
-        path: pyechart 图像输出路径
+        score:
+        path: 图像输出路径
     Returns:
     """
     if not check_id(tcms, check_tcm_id):
-        # should never be here
         return json.dumps({'msg': 'Wrong TCM ID'})
-    result = analysis.from_tcm_or_formula(tcms, out_for_cytoscape=False, out_graph=True, path=path)
+    result = analysis.from_tcm_or_formula(tcms, score=score, path=path)
     tmp = []
     for e in result:
         tmp.append(nan_converter(e))
@@ -102,79 +101,135 @@ def from_tcm(tcms: list[str], path: str):
     })
 
 
-def from_formula(formulas: list[str]):
+def from_formula(formulas: list[str], score: int, path):
     """
     给定复方分析
     Args:
         formulas: 复方 id 列表, 如 ['HVP1625']
+        score:
+        path:     图像输出路径
     Returns:
     """
     if not check_id(formulas, check_formula_id):
         return json.dumps({'msg': 'Wrong formula ID'})
-    result = analysis.from_tcm_or_formula(formulas)
-    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = result
+    result = analysis.from_tcm_or_formula(formulas, score=score, path=path)
+    tmp = []
+    for e in result:
+        tmp.append(nan_converter(e))
+    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = tmp
     return json.dumps({
-        'formula':            formula,
-        'tcm':                tcm,
-        'tcm_chem_links':     tcm_chem_links,
-        'chem':               chem,
-        'chem_protein_links': chem_protein_links,
-        'proteins':           proteins,
-    })
+        'formula':            formula.to_dict(orient='records'),
+        'formula_tcm_links':  formula_tcm_links.to_dict(orient='records'),
+        'tcm':                tcm.to_dict(orient='records'),
+        'tcm_chem_links':     tcm_chem_links.to_dict(orient='records'),
+        'chem':               chem.to_dict(orient='records'),
+        'chem_protein_links': chem_protein_links.to_dict(orient='records'),
+        'proteins':           proteins.to_dict(orient='records'),
+    }, ensure_ascii=False)
 
 
-def from_tcm_protein(tcms: list[str], proteins: list[str]):
+def from_tcm_protein(tcms: list[str], proteins: list[str], score: int, path):
     """
     给定中药和靶点分析
     Args:
         tcms:     中药 id 列表，如 ['HVM0367', 'HVM1695']
-        proteins: 靶点 id 列表，如 ['ENSP00000381588', 'ENSP00000252519']
+        proteins: 靶点 id 列表，如 ['ENSP00000043402', 'ENSP00000223366']
+        score:
+        path:
     Returns:
     """
     if not check_id(tcms, check_tcm_id):
-        assert False, "Wrong TCM id"
+        return json.dumps({'msg': 'Wrong TCM ID'})
     if not check_id(proteins, check_protein_id):
-        assert False, "Wrong protein id"
-    pass
+        return json.dumps({'msg': 'Wrong protein ID'})
+    result = analysis.from_tcm_or_formula(
+        tcm_or_formula_id=tcms,
+        proteins_id=proteins,
+        path=path,
+        score=score
+    )
+    tmp = []
+    for e in result:
+        tmp.append(nan_converter(e))
+    tcm, tcm_chem_links, chem, chem_protein_links, proteins = tmp
+    return json.dumps({
+        'tcm': tcm.to_dict(orient='records'),
+        'tcm_chem_link': tcm_chem_links.to_dict(orient='records'),
+        'chem': chem.to_dict(orient='records'),
+        'chem_protein_link': chem_protein_links.to_dict(orient='records'),
+        'protein': proteins.to_dict(orient='records')
+    }, ensure_ascii=False)
 
 
-def from_formula_protein(formulas: list[str], proteins: list[str]):
+def from_formula_protein(formulas: list[str], proteins: list[str], score: int, path):
     """
     给定复方和靶点分析
     Args:
         formulas: 复方 id 列表，如 ['HVP1625']
         proteins: 靶点 id 列表，如 ['ENSP00000381588', 'ENSP00000252519']
+        score:
+        path:
     Returns:
     """
     if not check_id(formulas, check_formula_id):
-        assert False, "Wrong formula id"
+        return json.dumps({'msg': 'Wrong formula ID'})
     if not check_id(proteins, check_protein_id):
-        assert False, "Wrong protein id"
-    # result = analysis.from_tcm_or_formula_proteins(formulas, proteins)
-    # formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = result
+        return json.dumps({'msg': 'Wrong protein ID'})
+    result = analysis.from_tcm_or_formula(
+        tcm_or_formula_id=formulas,
+        proteins_id=proteins,
+        path=path,
+        score=score
+    )
+    tmp = []
+    for e in result:
+        tmp.append(nan_converter(e))
+    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins = tmp
+    return json.dumps({
+        'formula':            formula.to_dict(orient='records'),
+        'formula_tcm_links':  formula_tcm_links.to_dict(orient='records'),
+        'tcm':                tcm.to_dict(orient='records'),
+        'tcm_chem_links':     tcm_chem_links.to_dict(orient='records'),
+        'chem':               chem.to_dict(orient='records'),
+        'chem_protein_links': chem_protein_links.to_dict(orient='records'),
+        'proteins':           proteins.to_dict(orient='records'),
+    }, ensure_ascii=False)
 
 
-def from_protein(proteins: list[str]):
+def from_protein(proteins: list[str], score: int, path):
     """
     逆向网络药理学分析
     Args:
         proteins: 靶点 id 列表，如 ['ENSP00000381588', 'ENSP00000252519']
+        score:
+        path:
     Returns:
     """
+    if not check_id(proteins, check_protein_id):
+        return json.dumps({'msg': 'Wrong protein ID'})
     # 优化
-    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins, tcms, formulas = analysis.from_proteins(
-        ['ENSP00000381588', 'ENSP00000252519'],
-        score=0,
+    result = analysis.from_proteins(
+        proteins,
+        score=score,
         random_state=138192,
-        num=100)
-    # 不优化
-    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins, tcms, formulas = analysis.from_proteins(
-        ['ENSP00000381588', 'ENSP00000252519'],
-        score=0,
-        tcm_component=False,
-        formula_component=False,
-        out_for_cytoscape=False
+        num=100,
+        path=path
     )
+    tmp = []
+    for e in result:
+        tmp.append(nan_converter(e))
+    formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins, tcms, formulas = tmp
+    return json.dumps({
+        'formula':            formula.to_dict(orient='records'),
+        'formula_tcm_links':  formula_tcm_links.to_dict(orient='records'),
+        'tcm':                tcm.to_dict(orient='records'),
+        'tcm_chem_links':     tcm_chem_links.to_dict(orient='records'),
+        'chem':               chem.to_dict(orient='records'),
+        'chem_protein_links': chem_protein_links.to_dict(orient='records'),
+        'proteins':           proteins.to_dict(orient='records'),
+        'tcms':               tcms.to_dict(orient='records'),
+        'formulas':           formulas.to_dict(orient='records')
+    }, ensure_ascii=False)
 
 
 def main():
@@ -185,22 +240,20 @@ def main():
     parser.add_argument('--proteins', nargs="+", type=str, help='Protein ids')
     parser.add_argument('--path', "-p", type=str, help='Graph Output Path', default="result")
     parser.add_argument('--prettier', action='store_true', help='输出格式化的 json')
+    parser.add_argument('--score', "-s", type=int, default=990, help='分数')
     args = parser.parse_args()
-    print(args.prettier)
 
     if args.function == "tcm":
-        print(from_tcm(args.tcms, args.path))
+        print(from_tcm(args.tcms, args.score, args.path))
     elif args.function == "formula":
-        print(from_formula(args.formulas))
-    elif args.function == "protein":
-        print(from_protein(args.proteins))
+        print(from_formula(args.formulas, args.score, args.path))
     elif args.function == "tcm_protein":
-        print()
+        print(from_tcm_protein(args.tcms, args.proteins, args.score, args.path))
     elif args.function == "formula_protein":
-        print()
+        print(from_formula_protein(args.formulas, args.proteins, args.score, args.path))
+    elif args.function == "protein":
+        print(from_protein(args.proteins, args.score, args.path))
 
 
 if __name__ == '__main__':
     main()
-
-
