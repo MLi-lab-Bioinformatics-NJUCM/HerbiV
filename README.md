@@ -29,7 +29,6 @@ HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是
 
 # 使用
 
-
 `herbiv.analysis`中提供了3个进行网络药理学分析的pipeline函数。
 
 ## `from_tcm_or_formula`
@@ -133,4 +132,3 @@ python herbiv-cli.py --function formula_protein --formulas HVP1625 --protein ENS
 ```shell
 python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 500
 ```
-
