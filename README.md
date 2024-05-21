@@ -29,7 +29,6 @@ HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是
 
 # 使用
 
-
 `herbiv.analysis`中提供了3个进行网络药理学分析的pipeline函数。
 
 ## `from_tcm_or_formula`
@@ -38,7 +37,14 @@ HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是
 
 ```python
 from herbiv import analysis
-analysis.from_tcm_or_formula(tcm_or_formula, score, out_graph, out_for_cytoscape, re, path)
+analysis.from_tcm_or_formula(
+  tcm_or_formula, 
+  score, 
+  out_graph, 
+  out_for_cytoscape, 
+  re, 
+  path
+)
 ```
 
 它需要一个必需形参`tcm_or_formula`：任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析的中药或复方的ID，
@@ -62,15 +68,17 @@ analysis.from_tcm_or_formula(tcm_or_formula, score, out_graph, out_for_cytoscape
 
 ```python
 from herbiv import analysis
-analysis.from_proteins(proteins,
-                       score,
-                       random_state,
-                       num, 
-                       tcm_component, 
-                       formula_component,
-                       out_for_cytoscape,
-                       re,
-                       path)
+analysis.from_proteins(
+  proteins,
+  score,
+  random_state,
+  num, 
+  tcm_component, 
+  formula_component,
+  out_for_cytoscape,
+  re,
+  path
+)
 ```
 
 它需要一个必需形参`proteins`，这是一个任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID，
@@ -91,7 +99,7 @@ analysis.from_proteins(proteins,
 组合前后潜在作用的提升量）；
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
-# CLI(Command Line Interface)
+# Command Line Interface
 
 herbiv-cli 是对 herbiv 的命令行封装，用法如下
 
@@ -122,6 +130,5 @@ python herbiv-cli.py --function formula_protein --formulas HVP1625 --protein ENS
 
 - 给定 protein 分析
 ```shell
-python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 600
+python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 500
 ```
-

@@ -6,7 +6,7 @@ import pandas as pd
 from herbiv import analysis
 import warnings
 # 消除 pandas Future Warning
-# warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=FutureWarning)
 """
 HerbiV Command Line Interface
 """
@@ -125,7 +125,7 @@ def from_formula(formulas: list[str], score: int, path):
         'chem':               chem.to_dict(orient='records'),
         'chem_protein_links': chem_protein_links.to_dict(orient='records'),
         'proteins':           proteins.to_dict(orient='records'),
-    }, ensure_ascii=False)
+    })
 
 
 def from_tcm_protein(tcms: list[str], proteins: list[str], score: int, path):
@@ -158,7 +158,7 @@ def from_tcm_protein(tcms: list[str], proteins: list[str], score: int, path):
         'chem': chem.to_dict(orient='records'),
         'chem_protein_link': chem_protein_links.to_dict(orient='records'),
         'protein': proteins.to_dict(orient='records')
-    }, ensure_ascii=False)
+    })
 
 
 def from_formula_protein(formulas: list[str], proteins: list[str], score: int, path):
@@ -193,7 +193,7 @@ def from_formula_protein(formulas: list[str], proteins: list[str], score: int, p
         'chem':               chem.to_dict(orient='records'),
         'chem_protein_links': chem_protein_links.to_dict(orient='records'),
         'proteins':           proteins.to_dict(orient='records'),
-    }, ensure_ascii=False)
+    })
 
 
 def from_protein(proteins: list[str], score: int, path):
@@ -229,7 +229,7 @@ def from_protein(proteins: list[str], score: int, path):
         'proteins':           proteins.to_dict(orient='records'),
         'tcms':               tcms.to_dict(orient='records'),
         'formulas':           formulas.to_dict(orient='records')
-    }, ensure_ascii=False)
+    })
 
 
 def main():

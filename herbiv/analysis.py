@@ -11,7 +11,7 @@ def from_tcm_or_formula(tcm_or_formula_id,
                         out_graph=True,
                         re=True,
                         path='results'):
-    r"""
+    """
     进行经典的正向网络药理学分析
     :param tcm_or_formula_id: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟分析的中药或复方的ID
     :param proteins_id: None 或任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID。
@@ -44,7 +44,6 @@ def from_tcm_or_formula(tcm_or_formula_id,
         >>> from_tcm_or_formula(['HVP1625'],['ENSP00000381588', 'ENSP00000252519'], score=400)# medium confidence in STITCH
 
     """
-
     if tcm_or_formula_id[0][2] == 'P':  # 判断输入是否为复方的HVPID
         formula = get.get_formula('HVPID', tcm_or_formula_id)  # 获取该复方的信息
         formula_tcm_links = get.get_formula_tcm_links('HVPID', formula['HVPID'])
@@ -91,7 +90,7 @@ def from_proteins(proteins,
                   out_for_cytoscape=True,
                   re=True,
                   path='result'):
-    r"""
+    """
     进行逆向网络药理学分析
     :param proteins: 任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID
     :param score: int类型，HerbiV_chemical_protein_links数据集中仅combined_score大于等于score的记录会被筛选出，默认为0
