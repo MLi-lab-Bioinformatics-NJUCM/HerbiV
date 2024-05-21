@@ -151,13 +151,13 @@ def score(tcm: pd.DataFrame,
 
 
 def component(items_and_score, random_state=None, num=1000, c=10):
-    '''
+    """
     :param random_state:
     :param tcm:
     :param items_and_score: pd存储复方/中药信息
     :param num: 需要的解的组数
     :return:
-    '''
+    """
     if 'HVPID' in items_and_score.columns:
         by = 'HVPID'
         name = 'name'

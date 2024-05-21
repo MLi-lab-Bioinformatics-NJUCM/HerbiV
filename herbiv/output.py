@@ -5,7 +5,7 @@ from pyecharts.charts import Graph
 
 
 def re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein):
-    r"""
+    """
     :param tcm: pd.DataFrame类型，中药信息
     :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
     :param chem: pd.DataFrame类型，化合物（中药成分）信息
@@ -65,7 +65,7 @@ def re_name(tcm, tcm_chem_links, chem, chem_protein_links, protein):
 
 
 def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result'):
-    r"""
+    """
     输出Cytoscape用于作图的网络文件和属性文件
     :param protein:
     :param tcm: pd.DataFrame类型，中药信息
@@ -89,7 +89,7 @@ def out_for_cyto(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='r
 
 
 def vis(tcm, tcm_chem_links, chem, chem_protein_links, protein, path='result'):
-    r"""
+    """
     使用pyecharts可视化分析结果
     :param tcm: pd.DataFrame类型，中药信息
     :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
