@@ -12,38 +12,47 @@ def from_tcm_or_formula(tcm_or_formula_id,
                         re=True,
                         path='results'):
     """
-    进行经典的正向网络药理学分析
-    :param tcm_or_formula_id: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟分析的中药或复方的ID
-    :param proteins_id: None 或任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID。
-    默认为None
-    :param score: int类型，HerbiV_chemical_protein_links数据集中仅combined_score大于等于score的记录会被筛选出，默认为990
-    :param out_for_cytoscape: 布尔类型，是否输出用于Cytoscape绘图的文件，默认为True
-    :param out_graph: 布尔类型，是否输出基于ECharts的html格式的网络可视化图，默认为True
-    :param re: 布尔类型，是否返回原始分析结果（中药、化合物（中药成分）、蛋白（靶点）及其连接信息）
-    :param path: 字符串类型，存放结果的目录
-    :return: formula: pd.DataFrame类型，复方信息（仅在输入的tcm_or_formula为HVPID时返回）
-    :return: formula_tcm_links: pd.DataFrame类型，复方-中药连接信息（仅在输入的tcm_or_formula为HVPID时返回）
-    :return: tcm: pd.DataFrame类型，中药信息
-    :return: tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
-    :return: chem: pd.DataFrame类型，化合物（中药成分）信息
-    :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白（靶点）连接信息
-    :return: proteins: pd.DataFrame类型，蛋白（靶点）信息
-    Examples:
-        **From Formula**
+        进行经典的正向网络药理学分析
 
-        >>> from_tcm_or_formula(['HVP1625'])
-        See more at : demo.ipynb
+        Args:
+            tcm_or_formula_id: 任何可以使用in判断一个元素是否在其中的组合数据类型，拟分析的中药或复方的ID。
+            proteins_id: None 或任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID。
+                        默认为None
+            score (int): HerbiV_chemical_protein_links数据集中仅combined_score大于等于score的记录会被筛选出，默认为990。
+            out_for_cytoscape (bool): 是否输出用于Cytoscape绘图的文件，默认为True。
+            out_graph (bool): 是否输出基于ECharts的html格式的网络可视化图，默认为True。
+            re (bool): 是否返回原始分析结果（中药、化合物（中药成分）、蛋白（靶点）及其连接信息）。
+            path (str): 存放结果的目录。
 
-        **From TCM**
 
-        >>> from_tcm_or_formula(['HVM0367', 'HVM1695'])
-        See more at :demo
+        Returns:
+            formula: 复方信息（仅在输入的tcm_or_formula为HVPID时返回）。
+            formula_tcm_links: 复方-中药连接信息（仅在输入的tcm_or_formula为HVPID时返回）。
+            tcm: 中药信息。
+            tcm_chem_links: 中药-化合物（中药成分）连接信息。
+            chem: 化合物（中药成分）信息。
+            chem_protein_links: 化合物（中药成分）-蛋白（靶点）连接信息。
+            proteins: 蛋白（靶点）信息。
 
-        **From Formula and Proteins**
 
-        >>> from_tcm_or_formula(['HVP1625'],['ENSP00000381588', 'ENSP00000252519'], score=400)# medium confidence in STITCH
+        Examples:
+            **From Formula**
 
+            >>> from_tcm_or_formula(['HVP1625'])
+            See more at : demo.ipynb
+
+            **From TCM**
+
+            >>> from_tcm_or_formula(['HVM0367', 'HVM1695'])
+            See more at :demo
+
+            **From Formula and Proteins**
+
+            >>> from_tcm_or_formula(['HVP1625'],['ENSP00000381588', 'ENSP00000252519'], score=400)# medium confidence in STITCH
     """
+
+    
+
     if tcm_or_formula_id[0][2] == 'P':  # 判断输入是否为复方的HVPID
         formula = get.get_formula('HVPID', tcm_or_formula_id)  # 获取该复方的信息
         formula_tcm_links = get.get_formula_tcm_links('HVPID', formula['HVPID'])
