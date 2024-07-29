@@ -100,26 +100,40 @@ def from_proteins(proteins,
                   re=True,
                   path='result'):
     """
-    进行逆向网络药理学分析
-    :param proteins: 任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID
-    :param score: int类型，HerbiV_chemical_protein_links数据集中仅combined_score大于等于score的记录会被筛选出，默认为0
-    :param random_state: int类型，指定优化模型使用的随机数种子
-    :param num: int类型，指定优化时需生成的解的组数
-    :param tcm_component: 布尔类型，是否进行中药组合优化
-    :param formula_component: 布尔类型，是否进行复方组合优化
-    :param out_for_cytoscape: 布尔类型，是否输出用于Cytoscape绘图的文件
-    :param re: 布尔类型，是否返回原始分析结果
-    :param path: 字符串类型，存放结果的目录
-    :return: formula:            pd.DataFrame类型，复方信息
-    :return: formula_tcm_links:  pd.DataFrame类型，复方-中药连接信息
-    :return: tcm:                pd.DataFrame类型，中药信息
-    :return: tcm_chem_links:     pd.DataFrame类型，中药-化合物（中药成分）连接信息
-    :return: chem:               pd.DataFrame类型，化合物（中药成分）信息
-    :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白（靶点）连接信息
-    :return: proteins:           pd.DataFrame类型，蛋白（靶点）信息
-    :return: tcms:               pd.DataFrame类型，包含优化模型得到的中药组合中各中药的ID、组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量
-    :return: formulas:           pd.DataFrame类型，包含优化模型得到的复方组合中各复方的ID、组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量
+        进行逆向网络药理学分析
+
+        Args:
+            proteins: 任何可以使用in判断一个元素是否在其中的组合数据类型，存储拟分析蛋白（靶点）在STITCH中的Ensembl_ID。
+            score (int): HerbiV_chemical_protein_links数据集中仅combined_score大于等于score的记录会被筛选出，默认为0。
+            random_state (int): 指定优化模型使用的随机数种子。
+            num (int):指定优化时需生成的解的组数。
+            tcm_component (bool): 是否进行中药组合优化。
+            formula_component (bool): 是否进行复方组合优化。
+            out_for_cytoscape (bool): 是否输出用于Cytoscape绘图的文件。
+            re (bool): 是否返回原始分析结果。
+            path (str): 存放结果的目录。
+
+
+        Returns:
+            formula: 复方信息。
+            formula_tcm_links: 复方-中药连接信息。
+            tcm: 中药信息。
+            tcm_chem_links: 中药-化合物（中药成分）连接信息。
+            chem: 化合物（中药成分）信息。
+            chem_protein_links: 化合物（中药成分）-蛋白（靶点）连接信息。
+            proteins: 蛋白（靶点）信息。
+            tcms: 包含优化模型得到的中药组合中各中药的ID、组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量。
+            formulas: 包含优化模型得到的复方组合中各复方的ID、组合对疾病相关靶点集合的潜在作用、组合前后潜在作用的提升量。
+
+        Examples:
+            **From Proteins**
+
+            # TODO: 待补充
+            >>> from_proteins(['ENSP00000381588', 'ENSP00000252519'], score=400, num=1000, tcm_component=True, formula_component=True, out_for_cytoscape=True, re=True, path='result')
+
     """
+
+
     proteins = get.get_proteins('Ensembl_ID', proteins)
     chem_protein_links = get.get_chem_protein_links('Ensembl_ID', proteins['Ensembl_ID'], score)
     chem = get.get_chemicals('HVCID', chem_protein_links['HVCID'])
@@ -148,22 +162,39 @@ def from_proteins(proteins,
 
 
 def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins):
-    """深度优先搜索筛选有效节点（在完整的（复方-）中药-化合物-蛋白通路中的节点）
-    :param formula: pd.DataFrame类型，复方信息
-    :param formula_tcm_links: pd.DataFrame类型，复方-中药连接信息
-    :param tcm: pd.DataFrame类型，中药信息
-    :param tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
-    :param chem: pd.DataFrame类型，化合物（中药成分）信息
-    :param chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白（靶点）连接信息
-    :param proteins: pd.DataFrame类型，蛋白（靶点）信息
-    :return: formula: pd.DataFrame类型，复方信息
-    :return: formula_tcm_links: pd.DataFrame类型，复方-中药连接信息
-    :return: tcm: pd.DataFrame类型，中药信息
-    :return: tcm_chem_links: pd.DataFrame类型，中药-化合物（中药成分）连接信息
-    :return: chem: pd.DataFrame类型，化合物（中药成分）信息
-    :return: chem_protein_links: pd.DataFrame类型，化合物（中药成分）-蛋白（靶点）连接信息
-    :return: proteins: pd.DataFrame类型，蛋白（靶点）信息
     """
+        深度优先搜索筛选有效节点（在完整的（复方-）中药-化合物-蛋白通路中的节点）
+
+        Args:
+            formula: 复方信息。
+            formula_tcm_links: 复方-中药连接信息。
+            tcm: 中药信息。
+            tcm_chem_links:中药-化合物（中药成分）连接信息。
+            chem: 化合物（中药成分）信息。
+            chem_protein_links: 化合物（中药成分）-蛋白（靶点）连接信息。
+            proteins: 蛋白（靶点）信息。
+
+
+        Returns:
+            formula: 复方信息。
+            formula_tcm_links: 复方-中药连接信息。
+            tcm: 中药信息。
+            tcm_chem_links: 中药-化合物（中药成分）连接信息。
+            chem: 化合物（中药成分）信息。
+            chem_protein_links: 化合物（中药成分）-蛋白（靶点）连接信息。
+            proteins: 蛋白（靶点）信息。
+
+
+        Examples:
+            **dfs_filter**
+
+            # TODO: 待补充
+            >>>dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins)
+
+
+    """
+
+
     formula_id = set()
     tcm_id = set()
     chem_id = set()
