@@ -128,8 +128,13 @@ def from_proteins(proteins,
         Examples:
             **From Proteins**
 
-            # TODO: 待补充
-            >>> from_proteins(['ENSP00000381588', 'ENSP00000252519'], score=400, num=1000, tcm_component=True, formula_component=True, out_for_cytoscape=True, re=True, path='result')
+            进行优化
+            >>> from_proteins(['ENSP00000381588', 'ENSP00000252519'],score=0,random_state=138192,num=100)
+            See more at : demo.ipynb
+
+            不进行优化
+            >>> from_proteins(['ENSP00000381588', 'ENSP00000252519'],score=0,tcm_component=False,formula_component=False,out_for_cytoscape=False)
+            See more at : demo.ipynb
 
     """
 
@@ -189,7 +194,7 @@ def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_prote
             **dfs_filter**
 
             # TODO: 待补充
-            >>>dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_protein_links, proteins)
+            >>>
 
 
     """

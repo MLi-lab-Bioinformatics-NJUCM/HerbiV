@@ -32,5 +32,5 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/MLi-lab-Bioinformatics-NJUCM/pharmastar"
+"Homepage" = "https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV"
 "Bug Tracker" = "https://github.com/MLi-lab-Bioinformatics-NJUCM/pharmastar/issues"
