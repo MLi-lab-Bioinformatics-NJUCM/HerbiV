@@ -141,6 +141,12 @@ def from_proteins(proteins,
 
     proteins = get.get_proteins('Ensembl_ID', proteins)
     chem_protein_links = get.get_chem_protein_links('Ensembl_ID', proteins['Ensembl_ID'], score)
+
+    # **新增的异常处理代码**
+    if chem_protein_links.empty:
+        raise ValueError(f"根据设定的score值（score={score}），没有找到符合条件的化合物-蛋白连接。请尝试降低score值以获取更多结果。")
+
+
     chem = get.get_chemicals('HVCID', chem_protein_links['HVCID'])
     tcm_chem_links = get.get_tcm_chem_links('HVCID', chem['HVCID'])
     tcm = get.get_tcm('HVMID', tcm_chem_links['HVMID'])
@@ -241,7 +247,7 @@ if __name__ == '__main__':
     tcm_ft, tcm_chem_links_ft, chem_ft, chem_protein_links_ft, protein_ft = from_tcm_or_formula(['HVM0735'], )
     formula_ff, formula_tcm_links_ff, tcm_ff, tcm_chem_links_ff, chem_ff, chem_protein_links_ff, protein_ff = \
         from_tcm_or_formula(['HVP1625'], )
-    formula_fg, tcm_fg, tcm_chem_l_fg, chem_fg, chem_protein_l_fg, protein_fg, tcms_fg, formulas_fg = from_proteins(
+    formula_fg, tcm_fg, tcm_chem_l_fg, chem_fg, chem_protein_l_fg, protein_fg, tcms_fg, formulas_fg, proteins_fg = from_proteins(
         ['ENSP00000381588', 'ENSP00000252519'], num=3)
     # tcm_ftp, tcm_chem_links_ftp, chem_ftp, chem_protein_links_ftp, protein_ftp = \
     #     from_tcm_or_formula_proteins(['HVM0367', 'HVM1695'], ['ENSP00000381588', 'ENSP00000252519'])
