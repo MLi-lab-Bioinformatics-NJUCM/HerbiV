@@ -227,6 +227,7 @@ def get_chem_protein_links(by, items, score=900) -> pd.DataFrame:
         (chem_protein_links_all['Combined_score'] >= score)].copy()
 
     # 将Combined_score变换为0-1的浮点数
+    chem_protein_links['Combined_score'] = chem_protein_links['Combined_score'].astype(float)
     chem_protein_links.loc[:, 'Combined_score'] = chem_protein_links.loc[:, 'Combined_score'].apply(
         lambda x: x / 1000)
 
