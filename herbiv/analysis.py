@@ -144,8 +144,7 @@ def from_proteins(proteins,
 
     # **新增的异常处理代码**
     if chem_protein_links.empty:
-        raise ValueError(f"根据设定的score值（score={score}），没有找到符合条件的化合物-蛋白连接。请尝试降低score值以获取更多结果。")
-
+        raise ValueError(f"No compound-protein links found based on the set score value (score={score}). Please try lowering the score to obtain more results.")
 
     chem = get.get_chemicals('HVCID', chem_protein_links['HVCID'])
     tcm_chem_links = get.get_tcm_chem_links('HVCID', chem['HVCID'])
@@ -243,7 +242,7 @@ def dfs_filter(formula, formula_tcm_links, tcm, tcm_chem_links, chem, chem_prote
 
 
 if __name__ == '__main__':
-    from_tcm_or_formula(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'], score=0)
+    from_tcm_or_formula(['HVP1625'], ['ENSP00000381588', 'ENSP00000252519'], score=100000)
     tcm_ft, tcm_chem_links_ft, chem_ft, chem_protein_links_ft, protein_ft = from_tcm_or_formula(['HVM0735'], )
     formula_ff, formula_tcm_links_ff, tcm_ff, tcm_chem_links_ff, chem_ff, chem_protein_links_ff, protein_ff = \
         from_tcm_or_formula(['HVP1625'], )
