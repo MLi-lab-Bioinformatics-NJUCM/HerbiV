@@ -13,7 +13,8 @@ HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是
 - [使用](#使用)
   - [`from_tcm_or_formula`](#from_tcm_or_formula)
   - [`from_proteins`](#from_proteins)
-- [更新日志](#更新日志)
+- [命令行](#命令行)
+- [Star History](#star-history)
  
 <!-- tocstop -->
 
@@ -99,7 +100,7 @@ analysis.from_proteins(
 组合前后潜在作用的提升量）；
 - `path`: str类型，存放结果的路径，默认为`result/`。若无此路径，将自动建立相应的目录。
 
-# Command Line Interface
+# 命令行
 
 herbiv-cli 是对 herbiv 的命令行封装，用法如下
 
@@ -132,3 +133,8 @@ python herbiv-cli.py --function formula_protein --formulas HVP1625 --protein ENS
 ```shell
 python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 500
 ```
+
+
+# Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=MLi-lab-Bioinformatics-NJUCM/HerbiV&type=Date)](https://star-history.com/#MLi-lab-Bioinformatics-NJUCM/HerbiV&Date)
