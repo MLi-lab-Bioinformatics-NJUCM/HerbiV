@@ -19,6 +19,7 @@ All these efforts are aimed at promoting the modernization of traditional Chines
    - [`from_proteins`](#from_proteins)
    - [`from_tcm_or_formula_proteins`](#from_tcm_or_formula_proteins)
 - [Versions](#versions)
+- [Citation](#citation)
  
 <!-- tocstop -->
 
@@ -129,3 +130,37 @@ Its optional parameter includes
 ## 0.1a8(2023.6.30)
 - Differnet colors can be given to different types of nodes in the network diagram drawn by the vis function.
 
+# Citation
+
+If you use this project in your research, please cite:
+
+```bibtex
+@misc{herbiv_2023,
+    author = {HerbiV Team},
+    title = {HerbiV},
+    year = {2023},
+    publisher = {GitHub},
+    journal = {GitHub repository},
+    url = {https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV}
+}
+```
+
+Team Members (in full alphabetical order):
+
+- 陈晨
+- 陈雪
+- 戴欣露
+- 丁皓康
+- 胡钰奕
+- 李梦圆
+- 林文钰
+- 陆茵
+- 缪雨桐
+- 沈天威
+- 王涵琪
+- 王皓阳
+- 燕晨宇
+- 章晋
+- 张天然
+- 周航
+- 周唯叶
