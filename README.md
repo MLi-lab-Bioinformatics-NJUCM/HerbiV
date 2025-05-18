@@ -15,6 +15,7 @@ HerbiV(Bidirectional and Visible Database of Herb)既是一个数据库，又是
   - [`from_proteins`](#from_proteins)
 - [命令行](#命令行)
 - [Star History](#star-history)
+- [引用](#引用)
  
 <!-- tocstop -->
 
@@ -138,3 +139,39 @@ python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 500
 # Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=MLi-lab-Bioinformatics-NJUCM/HerbiV&type=Date)](https://star-history.com/#MLi-lab-Bioinformatics-NJUCM/HerbiV&Date)
+
+
+## 引用
+
+如果您在研究中使用了本项目，请按以下格式引用：
+
+```bibtex
+@misc{herbiv_2025,
+    author = {HerbiV Team},
+    title = {HerbiV},
+    year = {2023},
+    publisher = {GitHub},
+    journal = {GitHub repository},
+    url = {https://github.com/MLi-lab-Bioinformatics-NJUCM/HerbiV}
+}
+```
+
+以下成员按姓氏拼音首字母临时排序，最终作者顺序待定：
+
+- 陈晨
+- 陈雪
+- 戴欣露
+- 丁皓康
+- 胡钰奕
+- 李梦圆
+- 林文钰
+- 陆茵
+- 缪雨桐
+- 沈天威
+- 王涵琪
+- 王皓阳
+- 燕晨宇
+- 章晋
+- 张天然
+- 周航
+- 周唯叶
