@@ -146,7 +146,7 @@ python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 500
 如果您在研究中使用了本项目，请按以下格式引用：
 
 ```bibtex
-@misc{herbiv_2025,
+@misc{herbiv_2023,
     author = {HerbiV Team},
     title = {HerbiV},
     year = {2023},
