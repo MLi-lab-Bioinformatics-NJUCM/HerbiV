@@ -156,7 +156,7 @@ python herbiv-cli.py --function protein --proteins ENSP00000381588 --score 500
 }
 ```
 
-以下成员按姓氏拼音首字母临时排序，最终作者顺序待定：
+项目成员（按姓名完整拼音排序）：
 
 - 陈晨
 - 陈雪
